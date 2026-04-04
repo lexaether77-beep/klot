@@ -17,10 +17,7 @@ manoshia/
 └── README.md
 ```
 
-## Admin Access
-- URL: Click the "Admin" button (bottom-right corner)
-- Username: admin
-- Password: Manoshia@2025
+
 
 ## Features
 - Storefront: Home, Shop, Collections, About, Contact
