@@ -1,4 +1,4 @@
-# MANOSHIA — E-Commerce Website
+﻿# KLOT — E-Commerce Website
 
 ## Deployment Instructions
 
@@ -7,7 +7,7 @@
 3. Keep the folder structure intact:
 
 ```
-manoshia/
+klot/
 ├── index.html          ← Main entry point
 ├── css/
 │   └── style.css       ← All styles
@@ -17,7 +17,10 @@ manoshia/
 └── README.md
 ```
 
-
+## Admin Access
+- URL: Click the "Admin" button (bottom-right corner)
+- Username: admin
+- Password: Klot@2025
 
 ## Features
 - Storefront: Home, Shop, Collections, About, Contact

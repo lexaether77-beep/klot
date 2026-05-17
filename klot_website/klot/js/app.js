@@ -1,5 +1,5 @@
-/* ============================================================
-   MANOSHIA — Application JavaScript
+﻿/* ============================================================
+   KLOT — Application JavaScript
    All features: storefront, cart, admin, import engine, PM
    ============================================================ */
 
@@ -245,7 +245,7 @@ function attemptLogin() {
   var btn=document.getElementById('admin-login-btn');
   btn.disabled=true; btn.textContent='Verifying\u2026';
   setTimeout(function(){
-    Promise.all([sha256(u.toLowerCase()), sha256(p), sha256('admin'), sha256('Manoshia@2025')]).then(function(hashes) {
+    Promise.all([sha256(u.toLowerCase()), sha256(p), sha256('admin'), sha256('Klot@2025')]).then(function(hashes) {
       if(hashes[0]===hashes[2] && hashes[1]===hashes[3]) {
         loginAttempts=0;
         logAdminAction('AUTH', 'Password verified - awaiting MFA');
@@ -409,13 +409,13 @@ function exportOrders(fmt) {
   var rows=orders.map(function(o){return [o.id,o.customer,o.items,o.total,o.status,o.date];});
   if(fmt==='csv') {
     var csv=[headers.join(',')].concat(rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');})).join('\n');
-    dlFile(csv,'text/csv','manoshia_orders.csv');
+    dlFile(csv,'text/csv','klot_orders.csv');
   } else {
     if(typeof XLSX==='undefined'){showToast('Library loading...');return;}
     var ws=XLSX.utils.aoa_to_sheet([headers].concat(rows));
     ws['!cols']=headers.map(function(){return {wch:18};});
     var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Orders');
-    XLSX.writeFile(wb,'manoshia_orders_'+today()+'.xlsx');
+    XLSX.writeFile(wb,'klot_orders_'+today()+'.xlsx');
     showToast('Orders exported to Excel');
   }
 }
@@ -433,13 +433,13 @@ function exportInventory(fmt) {
   });
   if(fmt==='csv') {
     var csv=[headers.join(',')].concat(rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');})).join('\n');
-    dlFile(csv,'text/csv','manoshia_inventory.csv');
+    dlFile(csv,'text/csv','klot_inventory.csv');
   } else {
     if(typeof XLSX==='undefined'){showToast('Library loading...');return;}
     var ws=XLSX.utils.aoa_to_sheet([headers].concat(rows));
     ws['!cols']=headers.map(function(){return {wch:16};});
     var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Inventory');
-    XLSX.writeFile(wb,'manoshia_inventory_'+today()+'.xlsx');
+    XLSX.writeFile(wb,'klot_inventory_'+today()+'.xlsx');
     showToast('Inventory exported to Excel');
   }
 }
@@ -681,13 +681,13 @@ function pmExportExcel(){
   var ws=XLSX.utils.json_to_sheet(data);
   ws['!cols']=[{wch:12},{wch:6},{wch:28},{wch:12},{wch:10},{wch:14},{wch:12},{wch:8},{wch:10},{wch:8},{wch:10},{wch:40},{wch:40}];
   var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Products');
-  XLSX.writeFile(wb,'manoshia_products_'+today()+'.xlsx'); showToast('Products exported');
+  XLSX.writeFile(wb,'klot_products_'+today()+'.xlsx'); showToast('Products exported');
 }
 function pmExportCSV(){
   var data=pmState.filtered.length?pmState.filtered:products;
   var hdrs='SKU,ID,Name,Category,Style,Price_NGN,Price_USD,Stock,Status,Tag,Sizes,Image_URL,Description';
   var rows=data.map(function(p){return [p.sku||'',p.id,'"'+(p.name||'').replace(/"/g,'""')+'"',p.category,p.style||'',p.priceNGN,p.priceUSD,p.stock!==undefined?p.stock:'',(p.status||'active').toUpperCase(),p.tag||'',p.sizes||'','"'+(p.imageUrl||'').replace(/"/g,'""')+'"','"'+(p.description||'').replace(/"/g,'""')+'"'].join(',');});
-  dlFile([hdrs].concat(rows).join('\n'),'text/csv','manoshia_products_'+today()+'.csv');
+  dlFile([hdrs].concat(rows).join('\n'),'text/csv','klot_products_'+today()+'.csv');
   showToast('Products exported to CSV');
 }
 
@@ -850,14 +850,14 @@ function resetImport(){
 }
 function exportErrorLog(){
   if(!imp.errorLog.length)return;
-  dlFile(['Row,SKU,Field,Level,Message'].concat(imp.errorLog.map(function(e){return [e.row,e.sku,e.field,e.level,'"'+(e.msg||'').replace(/"/g,'""')+'"'].join(',');})).join('\n'),'text/csv','manoshia_import_errors.csv');
+  dlFile(['Row,SKU,Field,Level,Message'].concat(imp.errorLog.map(function(e){return [e.row,e.sku,e.field,e.level,'"'+(e.msg||'').replace(/"/g,'""')+'"'].join(',');})).join('\n'),'text/csv','klot_import_errors.csv');
 }
 function downloadTemplate(){
   if(typeof XLSX==='undefined'){showToast('Loading...');return;}
   var data=[['sku','name','category','priceNGN','priceUSD','style','sizes','tag','imageUrl','description','color','activity','stock','status'],['MN-021','Example Jacket','fashion',89000,55,'unisex','XS-XL','new','https://example.com/img.jpg','A luxury jacket.','#1a2d42','training',50,'active'],['MN-022','Example Jogger','fashion',65000,40,'unisex','XS-XL','','','','#e8e0d0','training',30,'active']];
   var ws=XLSX.utils.aoa_to_sheet(data); ws['!cols']=data[0].map(function(){return {wch:20};});
   var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Products');
-  XLSX.writeFile(wb,'manoshia_template.xlsx'); showToast('Template downloaded');
+  XLSX.writeFile(wb,'klot_template.xlsx'); showToast('Template downloaded');
 }
 
 // ── UTILITIES ──
@@ -970,7 +970,7 @@ function exportCustomers(fmt) {
     var csv = [headers.join(',')].concat(rows.map(function(r) {
       return r.map(function(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(',');
     })).join('\n');
-    dlFile(csv, 'text/csv', 'manoshia_customers_' + today() + '.csv');
+    dlFile(csv, 'text/csv', 'klot_customers_' + today() + '.csv');
     showToast('Customers exported to CSV');
   } else {
     if (typeof XLSX === 'undefined') { showToast('Loading...'); return; }
@@ -978,7 +978,7 @@ function exportCustomers(fmt) {
     ws['!cols'] = headers.map(function() { return {wch:20}; });
     var wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Customers');
-    XLSX.writeFile(wb, 'manoshia_customers_' + today() + '.xlsx');
+    XLSX.writeFile(wb, 'klot_customers_' + today() + '.xlsx');
     showToast('Customers exported to Excel');
   }
 }
@@ -988,7 +988,7 @@ function exportCustomers(fmt) {
 // ══════════════════════════════════════════════
 
 // Replace with your actual Paystack public key
-var PAYSTACK_PUBLIC_KEY = 'pk_test_f73aa5c0e73c5f9d5fca14d88f3506036eee24a2';
+var PAYSTACK_PUBLIC_KEY = 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
 function openCheckout() {
   if (!cart.length) { showToast('Your bag is empty'); return; }
@@ -1300,7 +1300,7 @@ function exportAuditLog() {
   var rows = auditLog.map(function(e) {
     return [e.timeStr, e.type, '"'+e.message.replace(/"/g,'""')+'"', e.user, e.ip].join(',');
   });
-  dlFile([headers].concat(rows).join('\n'), 'text/csv', 'manoshia_audit_'+today()+'.csv');
+  dlFile([headers].concat(rows).join('\n'), 'text/csv', 'klot_audit_'+today()+'.csv');
   showToast('Audit log exported');
 }
 
@@ -1757,7 +1757,7 @@ function submitRegister() {
 
     closeAuthModalDirect();
     if (btn) { btn.disabled = false; btn.textContent = 'Create Account'; }
-    showToast('Welcome to Manoshia, ' + fn + '!');
+    showToast('Welcome to KLOT, ' + fn + '!');
 
     if (authPendingCheckout) { authPendingCheckout = false; openCheckout(); }
   }).catch(function() {
@@ -1835,14 +1835,14 @@ function socialLogin(provider) {
   //     '&redirect_uri=' + REDIRECT_URI +
   //     '&response_type=code' +
   //     '&scope=openid%20email%20profile' +
-  //     '&state=manoshia_google';
+  //     '&state=klot_google';
   //   window.location.href = url;
   // } else if (provider === 'facebook') {
   //   var url = 'https://www.facebook.com/v18.0/dialog/oauth' +
   //     '?client_id='    + CLIENT_IDS.facebook +
   //     '&redirect_uri=' + REDIRECT_URI +
   //     '&scope=email,public_profile' +
-  //     '&state=manoshia_fb';
+  //     '&state=klot_fb';
   //   window.location.href = url;
   // }
   // --- END REAL OAUTH ---
@@ -2011,49 +2011,6 @@ openCheckout = function() {
     updatePayLabel();
   }, 100);
 };
-
-// ── Navigate to shop with category pre-filtered ──
-function goToShopCat(cat) {
-  showPage('shop');
-  var btns = document.querySelectorAll('#page-shop .filter-btn');
-  btns.forEach(function(b) { b.classList.remove('active'); });
-  btns.forEach(function(b) {
-    var txt = b.textContent.trim().toLowerCase();
-    if (cat === 'new' && txt === 'new arrivals') { b.classList.add('active'); }
-    else if (txt === cat) { b.classList.add('active'); }
-  });
-  renderGrid('shop-grid', cat === 'new'
-    ? products.filter(function(p) { return p.tag === 'new'; })
-    : products.filter(function(p) { return p.category === cat; })
-  );
-}
-
-// ── Collection Carousels ──
-var collCarouselIndices = [0, 0, 0, 0];
-
-function collCarousel(idx, dir) {
-  var carousel = document.getElementById('carousel-' + idx);
-  if (!carousel) return;
-  var slides = carousel.querySelectorAll('.coll-slide');
-  var dots   = carousel.querySelectorAll('.coll-dot');
-  slides[collCarouselIndices[idx]].classList.remove('active');
-  dots[collCarouselIndices[idx]].classList.remove('active');
-  collCarouselIndices[idx] = (collCarouselIndices[idx] + dir + slides.length) % slides.length;
-  slides[collCarouselIndices[idx]].classList.add('active');
-  dots[collCarouselIndices[idx]].classList.add('active');
-}
-
-function collCarouselTo(idx, to) {
-  var carousel = document.getElementById('carousel-' + idx);
-  if (!carousel) return;
-  var slides = carousel.querySelectorAll('.coll-slide');
-  var dots   = carousel.querySelectorAll('.coll-dot');
-  slides[collCarouselIndices[idx]].classList.remove('active');
-  dots[collCarouselIndices[idx]].classList.remove('active');
-  collCarouselIndices[idx] = to;
-  slides[collCarouselIndices[idx]].classList.add('active');
-  dots[collCarouselIndices[idx]].classList.add('active');
-}
 
 // ── Init: restore session on load ──
 document.addEventListener('DOMContentLoaded', function() {
