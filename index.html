@@ -176,6 +176,77 @@ nav { max-width:1400px; margin:0 auto; padding:0 40px; height:72px; display:flex
 .product-name { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:400; color:var(--navy); margin-bottom:6px; line-height:1.3; }
 .product-sizes { font-size:10px; color:var(--muted); letter-spacing:.08em; margin-bottom:10px; }
 .product-price { font-family:'Inter',sans-serif; font-size:20px; font-weight:500; color:var(--navy); }
+
+/* ── Product Detail Page (PDP) ── */
+.pdp-back { display:flex; align-items:center; gap:8px; padding:32px 40px 0; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); cursor:pointer; border:none; background:none; font-family:'Inter',sans-serif; transition:color .2s; }
+.pdp-back:hover { color:var(--navy); }
+.pdp-back svg { transition:transform .2s; }
+.pdp-back:hover svg { transform:translateX(-3px); }
+.pdp-layout { max-width:1300px; margin:0 auto; padding:40px 40px 80px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+.pdp-gallery {}
+.pdp-viewer { position:relative; aspect-ratio:4/5; background:#f5f5f5; overflow:hidden; cursor:zoom-in; }
+.pdp-viewer img { width:100%; height:100%; object-fit:contain; transition:transform .08s linear; pointer-events:none; will-change:transform; }
+.pdp-viewer.zoomed { cursor:crosshair; }
+.pdp-zoom-badge { position:absolute; bottom:16px; right:16px; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); background:var(--white); padding:6px 12px; opacity:.8; pointer-events:none; font-family:'Inter',sans-serif; }
+.pdp-thumbs { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:8px; }
+.pdp-thumb-wrap {}
+.pdp-thumb { aspect-ratio:1; background:#f0f0f0; cursor:pointer; overflow:hidden; border:2px solid transparent; transition:border-color .2s; }
+.pdp-thumb.active { border-color:var(--navy); }
+.pdp-thumb img { width:100%; height:100%; object-fit:contain; padding:4px; }
+.pdp-thumb-label { font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); text-align:center; margin-top:4px; font-family:'Inter',sans-serif; }
+.pdp-info {}
+.pdp-eyebrow { font-size:10px; letter-spacing:.25em; text-transform:uppercase; color:var(--green); margin-bottom:12px; }
+.pdp-title { font-family:'Barlow Condensed',sans-serif; font-size:clamp(32px,3.5vw,54px); font-weight:400; color:var(--navy); line-height:1.05; margin-bottom:8px; }
+.pdp-subtitle { font-size:13px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:32px; }
+.pdp-price { font-size:30px; font-weight:500; color:var(--navy); margin-bottom:36px; line-height:1; }
+.pdp-price-alt { font-size:14px; color:var(--muted); font-weight:400; margin-left:12px; }
+.pdp-variants { display:flex; flex-direction:column; gap:24px; margin-bottom:36px; }
+.pdp-variant-label { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--navy); margin-bottom:10px; font-family:'Inter',sans-serif; }
+.pdp-sizes { display:flex; gap:8px; flex-wrap:wrap; }
+.pdp-size-btn { min-width:48px; height:48px; padding:0 10px; border:1px solid var(--border); background:var(--white); font-size:12px; font-family:'Inter',sans-serif; color:var(--navy); cursor:pointer; transition:all .2s; letter-spacing:.05em; }
+.pdp-size-btn:hover { border-color:var(--navy); }
+.pdp-size-btn.active { background:var(--navy); color:var(--white); border-color:var(--navy); }
+.pdp-size-btn.out { opacity:.3; cursor:not-allowed; text-decoration:line-through; }
+.pdp-colorways { display:flex; gap:12px; align-items:center; }
+.pdp-color-swatch { width:30px; height:30px; border-radius:50%; cursor:pointer; border:3px solid transparent; outline:2px solid transparent; transition:outline-color .2s; box-shadow:0 0 0 1px rgba(0,0,0,.15); }
+.pdp-color-swatch.active { outline-color:var(--navy); outline-offset:3px; }
+.pdp-color-label { font-size:11px; color:var(--muted); margin-left:4px; font-family:'Inter',sans-serif; }
+.pdp-cta { display:flex; gap:10px; margin-bottom:32px; }
+.pdp-add-btn { flex:1; background:var(--navy); color:var(--white); border:none; padding:18px 20px; font-size:10px; letter-spacing:.25em; text-transform:uppercase; font-family:'Inter',sans-serif; cursor:pointer; transition:background .25s; }
+.pdp-add-btn:hover { background:var(--green); }
+.pdp-buy-btn { flex:1; background:var(--green); color:var(--white); border:none; padding:18px 20px; font-size:10px; letter-spacing:.25em; text-transform:uppercase; font-family:'Inter',sans-serif; cursor:pointer; transition:background .25s; }
+.pdp-buy-btn:hover { background:var(--green-mid); }
+.pdp-perks { display:flex; flex-direction:column; gap:12px; padding-top:24px; border-top:1px solid var(--border); }
+.pdp-perk { font-size:11px; color:var(--muted); letter-spacing:.05em; display:flex; align-items:center; gap:12px; font-family:'Inter',sans-serif; }
+.pdp-perk::before { content:''; width:20px; height:1px; background:var(--green); flex-shrink:0; }
+.pdp-tabs-section { max-width:1300px; margin:0 auto; padding:0 40px 100px; border-top:1px solid var(--border); }
+.pdp-tab-header { display:flex; gap:0; margin-bottom:52px; }
+.pdp-tab-btn { background:none; border:none; border-bottom:2px solid transparent; padding:24px 36px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); cursor:pointer; margin-bottom:-1px; transition:all .2s; font-family:'Inter',sans-serif; }
+.pdp-tab-btn:first-child { padding-left:0; }
+.pdp-tab-btn.active { color:var(--navy); border-bottom-color:var(--navy); }
+.pdp-tab-panel { display:none; }
+.pdp-tab-panel.active { display:block; }
+.pdp-highlights { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:20px 64px; }
+.pdp-highlights li { font-size:14px; color:var(--navy); padding-left:24px; position:relative; line-height:1.7; font-family:'Inter',sans-serif; }
+.pdp-highlights li::before { content:''; position:absolute; left:0; top:11px; width:10px; height:1px; background:var(--green); }
+.pdp-specs-table { width:100%; border-collapse:collapse; max-width:680px; }
+.pdp-specs-table tr { border-bottom:1px solid var(--border); }
+.pdp-specs-table tr:first-child { border-top:1px solid var(--border); }
+.pdp-specs-table td { padding:16px 0; font-size:13px; font-family:'Inter',sans-serif; }
+.pdp-specs-table td:first-child { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); width:220px; }
+.pdp-specs-table td:last-child { color:var(--navy); }
+.pdp-story { max-width:620px; }
+.pdp-story h3 { font-family:'Barlow Condensed',sans-serif; font-size:clamp(26px,2.8vw,40px); font-weight:400; color:var(--navy); margin-bottom:24px; line-height:1.1; }
+.pdp-story p { font-size:15px; color:var(--muted); line-height:1.85; margin-bottom:18px; font-family:'Inter',sans-serif; }
+.pdp-story blockquote { border-left:3px solid var(--green); padding-left:28px; margin:32px 0; font-family:'Barlow Condensed',sans-serif; font-size:26px; color:var(--navy); font-style:italic; line-height:1.35; }
+@media (max-width:900px) {
+  .pdp-layout { grid-template-columns:1fr; gap:36px; padding:24px 20px 60px; }
+  .pdp-back { padding:20px 20px 0; }
+  .pdp-tabs-section { padding:0 20px 60px; }
+  .pdp-tab-btn { padding:18px 20px; font-size:9px; }
+  .pdp-highlights { grid-template-columns:1fr; }
+}
+
 .size-select { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:var(--white); padding:6px 10px; font-size:10px; font-family:'Inter',sans-serif; outline:none; letter-spacing:.1em; }
 .size-select option { background:var(--navy); color:var(--cream); }
 
@@ -198,7 +269,12 @@ nav { max-width:1400px; margin:0 auto; padding:0 40px; height:72px; display:flex
 
 /* ── About ── */
 .about-layout { padding:100px 40px; max-width:1400px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
-.about-img { background:var(--navy); aspect-ratio:4/5; display:flex; align-items:center; justify-content:center; }
+.about-img { position:relative; aspect-ratio:4/5; overflow:hidden; background:var(--navy); }
+.about-img img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; transition:transform .8s cubic-bezier(.25,.46,.45,.94); }
+.about-img:hover img { transform:scale(1.05); }
+.about-img-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(13,13,13,.65) 0%, rgba(13,13,13,.15) 45%, transparent 75%); pointer-events:none; }
+.about-img-accent { position:absolute; top:0; left:0; width:56px; height:3px; background:var(--green); }
+.about-img-tag { position:absolute; bottom:32px; left:32px; font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:.4em; text-transform:uppercase; color:rgba(245,240,232,.6); }
 .about-body { font-family:'Inter',sans-serif; font-size:18px; line-height:1.9; color:var(--muted); margin-bottom:16px; }
 .team-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); max-width:1400px; margin:0 auto 80px; }
 .team-card { background:var(--white); padding:40px; text-align:center; }
@@ -734,6 +810,30 @@ input.pm-inp.pfx { padding-left:26px; }
   text-transform:uppercase; opacity:.5;
 }
 
+/* ── Admin Team Upload Panel ── */
+.team-upload-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:32px; }
+.team-upload-card { background:rgba(255,255,255,.04); border:1px solid rgba(184,151,74,.12); padding:0 0 24px; }
+.team-upload-preview { position:relative; aspect-ratio:3/4; overflow:hidden; background:#111; cursor:pointer; }
+.team-upload-preview img { width:100%; height:100%; object-fit:cover; object-position:top center; display:block; transition:transform .5s ease; }
+.team-upload-preview:hover img { transform:scale(1.04); }
+.team-upload-preview-overlay { position:absolute; inset:0; background:rgba(0,0,0,.52); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; opacity:0; transition:opacity .25s; pointer-events:none; }
+.team-upload-preview:hover .team-upload-preview-overlay { opacity:1; }
+.team-upload-preview-icon { font-size:32px; }
+.team-upload-preview-label { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:rgba(245,240,232,.7); font-family:'Barlow Condensed',sans-serif; }
+.team-upload-input { display:none; }
+.team-upload-body { padding:20px 20px 0; }
+.team-upload-name { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:600; color:var(--cream); letter-spacing:.04em; margin-bottom:3px; }
+.team-upload-role { font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--green); margin-bottom:18px; }
+.team-upload-bio-label { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:rgba(245,240,232,.35); margin-bottom:6px; }
+.team-upload-bio { width:100%; background:rgba(255,255,255,.05); border:1px solid rgba(184,151,74,.15); color:rgba(245,240,232,.8); font-family:'Inter',sans-serif; font-size:12px; line-height:1.65; padding:10px 12px; resize:vertical; min-height:80px; box-sizing:border-box; margin-bottom:12px; }
+.team-upload-bio:focus { outline:none; border-color:var(--green); }
+.team-upload-save { width:100%; background:var(--green); color:var(--white); border:none; padding:11px; font-size:9px; letter-spacing:.22em; text-transform:uppercase; cursor:pointer; font-family:'Barlow Condensed',sans-serif; transition:opacity .2s; }
+.team-upload-save:hover { opacity:.82; }
+.team-upload-status { font-size:11px; margin-top:10px; min-height:16px; color:#4ade80; font-family:'Inter',sans-serif; }
+.team-upload-hint { font-family:'Inter',sans-serif; font-size:13px; color:rgba(245,240,232,.4); line-height:1.7; margin-bottom:32px; }
+@media (max-width:1024px) { .team-upload-grid { grid-template-columns:1fr 1fr; } }
+@media (max-width:640px)  { .team-upload-grid { grid-template-columns:1fr; } }
+
 /* Upload success flash */
 @keyframes photoFlash {
   0%   { outline:3px solid var(--green); outline-offset:0; }
@@ -1254,6 +1354,77 @@ input.pm-inp.pfx { padding-left:26px; }
 </div>
 
 <!-- ======================================
+     PRODUCT DETAIL PAGE (PDP)
+     ====================================== -->
+<div class="page" id="page-pdp">
+  <button class="pdp-back" onclick="showPage(window._pdpReturn||'shop')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </button>
+
+  <div class="pdp-layout">
+    <!-- GALLERY -->
+    <div class="pdp-gallery">
+      <div class="pdp-viewer" id="pdp-viewer"
+           onmousemove="pdpPanZoom(event)"
+           onclick="pdpToggleZoom()">
+        <img id="pdp-main-img" src="" alt="">
+        <span class="pdp-zoom-badge" id="pdp-zoom-badge">+ Zoom</span>
+      </div>
+      <div class="pdp-thumbs" id="pdp-thumbs"></div>
+    </div>
+
+    <!-- INFO -->
+    <div class="pdp-info">
+      <p class="pdp-eyebrow" id="pdp-eyebrow"></p>
+      <h1 class="pdp-title" id="pdp-title"></h1>
+      <p class="pdp-subtitle" id="pdp-subtitle"></p>
+      <div class="pdp-price" id="pdp-price"></div>
+
+      <div class="pdp-variants">
+        <div>
+          <div class="pdp-variant-label">Size</div>
+          <div class="pdp-sizes" id="pdp-sizes"></div>
+        </div>
+        <div>
+          <div class="pdp-variant-label" id="pdp-color-label-head">Colorway</div>
+          <div class="pdp-colorways" id="pdp-colorways"></div>
+        </div>
+      </div>
+
+      <div class="pdp-cta">
+        <button class="pdp-add-btn" onclick="pdpAddToCart()">Add to Bag</button>
+        <button class="pdp-buy-btn" onclick="pdpBuyNow()">Buy Now</button>
+      </div>
+
+      <div class="pdp-perks">
+        <div class="pdp-perk">Free delivery on orders over &#8358;150,000 / $100</div>
+        <div class="pdp-perk">30-day hassle-free returns</div>
+        <div class="pdp-perk">Authentic KLOT quality guaranteed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="pdp-tabs-section">
+    <div class="pdp-tab-header" style="border-bottom:1px solid var(--border);">
+      <button class="pdp-tab-btn active" onclick="pdpTab('highlights',this)">Highlights</button>
+      <button class="pdp-tab-btn" onclick="pdpTab('specs',this)">Specifications</button>
+      <button class="pdp-tab-btn" onclick="pdpTab('story',this)">The Story</button>
+    </div>
+    <div id="pdp-panel-highlights" class="pdp-tab-panel active">
+      <ul class="pdp-highlights" id="pdp-highlights-list"></ul>
+    </div>
+    <div id="pdp-panel-specs" class="pdp-tab-panel">
+      <table class="pdp-specs-table" id="pdp-specs-table"></table>
+    </div>
+    <div id="pdp-panel-story" class="pdp-tab-panel">
+      <div class="pdp-story" id="pdp-story-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================
      COLLECTIONS PAGE
      ====================================== -->
 <div class="page" id="page-collections">
@@ -1312,17 +1483,23 @@ input.pm-inp.pfx { padding-left:26px; }
 <div class="page" id="page-about">
   <div class="about-layout">
     <div class="about-img">
-      <svg viewBox="0 0 44 44" fill="none" style="width:38%;opacity:0.18">
-        <ellipse cx="22" cy="22" rx="18" ry="20" stroke="#ffffff" stroke-width="5" fill="none"/>
-        <line x1="4" y1="22" x2="40" y2="22" stroke="#ffffff" stroke-width="5"/>
-      </svg>
+      <img src="klot_website/klot/assets/images/ourstorypic.png" alt="KLOT — Born From Intention" onerror="this.style.display='none'">
+      <div class="about-img-overlay"></div>
+      <div class="about-img-accent"></div>
+      <span class="about-img-tag">Born From Intention</span>
     </div>
     <div>
       <span class="section-label">Our Story</span>
       <h2 class="section-title">Born From <em>Intention</em></h2>
+      <div style="width:40px;height:2px;background:var(--green);margin-bottom:32px"></div>
       <p class="about-body">KLOT was founded on a singular belief: that performance and impact are not at odds. That the most powerful things you wear should also be the most functional.</p>
       <p class="about-body">Built for movement, designed for impact &mdash; our pieces speak to a generation of people who refuse to hold back, who demand that their wardrobes keep pace with who they are at every moment.</p>
       <p class="about-body">We craft each piece with athletic precision, using performance materials that honour both the body and the bold.</p>
+      <div style="display:flex;gap:40px;margin:32px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:28px 0">
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:700;letter-spacing:-.02em;color:var(--navy)">2024</div><div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Founded</div></div>
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:700;letter-spacing:-.02em;color:var(--navy)">20+</div><div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Products</div></div>
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:700;letter-spacing:-.02em;color:var(--navy)">Lagos</div><div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px">Origin</div></div>
+      </div>
       <button class="btn-outline" onclick="showPage('collections')">View Collections</button>
     </div>
   </div>
@@ -1340,14 +1517,6 @@ input.pm-inp.pfx { padding-left:26px; }
                class="team-photo"
                alt="Adaeze Manoshi — Founder &amp; Creative Director"
                onerror="this.style.display='none'">
-          <div class="team-photo-overlay">
-            <label class="team-photo-change" for="upload-adaeze" title="Upload photo">
-              &#128247; Update Photo
-              <input type="file" id="upload-adaeze" accept="image/*"
-                     style="display:none"
-                     onchange="updateExecPhoto('adaeze',this)">
-            </label>
-          </div>
         </div>
         <div class="team-info">
           <h4>Adaeze Manoshi</h4>
@@ -1364,14 +1533,6 @@ input.pm-inp.pfx { padding-left:26px; }
                class="team-photo"
                alt="Kofi Asante — Head of Design"
                onerror="this.style.display='none'">
-          <div class="team-photo-overlay">
-            <label class="team-photo-change" for="upload-kofi" title="Upload photo">
-              &#128247; Update Photo
-              <input type="file" id="upload-kofi" accept="image/*"
-                     style="display:none"
-                     onchange="updateExecPhoto('kofi',this)">
-            </label>
-          </div>
         </div>
         <div class="team-info">
           <h4>Kofi Asante</h4>
@@ -1388,14 +1549,6 @@ input.pm-inp.pfx { padding-left:26px; }
                class="team-photo"
                alt="Zara Obi — Brand &amp; Communications"
                onerror="this.style.display='none'">
-          <div class="team-photo-overlay">
-            <label class="team-photo-change" for="upload-zara" title="Upload photo">
-              &#128247; Update Photo
-              <input type="file" id="upload-zara" accept="image/*"
-                     style="display:none"
-                     onchange="updateExecPhoto('zara',this)">
-            </label>
-          </div>
         </div>
         <div class="team-info">
           <h4>Zara Obi</h4>
@@ -1593,6 +1746,7 @@ input.pm-inp.pfx { padding-left:26px; }
       <div class="admin-nav-item" onclick="showAdminTab('products',this)">&#128247; Products</div>
       <div class="admin-nav-item" onclick="showAdminTab('customers',this)">&#128100; Customers</div>
       <div class="admin-nav-item" onclick="showAdminTab('import',this)">&#128229; Import</div>
+      <div class="admin-nav-item" onclick="showAdminTab('team',this)">&#128100; Team Photos</div>
       <div class="admin-nav-item" onclick="showAdminTab('audit',this)">&#128196; Audit Log</div>
     </div>
 
@@ -1810,13 +1964,25 @@ input.pm-inp.pfx { padding-left:26px; }
                   <select class="pm-inp" id="edit-style"><option value="unisex">Unisex</option><option value="men">Men</option><option value="women">Women</option></select>
                 </div>
               </div>
-              <div class="pm-field" style="margin-bottom:18px">
-                <label class="pm-lbl">Image URL</label>
+              <div class="pm-field" style="margin-bottom:12px">
+                <label class="pm-lbl">Image 1 — Main (Hero)</label>
                 <div style="display:flex;gap:8px;align-items:center">
-                  <input type="url" class="pm-inp" id="edit-imageUrl" placeholder="https://example.com/image.jpg" oninput="pmPreviewImg(this.value)" style="flex:1">
+                  <input type="text" class="pm-inp" id="edit-imageUrl" placeholder="https://example.com/image.jpg or klot_website/..." oninput="pmPreviewImg(this.value)" style="flex:1">
                   <div class="pm-img-preview" id="pm-img-preview"><span style="font-size:18px;opacity:.3">&#128444;</span></div>
                 </div>
                 <div class="pm-img-status" id="pm-img-status"></div>
+              </div>
+              <div class="pm-field" style="margin-bottom:12px">
+                <label class="pm-lbl">Image 2 — Front View</label>
+                <input type="text" class="pm-inp" id="edit-image2" placeholder="https://example.com/front.jpg or klot_website/...">
+              </div>
+              <div class="pm-field" style="margin-bottom:12px">
+                <label class="pm-lbl">Image 3 — Rear View</label>
+                <input type="text" class="pm-inp" id="edit-image3" placeholder="https://example.com/rear.jpg or klot_website/...">
+              </div>
+              <div class="pm-field" style="margin-bottom:18px">
+                <label class="pm-lbl">Image 4 — Detail Shot</label>
+                <input type="text" class="pm-inp" id="edit-image4" placeholder="https://example.com/detail.jpg or klot_website/...">
               </div>
               <div class="pm-field-row">
                 <div class="pm-field">
@@ -1916,7 +2082,10 @@ input.pm-inp.pfx { padding-left:26px; }
             <div class="tpl-col"><div class="tpl-col-name">style</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">unisex|men|women</div></div>
             <div class="tpl-col"><div class="tpl-col-name">sizes</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">e.g. XS-XL</div></div>
             <div class="tpl-col"><div class="tpl-col-name">tag</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">new|limited|sale</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">imageUrl</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">https:// URL</div></div>
+            <div class="tpl-col"><div class="tpl-col-name">imageUrl</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">Main image URL</div></div>
+            <div class="tpl-col"><div class="tpl-col-name">image2</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">2nd image (front)</div></div>
+            <div class="tpl-col"><div class="tpl-col-name">image3</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">3rd image (rear)</div></div>
+            <div class="tpl-col"><div class="tpl-col-name">image4</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">4th image (detail)</div></div>
             <div class="tpl-col"><div class="tpl-col-name">stock</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">Quantity number</div></div>
             <div class="tpl-col"><div class="tpl-col-name">status</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">active|inactive</div></div>
             <div class="tpl-col"><div class="tpl-col-name">description</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">Product description</div></div>
@@ -1982,6 +2151,75 @@ input.pm-inp.pfx { padding-left:26px; }
         </div>
       </div><!-- /import tab -->
 
+
+      <!-- TEAM PHOTOS TAB -->
+      <div class="admin-tab" id="admin-team">
+        <h3 class="admin-section-title">Team Photo Manager</h3>
+        <p class="team-upload-hint">Upload profile photos and edit bios for the Our Story page. Click any photo to select a new image — changes apply immediately. Only accessible from this admin panel.</p>
+        <div class="team-upload-grid">
+
+          <!-- Adaeze -->
+          <div class="team-upload-card">
+            <div class="team-upload-preview" onclick="document.getElementById('admin-file-adaeze').click()" title="Click to upload photo">
+              <img id="admin-preview-adaeze" src="" alt="Adaeze Manoshi" onerror="this.style.opacity='.15'">
+              <div class="team-upload-preview-overlay">
+                <span class="team-upload-preview-icon">&#128247;</span>
+                <span class="team-upload-preview-label">Change Photo</span>
+              </div>
+              <input type="file" id="admin-file-adaeze" class="team-upload-input" accept="image/png,image/jpeg,image/webp" onchange="adminExecUpload('adaeze',this)">
+            </div>
+            <div class="team-upload-body">
+              <div class="team-upload-name">Adaeze Manoshi</div>
+              <div class="team-upload-role">Founder &amp; Creative Director</div>
+              <div class="team-upload-bio-label">Bio</div>
+              <textarea class="team-upload-bio" id="admin-bio-adaeze">Adaeze founded KLOT with a vision to marry bold design with the energy of active life. Former creative lead at a Lagos fashion house.</textarea>
+              <button class="team-upload-save" onclick="adminSaveBio('adaeze')">Save Bio</button>
+              <div class="team-upload-status" id="admin-status-adaeze"></div>
+            </div>
+          </div>
+
+          <!-- Kofi -->
+          <div class="team-upload-card">
+            <div class="team-upload-preview" onclick="document.getElementById('admin-file-kofi').click()" title="Click to upload photo">
+              <img id="admin-preview-kofi" src="" alt="Kofi Asante" onerror="this.style.opacity='.15'">
+              <div class="team-upload-preview-overlay">
+                <span class="team-upload-preview-icon">&#128247;</span>
+                <span class="team-upload-preview-label">Change Photo</span>
+              </div>
+              <input type="file" id="admin-file-kofi" class="team-upload-input" accept="image/png,image/jpeg,image/webp" onchange="adminExecUpload('kofi',this)">
+            </div>
+            <div class="team-upload-body">
+              <div class="team-upload-name">Kofi Asante</div>
+              <div class="team-upload-role">Head of Design</div>
+              <div class="team-upload-bio-label">Bio</div>
+              <textarea class="team-upload-bio" id="admin-bio-kofi">Kofi brings architectural precision to every silhouette. Trained in Milan and Accra, he leads the design language across all KLOT collections.</textarea>
+              <button class="team-upload-save" onclick="adminSaveBio('kofi')">Save Bio</button>
+              <div class="team-upload-status" id="admin-status-kofi"></div>
+            </div>
+          </div>
+
+          <!-- Zara -->
+          <div class="team-upload-card">
+            <div class="team-upload-preview" onclick="document.getElementById('admin-file-zara').click()" title="Click to upload photo">
+              <img id="admin-preview-zara" src="" alt="Zara Obi" onerror="this.style.opacity='.15'">
+              <div class="team-upload-preview-overlay">
+                <span class="team-upload-preview-icon">&#128247;</span>
+                <span class="team-upload-preview-label">Change Photo</span>
+              </div>
+              <input type="file" id="admin-file-zara" class="team-upload-input" accept="image/png,image/jpeg,image/webp" onchange="adminExecUpload('zara',this)">
+            </div>
+            <div class="team-upload-body">
+              <div class="team-upload-name">Zara Obi</div>
+              <div class="team-upload-role">Brand &amp; Communications</div>
+              <div class="team-upload-bio-label">Bio</div>
+              <textarea class="team-upload-bio" id="admin-bio-zara">Zara shapes how the world sees KLOT. With a background in athletic brand strategy, she crafts every touchpoint into a statement of intent.</textarea>
+              <button class="team-upload-save" onclick="adminSaveBio('zara')">Save Bio</button>
+              <div class="team-upload-status" id="admin-status-zara"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
 
       <!-- AUDIT LOG TAB -->
       <div class="admin-tab" id="admin-audit">
@@ -2345,23 +2583,31 @@ const LOGO_SVG = function(fill, w) {
 var products = [
   {id:1,  sku:'MN-001', name:'The Obsidian Jacket',  category:'fashion', tag:'new',     priceNGN:89000,  priceUSD:55,  sizes:'XS-XL',    color:'#1a2d42', style:'unisex', activity:'training', stock:42, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMSIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMmEzZDUyIiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWEyZDQyIiBzdG9wLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNoZWxmMSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMWEyZDQyIiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWEyZDQyIiBzdG9wLW9wYWNpdHk9IjAuMjIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiNmNWYwZTgiLz4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNiZzEpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDEiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWEyZDQyIiBzdHJva2Utd2lkdGg9IjAuNCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvcGF0dGVybj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNncmlkMSkiLz4KCiAgPCEtLSBQcm9kdWN0IHNpbGhvdWV0dGUgYXJlYSAoY2VudHJlZCwgcHJvZHVjdCBpbWFnZSB6b25lIDQwMHgzODApIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDMwKSI+CiAgICAKICAgICAgPCEtLSBqYWNrZXQgYm9keSAtLT4KICAgICAgPHBhdGggZD0iTTE0MCAxMjAgTDExMCAxNDUgTDk1IDIwMCBMOTUgMzQwIEwzMDUgMzQwIEwzMDUgMjAwIEwyOTAgMTQ1IEwyNjAgMTIwIiBmaWxsPSIjMmEzZDUyIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8IS0tIGxhcGVscyAtLT4KICAgICAgPHBhdGggZD0iTTE0MCAxMjAgTDE3NSAxODAgTDIwMCAxNjAgTDIwMCAzNDAiIGZpbGw9IiMxYTJkNDIiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPHBhdGggZD0iTTI2MCAxMjAgTDIyNSAxODAgTDIwMCAxNjAiIGZpbGw9IiMxYTJkNDIiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBzbGVldmVzIC0tPgogICAgICA8cGF0aCBkPSJNMTEwIDE0NSBMNzAgMjgwIEw5NSAyODUgTDEyMCAxODAgTDExMCAxNDUiIGZpbGw9IiMxYTJkNDIiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPHBhdGggZD0iTTI5MCAxNDUgTDMzMCAyODAgTDMwNSAyODUgTDI4MCAxODAgTDI5MCAxNDUiIGZpbGw9IiMxYTJkNDIiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBjb2xsYXIgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNTUgMTE1IEwyMDAgOTUgTDI0NSAxMTUgTDI2MCAxMjAgTDIwMCAxNTAgTDE0MCAxMjBaIiBmaWxsPSIjMmEzZDUyIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICAKICA8L2c+CgogIDwhLS0gQm90dG9tIGluZm8gcGFuZWwgLS0+CiAgPHJlY3QgeD0iMCIgeT0iNDAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzaGVsZjEpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiMxYTJkNDIiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNjkiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjMmE2YjJhIi8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5GQVNISU9OPC90ZXh0PgoKICA8IS0tIFNLVSAtLT4KICA8dGV4dCB4PSIzODQiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4LjUiIGxldHRlci1zcGFjaW5nPSIxIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjOWFhYmFkIj5NTi0wMDE8L3RleHQ+CgogIDwhLS0gUHJvZHVjdCBuYW1lIC0tPgogIDx0ZXh0IHg9IjE2IiB5PSI0NDkiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjQwMCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSIjMGUxYzM4Ij5UaGUgT2JzaWRpYW4gSmFja2V0PC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjMWEyZDQyIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iIzFhMmQ0MiIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiMxYTJkNDIiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjMWEyZDQyIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iIzFhMmQ0MiIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiMxYTJkNDIiLz4KICA8L2c+Cjwvc3ZnPg==', description:'A sleek all-season luxury active jacket.'},
   {id:2,  sku:'MN-002', name:'Ivory Tailored Jogger', category:'fashion', tag:'',        priceNGN:65000,  priceUSD:40,  sizes:'XS-XL',    color:'#e8e0d0', style:'unisex', activity:'training', stock:28, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMiIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZDRjOGIwIiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZThlMGQwIiBzdG9wLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNoZWxmMiIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZThlMGQwIiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZThlMGQwIiBzdG9wLW9wYWNpdHk9IjAuMjIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiNmNWYwZTgiLz4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNiZzIpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDIiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZThlMGQwIiBzdHJva2Utd2lkdGg9IjAuNCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvcGF0dGVybj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNncmlkMikiLz4KCiAgPCEtLSBQcm9kdWN0IHNpbGhvdWV0dGUgYXJlYSAoY2VudHJlZCwgcHJvZHVjdCBpbWFnZSB6b25lIDQwMHgzODApIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDMwKSI+CiAgICAKICAgICAgPCEtLSB3YWlzdGJhbmQgLS0+CiAgICAgIDxyZWN0IHg9IjEzMCIgeT0iMTE1IiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjIyIiByeD0iNCIgZmlsbD0iI2Q0YzhiMCIvPgogICAgICA8IS0tIGxlZnQgbGVnIC0tPgogICAgICA8cGF0aCBkPSJNMTMwIDEzNyBMMTI1IDMxMCBMMTgwIDMxNSBMMjAwIDIwMCBMMjIwIDMxNSBMMjc1IDMxMCBMMjcwIDEzN1oiIGZpbGw9IiNlOGUwZDAiIHN0cm9rZT0iIzBlMWMzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBhbmtsZSBjdWZmcyAtLT4KICAgICAgPHJlY3QgeD0iMTIyIiB5PSIzMDgiIHdpZHRoPSI2MSIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiNkNGM4YjAiLz4KICAgICAgPHJlY3QgeD0iMjE3IiB5PSIzMDgiIHdpZHRoPSI2MSIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiNkNGM4YjAiLz4KICAgICAgPCEtLSBkcmF3c3RyaW5nIC0tPgogICAgICA8bGluZSB4MT0iMTg1IiB5MT0iMTI2IiB4Mj0iMjE1IiB5Mj0iMTI2IiBzdHJva2U9IiMwZTFjMzgiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICAKICA8L2c+CgogIDwhLS0gQm90dG9tIGluZm8gcGFuZWwgLS0+CiAgPHJlY3QgeD0iMCIgeT0iNDAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzaGVsZjIpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiNlOGUwZDAiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNjkiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjMmE2YjJhIi8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5GQVNISU9OPC90ZXh0PgoKICA8IS0tIFNLVSAtLT4KICA8dGV4dCB4PSIzODQiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4LjUiIGxldHRlci1zcGFjaW5nPSIxIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNWE2ZTdmIj5NTi0wMDI8L3RleHQ+CgogIDwhLS0gUHJvZHVjdCBuYW1lIC0tPgogIDx0ZXh0IHg9IjE2IiB5PSI0NDkiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjQwMCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSIjMGUxYzM4Ij5Jdm9yeSBUYWlsb3JlZCBKb2figKY8L3RleHQ+CgogIDwhLS0gTSBtYXJrIHdhdGVybWFyayAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMzAsIDQxOCkiIG9wYWNpdHk9IjAuMDgiPgogICAgPHJlY3QgeD0iMCIgeT0iMCIgICB3aWR0aD0iNi41IiAgaGVpZ2h0PSIxMSIgIGZpbGw9IiNlOGUwZDAiLz4KICAgIDxyZWN0IHg9IjAiIHk9IjEzIiAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTUiICBmaWxsPSIjZThlMGQwIi8+CiAgICA8cmVjdCB4PSI4LjMiIHk9IjQiIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjcuNSIgZmlsbD0iI2U4ZTBkMCIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgIGZpbGw9IiNlOGUwZDAiLz4KICAgIDxyZWN0IHg9IjE2LjUiIHk9IjAiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTEiICBmaWxsPSIjZThlMGQwIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgZmlsbD0iI2U4ZTBkMCIvPgogIDwvZz4KPC9zdmc+', description:'Tailored jogger in ivory performance fabric.'},
-  {id:3,  sku:'MN-003', name:'Precision Run Vest',    category:'sports',  tag:'new',     priceNGN:48000,  priceUSD:30,  sizes:'XS-XL',    color:'#2a3d4a', style:'unisex', activity:'running',  stock:61, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMWEyZDM4IiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMmEzZDRhIiBzdG9wLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNoZWxmMyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMmEzZDRhIiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMmEzZDRhIiBzdG9wLW9wYWNpdHk9IjAuMjIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiNmNWYwZTgiLz4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNiZzMpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDMiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMmEzZDRhIiBzdHJva2Utd2lkdGg9IjAuNCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvcGF0dGVybj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNncmlkMykiLz4KCiAgPCEtLSBQcm9kdWN0IHNpbGhvdWV0dGUgYXJlYSAoY2VudHJlZCwgcHJvZHVjdCBpbWFnZSB6b25lIDQwMHgzODApIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDMwKSI+CiAgICAKICAgICAgPCEtLSB2ZXN0IGJvZHkgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNTUgMTA1IEwxMzAgMTMwIEwxMjAgMzIwIEwyODAgMzIwIEwyNzAgMTMwIEwyNDUgMTA1IiBmaWxsPSIjMmEzZDRhIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8IS0tIGFybWhvbGVzIC0tPgogICAgICA8cGF0aCBkPSJNMTU1IDEwNSBMMTMwIDEzMCBMMTE1IDE3MCBMMTM1IDE3NSBMMTU1IDEzNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTgpIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgPHBhdGggZD0iTTI0NSAxMDUgTDI3MCAxMzAgTDI4NSAxNzAgTDI2NSAxNzUgTDI0NSAxMzUiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICAgIDwhLS0gemlwIGxpbmUgLS0+CiAgICAgIDxsaW5lIHgxPSIyMDAiIHkxPSIxMDUiIHgyPSIyMDAiIHkyPSIzMjAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZS1kYXNoYXJyYXk9IjYsMyIvPgogICAgICA8IS0tIGNvbGxhciAtLT4KICAgICAgPHBhdGggZD0iTTE2NSAxMDUgTDIwMCA4OCBMMjM1IDEwNSBMMjQ1IDEwNSBMMjAwIDEyNSBMMTU1IDEwNVoiIGZpbGw9IiMxYTJkMzgiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIAogIDwvZz4KCiAgPCEtLSBCb3R0b20gaW5mbyBwYW5lbCAtLT4KICA8cmVjdCB4PSIwIiB5PSI0MDAiIHdpZHRoPSI0MDAiIGhlaWdodD0iMTAwIiBmaWxsPSJ1cmwoI3NoZWxmMykiLz4KICA8cmVjdCB4PSIwIiB5PSIzOTgiIHdpZHRoPSI0MDAiIGhlaWdodD0iMSIgZmlsbD0iIzJhM2Q0YSIgb3BhY2l0eT0iMC4xNSIvPgoKICA8IS0tIENhdGVnb3J5IGxhYmVsIC0tPgogIDxyZWN0IHg9IjE2IiB5PSI0MTIiIHdpZHRoPSI2MiIgaGVpZ2h0PSIxNiIgcng9IjIiIGZpbGw9IiMwZTFjMzgiLz4KICA8dGV4dCB4PSIyNiIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGxldHRlci1zcGFjaW5nPSIxLjUiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0id2hpdGUiIHRleHQtdHJhbnNmb3JtPSJ1cHBlcmNhc2UiPlNQT1JUUzwvdGV4dD4KCiAgPCEtLSBTS1UgLS0+CiAgPHRleHQgeD0iMzg0IiB5PSI0MjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iOC41IiBsZXR0ZXItc3BhY2luZz0iMSIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzlhYWJhZCI+TU4tMDAzPC90ZXh0PgoKICA8IS0tIFByb2R1Y3QgbmFtZSAtLT4KICA8dGV4dCB4PSIxNiIgeT0iNDQ5IiBmb250LWZhbWlseT0iR2VvcmdpYSwgc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI0MDAiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0iIzBlMWMzOCI+UHJlY2lzaW9uIFJ1biBWZXN0PC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjMmEzZDRhIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iIzJhM2Q0YSIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiMyYTNkNGEiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjMmEzZDRhIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iIzJhM2Q0YSIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiMyYTNkNGEiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Lightweight vest engineered for performance running.'},
+  {id:3,  sku:'MN-003', name:'Precision Run Vest',    category:'sports',  tag:'new',     priceNGN:48000,  priceUSD:30,  sizes:'XS-XL',    color:'#2a3d4a', style:'unisex', activity:'running',  stock:61, status:'active',   imageUrl:'klot_website/klot/assets/images/Precision Run Vest_main.png',image2:'klot_website/klot/assets/images/Precision Run Vest_front.png',image3:'klot_website/klot/assets/images/Precision Run Vest_rear.png',image4:'klot_website/klot/assets/images/Precision Run Vest_detail.png', description:'Lightweight vest engineered for performance running.'},
   {id:4,  sku:'MN-004', name:'Navy Flow Leggings',    category:'sports',  tag:'',        priceNGN:54000,  priceUSD:34,  sizes:'XS-XL',    color:'#0d1b2a', style:'women',  activity:'yoga',     stock:35, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnNCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMWEyZDQyIiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGQxYjJhIiBzdG9wLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNoZWxmNCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMGQxYjJhIiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGQxYjJhIiBzdG9wLW9wYWNpdHk9IjAuMjIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiNmNWYwZTgiLz4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNiZzQpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMGQxYjJhIiBzdHJva2Utd2lkdGg9IjAuNCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvcGF0dGVybj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNncmlkNCkiLz4KCiAgPCEtLSBQcm9kdWN0IHNpbGhvdWV0dGUgYXJlYSAoY2VudHJlZCwgcHJvZHVjdCBpbWFnZSB6b25lIDQwMHgzODApIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDMwKSI+CiAgICAKICAgICAgPCEtLSB3YWlzdGJhbmQgLS0+CiAgICAgIDxyZWN0IHg9IjEzNSIgeT0iMTAwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iIzFhMmQ0MiIvPgogICAgICA8IS0tIGxlZnQgbGVnIC0tPgogICAgICA8cGF0aCBkPSJNMTM1IDEyNCBMMTI4IDMzMCBMMTkwIDMzMCBMMjAwIDIxMCBMMjEwIDMzMCBMMjcyIDMzMCBMMjY1IDEyNFoiIGZpbGw9IiMwZDFiMmEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBzZWFtIGxpbmVzIC0tPgogICAgICA8bGluZSB4MT0iMTYzIiB5MT0iMTI0IiB4Mj0iMTU4IiB5Mj0iMzMwIiBzdHJva2U9IiMxYTJkNDIiIHN0cm9rZS13aWR0aD0iMS41IiBvcGFjaXR5PSIwLjUiLz4KICAgICAgPGxpbmUgeDE9IjIzNyIgeTE9IjEyNCIgeDI9IjI0MiIgeTI9IjMzMCIgc3Ryb2tlPSIjMWEyZDQyIiBzdHJva2Utd2lkdGg9IjEuNSIgb3BhY2l0eT0iMC41Ii8+CiAgICAKICA8L2c+CgogIDwhLS0gQm90dG9tIGluZm8gcGFuZWwgLS0+CiAgPHJlY3QgeD0iMCIgeT0iNDAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzaGVsZjQpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiMwZDFiMmEiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNjIiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjMGUxYzM4Ii8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5TUE9SVFM8L3RleHQ+CgogIDwhLS0gU0tVIC0tPgogIDx0ZXh0IHg9IjM4NCIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjguNSIgbGV0dGVyLXNwYWNpbmc9IjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM5YWFiYWQiPk1OLTAwNDwvdGV4dD4KCiAgPCEtLSBQcm9kdWN0IG5hbWUgLS0+CiAgPHRleHQgeD0iMTYiIHk9IjQ0OSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNDAwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMwZTFjMzgiPk5hdnkgRmxvdyBMZWdnaW5nczwvdGV4dD4KCiAgPCEtLSBNIG1hcmsgd2F0ZXJtYXJrIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMzMCwgNDE4KSIgb3BhY2l0eT0iMC4wOCI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiAgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjExIiAgZmlsbD0iIzBkMWIyYSIvPgogICAgPHJlY3QgeD0iMCIgeT0iMTMiICB3aWR0aD0iNi41IiAgaGVpZ2h0PSIxNSIgIGZpbGw9IiMwZDFiMmEiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iNCIgd2lkdGg9IjYuNSIgIGhlaWdodD0iNy41IiBmaWxsPSIjMGQxYjJhIi8+CiAgICA8cmVjdCB4PSI4LjMiIHk9IjEzIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjE1IiAgZmlsbD0iIzBkMWIyYSIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMCIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxMSIgIGZpbGw9IiMwZDFiMmEiLz4KICAgIDxyZWN0IHg9IjE2LjUiIHk9IjEzIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjE1IiBmaWxsPSIjMGQxYjJhIi8+CiAgPC9nPgo8L3N2Zz4=', description:'Ultra-soft navy leggings for yoga and training.'},
   {id:5,  sku:'MN-005', name:'Mini Luxe Sweatshirt',  category:'kids',    tag:'',        priceNGN:32000,  priceUSD:20,  sizes:'2-12 yrs', color:'#c8bfaa', style:'unisex', activity:'training', stock:19, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnNSIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjYjRhYTk2IiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjYzhiZmFhIiBzdG9wLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNoZWxmNSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjYzhiZmFhIiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjYzhiZmFhIiBzdG9wLW9wYWNpdHk9IjAuMjIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiNmNWYwZTgiLz4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNiZzUpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDUiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzhiZmFhIiBzdHJva2Utd2lkdGg9IjAuNCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvcGF0dGVybj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNncmlkNSkiLz4KCiAgPCEtLSBQcm9kdWN0IHNpbGhvdWV0dGUgYXJlYSAoY2VudHJlZCwgcHJvZHVjdCBpbWFnZSB6b25lIDQwMHgzODApIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDMwKSI+CiAgICAKICAgICAgPCEtLSBib2R5IC0tPgogICAgICA8cGF0aCBkPSJNMTQ1IDExNSBMMTIwIDE0NSBMMTE1IDMyMCBMMjg1IDMyMCBMMjgwIDE0NSBMMjU1IDExNSIgZmlsbD0iI2M4YmZhYSIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgPCEtLSBzbGVldmVzIC0tPgogICAgICA8cGF0aCBkPSJNMTIwIDE0NSBMODAgMjcwIEwxMDggMjc4IEwxMzUgMTcwIEwxMjAgMTQ1IiBmaWxsPSIjYzhiZmFhIiBzdHJva2U9IiMwZTFjMzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICAgIDxwYXRoIGQ9Ik0yODAgMTQ1IEwzMjAgMjcwIEwyOTIgMjc4IEwyNjUgMTcwIEwyODAgMTQ1IiBmaWxsPSIjYzhiZmFhIiBzdHJva2U9IiMwZTFjMzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICAgIDwhLS0gcmliIGN1ZmZzIC0tPgogICAgICA8cmVjdCB4PSI3OCIgeT0iMjY3IiB3aWR0aD0iMzMiIGhlaWdodD0iMTYiIHJ4PSIzIiBmaWxsPSIjYjRhYTk2Ii8+CiAgICAgIDxyZWN0IHg9IjI4OSIgeT0iMjY3IiB3aWR0aD0iMzMiIGhlaWdodD0iMTYiIHJ4PSIzIiBmaWxsPSIjYjRhYTk2Ii8+CiAgICAgIDwhLS0gcmliIGhlbSAtLT4KICAgICAgPHJlY3QgeD0iMTEzIiB5PSIzMTYiIHdpZHRoPSIxNzQiIGhlaWdodD0iMTgiIHJ4PSIzIiBmaWxsPSIjYjRhYTk2Ii8+CiAgICAgIDwhLS0gaG9vZCAtLT4KICAgICAgPHBhdGggZD0iTTE1NSAxMTUgTDE0OCA4NSBMMjAwIDcwIEwyNTIgODUgTDI0NSAxMTUgTDIwMCAxMTBaIiBmaWxsPSIjYjRhYTk2IiBzdHJva2U9IiMwZTFjMzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICAKICA8L2c+CgogIDwhLS0gQm90dG9tIGluZm8gcGFuZWwgLS0+CiAgPHJlY3QgeD0iMCIgeT0iNDAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzaGVsZjUpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiNjOGJmYWEiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNDgiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjNWEzYTdhIi8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5LSURTPC90ZXh0PgoKICA8IS0tIFNLVSAtLT4KICA8dGV4dCB4PSIzODQiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4LjUiIGxldHRlci1zcGFjaW5nPSIxIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNWE2ZTdmIj5NTi0wMDU8L3RleHQ+CgogIDwhLS0gUHJvZHVjdCBuYW1lIC0tPgogIDx0ZXh0IHg9IjE2IiB5PSI0NDkiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjQwMCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSIjMGUxYzM4Ij5NaW5pIEx1eGUgU3dlYXRzaGlydDwvdGV4dD4KCiAgPCEtLSBNIG1hcmsgd2F0ZXJtYXJrIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMzMCwgNDE4KSIgb3BhY2l0eT0iMC4wOCI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiAgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjExIiAgZmlsbD0iI2M4YmZhYSIvPgogICAgPHJlY3QgeD0iMCIgeT0iMTMiICB3aWR0aD0iNi41IiAgaGVpZ2h0PSIxNSIgIGZpbGw9IiNjOGJmYWEiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iNCIgd2lkdGg9IjYuNSIgIGhlaWdodD0iNy41IiBmaWxsPSIjYzhiZmFhIi8+CiAgICA8cmVjdCB4PSI4LjMiIHk9IjEzIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjE1IiAgZmlsbD0iI2M4YmZhYSIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMCIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxMSIgIGZpbGw9IiNjOGJmYWEiLz4KICAgIDxyZWN0IHg9IjE2LjUiIHk9IjEzIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjE1IiBmaWxsPSIjYzhiZmFhIi8+CiAgPC9nPgo8L3N2Zz4=', description:'Soft luxury sweatshirt for little ones.'},
   {id:6,  sku:'MN-006', name:'Editorial Trench Coat', category:'fashion', tag:'limited', priceNGN:145000, priceUSD:90,  sizes:'XS-XL',    color:'#9a8860', style:'unisex', activity:'training', stock:8,  status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnNiIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjN2E2ODQwIiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOWE4ODYwIiBzdG9wLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNoZWxmNiIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjOWE4ODYwIiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOWE4ODYwIiBzdG9wLW9wYWNpdHk9IjAuMjIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiNmNWYwZTgiLz4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNiZzYpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOWE4ODYwIiBzdHJva2Utd2lkdGg9IjAuNCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvcGF0dGVybj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNncmlkNikiLz4KCiAgPCEtLSBQcm9kdWN0IHNpbGhvdWV0dGUgYXJlYSAoY2VudHJlZCwgcHJvZHVjdCBpbWFnZSB6b25lIDQwMHgzODApIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDMwKSI+CiAgICAKICAgICAgPCEtLSB0cmVuY2ggYm9keSBsb25nIC0tPgogICAgICA8cGF0aCBkPSJNMTQ1IDExMCBMMTE4IDE0NSBMMTA1IDM5MCBMMjk1IDM5MCBMMjg3IDE0NSBMMjU1IDExMCIgZmlsbD0iIzlhODg2MCIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgPCEtLSBkb3VibGUgYnJlYXN0IGJ1dHRvbnMgLS0+CiAgICAgIDxjaXJjbGUgY3g9IjE4OCIgY3k9IjIwMCIgcj0iNSIgZmlsbD0iIzBlMWMzOCIgb3BhY2l0eT0iMC43Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE4OCIgY3k9IjIzMCIgcj0iNSIgZmlsbD0iIzBlMWMzOCIgb3BhY2l0eT0iMC43Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE4OCIgY3k9IjI2MCIgcj0iNSIgZmlsbD0iIzBlMWMzOCIgb3BhY2l0eT0iMC43Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjIxMiIgY3k9IjIwMCIgcj0iNSIgZmlsbD0iIzBlMWMzOCIgb3BhY2l0eT0iMC43Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjIxMiIgY3k9IjIzMCIgcj0iNSIgZmlsbD0iIzBlMWMzOCIgb3BhY2l0eT0iMC43Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjIxMiIgY3k9IjI2MCIgcj0iNSIgZmlsbD0iIzBlMWMzOCIgb3BhY2l0eT0iMC43Ii8+CiAgICAgIDwhLS0gbGFwZWxzIC0tPgogICAgICA8cGF0aCBkPSJNMTQ1IDExMCBMMTc4IDE3NSBMMjAwIDE1OCBMMjAwIDM5MCIgZmlsbD0iIzdhNjg0MCIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgICA8cGF0aCBkPSJNMjU1IDExMCBMMjIyIDE3NSBMMjAwIDE1OCIgZmlsbD0iIzdhNjg0MCIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgICA8IS0tIHNsZWV2ZXMgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xMTggMTQ1IEw3OCAzMTAgTDEwNiAzMTggTDEyOCAxNzUiIGZpbGw9IiM5YTg4NjAiIHN0cm9rZT0iIzBlMWMzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPHBhdGggZD0iTTI4MiAxNDUgTDMyMiAzMTAgTDI5NCAzMTggTDI3MiAxNzUiIGZpbGw9IiM5YTg4NjAiIHN0cm9rZT0iIzBlMWMzOCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBiZWx0IC0tPgogICAgICA8cmVjdCB4PSIxNDgiIHk9IjI0NSIgd2lkdGg9IjEwNCIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiM3YTY4NDAiLz4KICAgIAogIDwvZz4KCiAgPCEtLSBCb3R0b20gaW5mbyBwYW5lbCAtLT4KICA8cmVjdCB4PSIwIiB5PSI0MDAiIHdpZHRoPSI0MDAiIGhlaWdodD0iMTAwIiBmaWxsPSJ1cmwoI3NoZWxmNikiLz4KICA8cmVjdCB4PSIwIiB5PSIzOTgiIHdpZHRoPSI0MDAiIGhlaWdodD0iMSIgZmlsbD0iIzlhODg2MCIgb3BhY2l0eT0iMC4xNSIvPgoKICA8IS0tIENhdGVnb3J5IGxhYmVsIC0tPgogIDxyZWN0IHg9IjE2IiB5PSI0MTIiIHdpZHRoPSI2OSIgaGVpZ2h0PSIxNiIgcng9IjIiIGZpbGw9IiMyYTZiMmEiLz4KICA8dGV4dCB4PSIyNiIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGxldHRlci1zcGFjaW5nPSIxLjUiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0id2hpdGUiIHRleHQtdHJhbnNmb3JtPSJ1cHBlcmNhc2UiPkZBU0hJT048L3RleHQ+CgogIDwhLS0gU0tVIC0tPgogIDx0ZXh0IHg9IjM4NCIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjguNSIgbGV0dGVyLXNwYWNpbmc9IjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM1YTZlN2YiPk1OLTAwNjwvdGV4dD4KCiAgPCEtLSBQcm9kdWN0IG5hbWUgLS0+CiAgPHRleHQgeD0iMTYiIHk9IjQ0OSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNDAwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMwZTFjMzgiPkVkaXRvcmlhbCBUcmVuY2ggQ+KApjwvdGV4dD4KCiAgPCEtLSBNIG1hcmsgd2F0ZXJtYXJrIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMzMCwgNDE4KSIgb3BhY2l0eT0iMC4wOCI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiAgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjExIiAgZmlsbD0iIzlhODg2MCIvPgogICAgPHJlY3QgeD0iMCIgeT0iMTMiICB3aWR0aD0iNi41IiAgaGVpZ2h0PSIxNSIgIGZpbGw9IiM5YTg4NjAiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iNCIgd2lkdGg9IjYuNSIgIGhlaWdodD0iNy41IiBmaWxsPSIjOWE4ODYwIi8+CiAgICA8cmVjdCB4PSI4LjMiIHk9IjEzIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjE1IiAgZmlsbD0iIzlhODg2MCIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMCIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxMSIgIGZpbGw9IiM5YTg4NjAiLz4KICAgIDxyZWN0IHg9IjE2LjUiIHk9IjEzIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjE1IiBmaWxsPSIjOWE4ODYwIi8+CiAgPC9nPgo8L3N2Zz4=', description:'Limited-edition trench coat with editorial drape.'},
-  {id:7,  sku:'MN-007', name:'Sprint Elite Shorts',   category:'sports',  tag:'new',     priceNGN:38000,  priceUSD:24,  sizes:'XS-XL',    color:'#1a2d42', style:'men',    activity:'running',  stock:54, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnNyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMGQxYjJhIiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWEyZDQyIiBzdG9wLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNoZWxmNyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMWEyZDQyIiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWEyZDQyIiBzdG9wLW9wYWNpdHk9IjAuMjIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiNmNWYwZTgiLz4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNiZzcpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWEyZDQyIiBzdHJva2Utd2lkdGg9IjAuNCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvcGF0dGVybj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNncmlkNykiLz4KCiAgPCEtLSBQcm9kdWN0IHNpbGhvdWV0dGUgYXJlYSAoY2VudHJlZCwgcHJvZHVjdCBpbWFnZSB6b25lIDQwMHgzODApIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDMwKSI+CiAgICAKICAgICAgPCEtLSB3YWlzdGJhbmQgLS0+CiAgICAgIDxyZWN0IHg9IjE0MCIgeT0iMTA1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjIyIiByeD0iNCIgZmlsbD0iIzBkMWIyYSIvPgogICAgICA8IS0tIHNob3J0cyBib2R5IC0tPgogICAgICA8cGF0aCBkPSJNMTQwIDEyNyBMMTM1IDI0MCBMMTg4IDI0MCBMMjAwIDE4NSBMMjEyIDI0MCBMMjY1IDI0MCBMMjYwIDEyN1oiIGZpbGw9IiMxYTJkNDIiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBzaWRlIHN0cmlwZSAtLT4KICAgICAgPHJlY3QgeD0iMTM2IiB5PSIxMjciIHdpZHRoPSI4IiBoZWlnaHQ9IjExMyIgcng9IjIiIGZpbGw9IiMwZDFiMmEiIG9wYWNpdHk9IjAuNiIvPgogICAgICA8cmVjdCB4PSIyNTYiIHk9IjEyNyIgd2lkdGg9IjgiIGhlaWdodD0iMTEzIiByeD0iMiIgZmlsbD0iIzBkMWIyYSIgb3BhY2l0eT0iMC42Ii8+CiAgICAKICA8L2c+CgogIDwhLS0gQm90dG9tIGluZm8gcGFuZWwgLS0+CiAgPHJlY3QgeD0iMCIgeT0iNDAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzaGVsZjcpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiMxYTJkNDIiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNjIiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjMGUxYzM4Ii8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5TUE9SVFM8L3RleHQ+CgogIDwhLS0gU0tVIC0tPgogIDx0ZXh0IHg9IjM4NCIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjguNSIgbGV0dGVyLXNwYWNpbmc9IjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM5YWFiYWQiPk1OLTAwNzwvdGV4dD4KCiAgPCEtLSBQcm9kdWN0IG5hbWUgLS0+CiAgPHRleHQgeD0iMTYiIHk9IjQ0OSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNDAwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMwZTFjMzgiPlNwcmludCBFbGl0ZSBTaG9ydHM8L3RleHQ+CgogIDwhLS0gTSBtYXJrIHdhdGVybWFyayAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMzAsIDQxOCkiIG9wYWNpdHk9IjAuMDgiPgogICAgPHJlY3QgeD0iMCIgeT0iMCIgICB3aWR0aD0iNi41IiAgaGVpZ2h0PSIxMSIgIGZpbGw9IiMxYTJkNDIiLz4KICAgIDxyZWN0IHg9IjAiIHk9IjEzIiAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTUiICBmaWxsPSIjMWEyZDQyIi8+CiAgICA8cmVjdCB4PSI4LjMiIHk9IjQiIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjcuNSIgZmlsbD0iIzFhMmQ0MiIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgIGZpbGw9IiMxYTJkNDIiLz4KICAgIDxyZWN0IHg9IjE2LjUiIHk9IjAiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTEiICBmaWxsPSIjMWEyZDQyIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgZmlsbD0iIzFhMmQ0MiIvPgogIDwvZz4KPC9zdmc+', description:'High-performance sprint shorts.'},
+  {id:7,  sku:'MN-007', name:'Sprint Elite Shorts',   category:'sports',  tag:'new',     priceNGN:38000,  priceUSD:24,  sizes:'XS-XL',    color:'#1a2d42', style:'men',    activity:'running',  stock:54, status:'active',   imageUrl:'klot_website/klot/assets/images/Elitesportsshorts_main.png',image2:'klot_website/klot/assets/images/Elitesportsshorts_front.png',image3:'klot_website/klot/assets/images/Elitesportsshorts_rear.png',image4:'klot_website/klot/assets/images/Elitesportsshorts_detail.png', description:'High-performance sprint shorts.'},
   {id:8,  sku:'MN-008', name:'Cashmere Hoodie',       category:'fashion', tag:'',        priceNGN:110000, priceUSD:68,  sizes:'XS-XL',    color:'#d4c4a8', style:'unisex', activity:'training', stock:22, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnOCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjYzBiMDkwIiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZDRjNGE4IiBzdG9wLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNoZWxmOCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZDRjNGE4IiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZDRjNGE4IiBzdG9wLW9wYWNpdHk9IjAuMjIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiNmNWYwZTgiLz4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNiZzgpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDgiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDRjNGE4IiBzdHJva2Utd2lkdGg9IjAuNCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvcGF0dGVybj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNncmlkOCkiLz4KCiAgPCEtLSBQcm9kdWN0IHNpbGhvdWV0dGUgYXJlYSAoY2VudHJlZCwgcHJvZHVjdCBpbWFnZSB6b25lIDQwMHgzODApIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDMwKSI+CiAgICAKICAgICAgPCEtLSBib2R5IC0tPgogICAgICA8cGF0aCBkPSJNMTQ4IDExOCBMMTIyIDE0OCBMMTE4IDMyNSBMMjgyIDMyNSBMMjc4IDE0OCBMMjUyIDExOCIgZmlsbD0iI2Q0YzRhOCIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgPCEtLSBzbGVldmVzIC0tPgogICAgICA8cGF0aCBkPSJNMTIyIDE0OCBMODIgMjc1IEwxMTAgMjgzIEwxMzggMTc1IiBmaWxsPSIjZDRjNGE4IiBzdHJva2U9IiMwZTFjMzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICAgIDxwYXRoIGQ9Ik0yNzggMTQ4IEwzMTggMjc1IEwyOTAgMjgzIEwyNjIgMTc1IiBmaWxsPSIjZDRjNGE4IiBzdHJva2U9IiMwZTFjMzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICAgIDwhLS0gaG9vZCAtLT4KICAgICAgPHBhdGggZD0iTTE1OCAxMTggTDE1MCA3OCBMMjAwIDYyIEwyNTAgNzggTDI0MiAxMTggTDIwMCAxMDhaIiBmaWxsPSIjYzBiMDkwIiBzdHJva2U9IiMwZTFjMzgiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICAgIDwhLS0ga2FuZ2Fyb28gcG9ja2V0IC0tPgogICAgICA8cGF0aCBkPSJNMTYwIDI1MCBMMTYwIDI5NSBMMjQwIDI5NSBMMjQwIDI1MCBRMjAwIDI0MCAxNjAgMjUwWiIgZmlsbD0iI2MwYjA5MCIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEuMiIvPgogICAgICA8IS0tIHJpYiBoZW0gLS0+CiAgICAgIDxyZWN0IHg9IjExNiIgeT0iMzIxIiB3aWR0aD0iMTY4IiBoZWlnaHQ9IjE4IiByeD0iMyIgZmlsbD0iI2MwYjA5MCIvPgogICAgCiAgPC9nPgoKICA8IS0tIEJvdHRvbSBpbmZvIHBhbmVsIC0tPgogIDxyZWN0IHg9IjAiIHk9IjQwMCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjc2hlbGY4KSIvPgogIDxyZWN0IHg9IjAiIHk9IjM5OCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxIiBmaWxsPSIjZDRjNGE4IiBvcGFjaXR5PSIwLjE1Ii8+CgogIDwhLS0gQ2F0ZWdvcnkgbGFiZWwgLS0+CiAgPHJlY3QgeD0iMTYiIHk9IjQxMiIgd2lkdGg9IjY5IiBoZWlnaHQ9IjE2IiByeD0iMiIgZmlsbD0iIzJhNmIyYSIvPgogIDx0ZXh0IHg9IjI2IiB5PSI0MjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iOCIgbGV0dGVyLXNwYWNpbmc9IjEuNSIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSJ3aGl0ZSIgdGV4dC10cmFuc2Zvcm09InVwcGVyY2FzZSI+RkFTSElPTjwvdGV4dD4KCiAgPCEtLSBTS1UgLS0+CiAgPHRleHQgeD0iMzg0IiB5PSI0MjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iOC41IiBsZXR0ZXItc3BhY2luZz0iMSIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzVhNmU3ZiI+TU4tMDA4PC90ZXh0PgoKICA8IS0tIFByb2R1Y3QgbmFtZSAtLT4KICA8dGV4dCB4PSIxNiIgeT0iNDQ5IiBmb250LWZhbWlseT0iR2VvcmdpYSwgc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI0MDAiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0iIzBlMWMzOCI+Q2FzaG1lcmUgSG9vZGllPC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjZDRjNGE4Ii8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iI2Q0YzRhOCIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiNkNGM0YTgiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjZDRjNGE4Ii8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iI2Q0YzRhOCIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiNkNGM0YTgiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Premium cashmere-blend hoodie in warm taupe.'},
   {id:9,  sku:'MN-009', name:'Kids Puffer Vest',      category:'kids',    tag:'new',     priceNGN:28000,  priceUSD:17,  sizes:'2-12 yrs', color:'#0d1b2a', style:'unisex', activity:'running',  stock:47, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnOSIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMWEyZDQyIiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGQxYjJhIiBzdG9wLW9wYWNpdHk9IjAuMjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNoZWxmOSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMGQxYjJhIiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGQxYjJhIiBzdG9wLW9wYWNpdHk9IjAuMjIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiNmNWYwZTgiLz4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNiZzkpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDkiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICA8cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMGQxYjJhIiBzdHJva2Utd2lkdGg9IjAuNCIgb3BhY2l0eT0iMC4wOCIvPgogIDwvcGF0dGVybj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0idXJsKCNncmlkOSkiLz4KCiAgPCEtLSBQcm9kdWN0IHNpbGhvdWV0dGUgYXJlYSAoY2VudHJlZCwgcHJvZHVjdCBpbWFnZSB6b25lIDQwMHgzODApIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDMwKSI+CiAgICAKICAgICAgPCEtLSBwdWZmZXIgYm9keSBxdWlsdGVkIC0tPgogICAgICA8cGF0aCBkPSJNMTU4IDEwOCBMMTM1IDEzNSBMMTI4IDMyMCBMMjcyIDMyMCBMMjY1IDEzNSBMMjQyIDEwOCIgZmlsbD0iIzBkMWIyYSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTgpIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgPCEtLSBxdWlsdCBsaW5lcyAtLT4KICAgICAgPGxpbmUgeDE9IjEzMCIgeTE9IjE2NSIgeDI9IjI3MCIgeTI9IjE2NSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTgpIiBzdHJva2Utd2lkdGg9IjEuMiIgb3BhY2l0eT0iMC40Ii8+CiAgICAgIDxsaW5lIHgxPSIxMjgiIHkxPSIyMDUiIHgyPSIyNzIiIHkyPSIyMDUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjIiIG9wYWNpdHk9IjAuNCIvPgogICAgICA8bGluZSB4MT0iMTI4IiB5MT0iMjQ1IiB4Mj0iMjcyIiB5Mj0iMjQ1IiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMS4yIiBvcGFjaXR5PSIwLjQiLz4KICAgICAgPGxpbmUgeDE9IjEyOCIgeTE9IjI4NSIgeDI9IjI3MiIgeTI9IjI4NSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTgpIiBzdHJva2Utd2lkdGg9IjEuMiIgb3BhY2l0eT0iMC40Ii8+CiAgICAgIDwhLS0gYXJtaG9sZXMgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNTggMTA4IEwxMzUgMTM1IEwxMTggMTc1IEwxNDAgMTgwIEwxNjIgMTM4IiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMS44Ii8+CiAgICAgIDxwYXRoIGQ9Ik0yNDIgMTA4IEwyNjUgMTM1IEwyODIgMTc1IEwyNjAgMTgwIEwyMzggMTM4IiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMS44Ii8+CiAgICAgIDwhLS0gemlwIC0tPgogICAgICA8bGluZSB4MT0iMjAwIiB5MT0iMTA4IiB4Mj0iMjAwIiB5Mj0iMzIwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iNCwyIi8+CiAgICAKICA8L2c+CgogIDwhLS0gQm90dG9tIGluZm8gcGFuZWwgLS0+CiAgPHJlY3QgeD0iMCIgeT0iNDAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzaGVsZjkpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiMwZDFiMmEiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNDgiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjNWEzYTdhIi8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5LSURTPC90ZXh0PgoKICA8IS0tIFNLVSAtLT4KICA8dGV4dCB4PSIzODQiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4LjUiIGxldHRlci1zcGFjaW5nPSIxIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjOWFhYmFkIj5NTi0wMDk8L3RleHQ+CgogIDwhLS0gUHJvZHVjdCBuYW1lIC0tPgogIDx0ZXh0IHg9IjE2IiB5PSI0NDkiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjQwMCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSIjMGUxYzM4Ij5LaWRzIFB1ZmZlciBWZXN0PC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjMGQxYjJhIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iIzBkMWIyYSIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiMwZDFiMmEiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjMGQxYjJhIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iIzBkMWIyYSIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiMwZDFiMmEiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Lightweight puffer vest for active kids.'},
   {id:10, sku:'MN-010', name:'Yoga Luxe Bra',         category:'sports',  tag:'',        priceNGN:42000,  priceUSD:26,  sizes:'XS-XL',    color:'#3d2a42', style:'women',  activity:'yoga',     stock:33, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTAiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzJhMWEzMCIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNkMmE0MiIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjEwIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMzZDJhNDIiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzZDJhNDIiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTApIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDEwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNkMmE0MiIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDEwKSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIGJyYSBiYW5kIC0tPgogICAgICA8cGF0aCBkPSJNMTMwIDI0MCBRMjAwIDI5MCAyNzAgMjQwIEwyNzAgMjY1IFEyMDAgMzE1IDEzMCAyNjVaIiBmaWxsPSIjM2QyYTQyIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICAgIDwhLS0gbGVmdCBjdXAgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xMzAgMjQwIFExNjUgMTc1IDIwMCAxOTUgUTE2NSAyNDggMTMwIDI2NVoiIGZpbGw9IiMzZDJhNDIiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSByaWdodCBjdXAgLS0+CiAgICAgIDxwYXRoIGQ9Ik0yMDAgMTk1IFEyMzUgMTc1IDI3MCAyNDAgTDI3MCAyNjUgUTIzNSAyNDggMjAwIDE5NVoiIGZpbGw9IiMzZDJhNDIiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBzdHJhcHMgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNTIgMjM3IEwxNjggMTM1IiBzdHJva2U9IiMyYTFhMzAiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICAgIDxwYXRoIGQ9Ik0yNDggMjM3IEwyMzIgMTM1IiBzdHJva2U9IiMyYTFhMzAiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICAgIDwhLS0gcmFjZXJiYWNrIC0tPgogICAgICA8cGF0aCBkPSJNMTY4IDEzNSBRMjAwIDE1NSAyMzIgMTM1IiBzdHJva2U9IiMyYTFhMzAiIHN0cm9rZS13aWR0aD0iNSIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICAKICA8L2c+CgogIDwhLS0gQm90dG9tIGluZm8gcGFuZWwgLS0+CiAgPHJlY3QgeD0iMCIgeT0iNDAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzaGVsZjEwKSIvPgogIDxyZWN0IHg9IjAiIHk9IjM5OCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxIiBmaWxsPSIjM2QyYTQyIiBvcGFjaXR5PSIwLjE1Ii8+CgogIDwhLS0gQ2F0ZWdvcnkgbGFiZWwgLS0+CiAgPHJlY3QgeD0iMTYiIHk9IjQxMiIgd2lkdGg9IjYyIiBoZWlnaHQ9IjE2IiByeD0iMiIgZmlsbD0iIzBlMWMzOCIvPgogIDx0ZXh0IHg9IjI2IiB5PSI0MjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iOCIgbGV0dGVyLXNwYWNpbmc9IjEuNSIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSJ3aGl0ZSIgdGV4dC10cmFuc2Zvcm09InVwcGVyY2FzZSI+U1BPUlRTPC90ZXh0PgoKICA8IS0tIFNLVSAtLT4KICA8dGV4dCB4PSIzODQiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4LjUiIGxldHRlci1zcGFjaW5nPSIxIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjOWFhYmFkIj5NTi0wMTA8L3RleHQ+CgogIDwhLS0gUHJvZHVjdCBuYW1lIC0tPgogIDx0ZXh0IHg9IjE2IiB5PSI0NDkiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjQwMCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSIjMGUxYzM4Ij5Zb2dhIEx1eGUgQnJhPC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjM2QyYTQyIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iIzNkMmE0MiIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiMzZDJhNDIiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjM2QyYTQyIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iIzNkMmE0MiIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiMzZDJhNDIiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Medium-support luxury sports bra.'},
   {id:11, sku:'MN-011', name:'Silk-Touch Bomber',     category:'fashion', tag:'limited', priceNGN:125000, priceUSD:78,  sizes:'XS-XL',    color:'#1a3a2a', style:'men',    activity:'training', stock:11, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTEiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBkMmExYSIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFhM2EyYSIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjExIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxYTNhMmEiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTNhMmEiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTEpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDExIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFhM2EyYSIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDExKSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIGJvZHkgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNDggMTI1IEwxMjIgMTUyIEwxMTggMzE1IEwyODIgMzE1IEwyNzggMTUyIEwyNTIgMTI1IiBmaWxsPSIjMWEzYTJhIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8IS0tIHNsZWV2ZXMgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xMjIgMTUyIEw4NSAyNzUgTDExMiAyODMgTDEzOCAxNzgiIGZpbGw9IiMxYTNhMmEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPHBhdGggZD0iTTI3OCAxNTIgTDMxNSAyNzUgTDI4OCAyODMgTDI2MiAxNzgiIGZpbGw9IiMxYTNhMmEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSByaWIgY29sbGFyIC0tPgogICAgICA8cGF0aCBkPSJNMTU4IDEyNSBMMjAwIDExMiBMMjQyIDEyNSBMMjUyIDEyNSBMMjAwIDEzOCBMMTQ4IDEyNVoiIGZpbGw9IiMwZDJhMWEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSByaWIgY3VmZnMgLS0+CiAgICAgIDxyZWN0IHg9IjgzIiB5PSIyNzIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IiMwZDJhMWEiLz4KICAgICAgPHJlY3QgeD0iMjg3IiB5PSIyNzIiIHdpZHRoPSIzMCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IiMwZDJhMWEiLz4KICAgICAgPCEtLSByaWIgaGVtIC0tPgogICAgICA8cmVjdCB4PSIxMTYiIHk9IjMxMSIgd2lkdGg9IjE2OCIgaGVpZ2h0PSIxNyIgcng9IjMiIGZpbGw9IiMwZDJhMWEiLz4KICAgICAgPCEtLSB6aXAgLS0+CiAgICAgIDxsaW5lIHgxPSIyMDAiIHkxPSIxMjUiIHgyPSIyMDAiIHkyPSIzMTUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtZGFzaGFycmF5PSI1LDIuNSIvPgogICAgCiAgPC9nPgoKICA8IS0tIEJvdHRvbSBpbmZvIHBhbmVsIC0tPgogIDxyZWN0IHg9IjAiIHk9IjQwMCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjc2hlbGYxMSkiLz4KICA8cmVjdCB4PSIwIiB5PSIzOTgiIHdpZHRoPSI0MDAiIGhlaWdodD0iMSIgZmlsbD0iIzFhM2EyYSIgb3BhY2l0eT0iMC4xNSIvPgoKICA8IS0tIENhdGVnb3J5IGxhYmVsIC0tPgogIDxyZWN0IHg9IjE2IiB5PSI0MTIiIHdpZHRoPSI2OSIgaGVpZ2h0PSIxNiIgcng9IjIiIGZpbGw9IiMyYTZiMmEiLz4KICA8dGV4dCB4PSIyNiIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGxldHRlci1zcGFjaW5nPSIxLjUiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0id2hpdGUiIHRleHQtdHJhbnNmb3JtPSJ1cHBlcmNhc2UiPkZBU0hJT048L3RleHQ+CgogIDwhLS0gU0tVIC0tPgogIDx0ZXh0IHg9IjM4NCIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjguNSIgbGV0dGVyLXNwYWNpbmc9IjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM5YWFiYWQiPk1OLTAxMTwvdGV4dD4KCiAgPCEtLSBQcm9kdWN0IG5hbWUgLS0+CiAgPHRleHQgeD0iMTYiIHk9IjQ0OSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNDAwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMwZTFjMzgiPlNpbGstVG91Y2ggQm9tYmVyPC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjMWEzYTJhIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iIzFhM2EyYSIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiMxYTNhMmEiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjMWEzYTJhIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iIzFhM2EyYSIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiMxYTNhMmEiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Silk-touch bomber in deep forest green.'},
   {id:12, sku:'MN-012', name:'Mini Sport Set',        category:'kids',    tag:'',        priceNGN:36000,  priceUSD:22,  sizes:'2-12 yrs', color:'#2a4a3a', style:'unisex', activity:'training', stock:26, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTIiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzFhM2EyYSIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzJhNGEzYSIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjEyIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMyYTRhM2EiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyYTRhM2EiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTIpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDEyIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJhNGEzYSIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDEyKSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIHRvcCAtLT4KICAgICAgPHBhdGggZD0iTTE1OCAxMDAgTDEzOCAxMjUgTDEzNSAyMTAgTDI2NSAyMTAgTDI2MiAxMjUgTDI0MiAxMDAiIGZpbGw9IiMyYTRhM2EiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjgiLz4KICAgICAgPCEtLSB0b3Agc2xlZXZlcyBzaG9ydCAtLT4KICAgICAgPHBhdGggZD0iTTEzOCAxMjUgTDExMiAxODggTDEzNiAxOTQgTDE1MiAxNDUiIGZpbGw9IiMyYTRhM2EiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPHBhdGggZD0iTTI2MiAxMjUgTDI4OCAxODggTDI2NCAxOTQgTDI0OCAxNDUiIGZpbGw9IiMyYTRhM2EiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBzaG9ydHMgd2Fpc3RiYW5kIC0tPgogICAgICA8cmVjdCB4PSIxNDUiIHk9IjIyNSIgd2lkdGg9IjExMCIgaGVpZ2h0PSIxOCIgcng9IjMiIGZpbGw9IiMxYTNhMmEiLz4KICAgICAgPCEtLSBzaG9ydHMgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNDUgMjQzIEwxNDIgMzM1IEwxOTIgMzM1IEwyMDAgMjg1IEwyMDggMzM1IEwyNTggMzM1IEwyNTUgMjQzWiIgZmlsbD0iIzJhNGEzYSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTgpIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgCiAgPC9nPgoKICA8IS0tIEJvdHRvbSBpbmZvIHBhbmVsIC0tPgogIDxyZWN0IHg9IjAiIHk9IjQwMCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjc2hlbGYxMikiLz4KICA8cmVjdCB4PSIwIiB5PSIzOTgiIHdpZHRoPSI0MDAiIGhlaWdodD0iMSIgZmlsbD0iIzJhNGEzYSIgb3BhY2l0eT0iMC4xNSIvPgoKICA8IS0tIENhdGVnb3J5IGxhYmVsIC0tPgogIDxyZWN0IHg9IjE2IiB5PSI0MTIiIHdpZHRoPSI0OCIgaGVpZ2h0PSIxNiIgcng9IjIiIGZpbGw9IiM1YTNhN2EiLz4KICA8dGV4dCB4PSIyNiIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGxldHRlci1zcGFjaW5nPSIxLjUiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0id2hpdGUiIHRleHQtdHJhbnNmb3JtPSJ1cHBlcmNhc2UiPktJRFM8L3RleHQ+CgogIDwhLS0gU0tVIC0tPgogIDx0ZXh0IHg9IjM4NCIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjguNSIgbGV0dGVyLXNwYWNpbmc9IjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM5YWFiYWQiPk1OLTAxMjwvdGV4dD4KCiAgPCEtLSBQcm9kdWN0IG5hbWUgLS0+CiAgPHRleHQgeD0iMTYiIHk9IjQ0OSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNDAwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMwZTFjMzgiPk1pbmkgU3BvcnQgU2V0PC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjMmE0YTNhIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iIzJhNGEzYSIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiMyYTRhM2EiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjMmE0YTNhIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iIzJhNGEzYSIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiMyYTRhM2EiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Matching top and shorts sport set for kids.'},
-  {id:13, sku:'MN-013', name:'Performance Tee',       category:'sports',  tag:'',        priceNGN:26000,  priceUSD:16,  sizes:'XS-XL',    color:'#f5f0e8', style:'unisex', activity:'running',  stock:78, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTMiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U4ZTBkMCIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y1ZjBlOCIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjEzIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmNWYwZTgiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWYwZTgiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTMpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDEzIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1ZjBlOCIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDEzKSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIGJvZHkgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNTIgMTIwIEwxMjggMTQ4IEwxMjIgMzIwIEwyNzggMzIwIEwyNzIgMTQ4IEwyNDggMTIwIiBmaWxsPSIjZjVmMGU4IiBzdHJva2U9IiMwZTFjMzgiIHN0cm9rZS13aWR0aD0iMS44Ii8+CiAgICAgIDwhLS0gc2hvcnQgc2xlZXZlcyAtLT4KICAgICAgPHBhdGggZD0iTTEyOCAxNDggTDkwIDIyMCBMMTE4IDIyOCBMMTQyIDE2NSIgZmlsbD0iI2Y1ZjBlOCIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgICA8cGF0aCBkPSJNMjcyIDE0OCBMMzEwIDIyMCBMMjgyIDIyOCBMMjU4IDE2NSIgZmlsbD0iI2Y1ZjBlOCIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgICA8IS0tIGNyZXcgbmVjayAtLT4KICAgICAgPHBhdGggZD0iTTE2MiAxMjAgUTIwMCAxMDUgMjM4IDEyMCBMMjQ4IDEyMCBRMjAwIDEwMCAxNTIgMTIwWiIgZmlsbD0iI2U4ZTBkMCIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEuMiIvPgogICAgCiAgPC9nPgoKICA8IS0tIEJvdHRvbSBpbmZvIHBhbmVsIC0tPgogIDxyZWN0IHg9IjAiIHk9IjQwMCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjc2hlbGYxMykiLz4KICA8cmVjdCB4PSIwIiB5PSIzOTgiIHdpZHRoPSI0MDAiIGhlaWdodD0iMSIgZmlsbD0iI2Y1ZjBlOCIgb3BhY2l0eT0iMC4xNSIvPgoKICA8IS0tIENhdGVnb3J5IGxhYmVsIC0tPgogIDxyZWN0IHg9IjE2IiB5PSI0MTIiIHdpZHRoPSI2MiIgaGVpZ2h0PSIxNiIgcng9IjIiIGZpbGw9IiMwZTFjMzgiLz4KICA8dGV4dCB4PSIyNiIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGxldHRlci1zcGFjaW5nPSIxLjUiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0id2hpdGUiIHRleHQtdHJhbnNmb3JtPSJ1cHBlcmNhc2UiPlNQT1JUUzwvdGV4dD4KCiAgPCEtLSBTS1UgLS0+CiAgPHRleHQgeD0iMzg0IiB5PSI0MjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iOC41IiBsZXR0ZXItc3BhY2luZz0iMSIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzVhNmU3ZiI+TU4tMDEzPC90ZXh0PgoKICA8IS0tIFByb2R1Y3QgbmFtZSAtLT4KICA8dGV4dCB4PSIxNiIgeT0iNDQ5IiBmb250LWZhbWlseT0iR2VvcmdpYSwgc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI0MDAiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0iIzBlMWMzOCI+UGVyZm9ybWFuY2UgVGVlPC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjZjVmMGU4Ii8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iI2Y1ZjBlOCIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiNmNWYwZTgiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjZjVmMGU4Ii8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iI2Y1ZjBlOCIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiNmNWYwZTgiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Breathable performance tee in cream.'},
+  {id:13, sku:'MN-013', name:'Performance Tee',       category:'sports',  tag:'',        priceNGN:26000,  priceUSD:16,  sizes:'XS-XL',    color:'#f5f0e8', style:'unisex', activity:'running',  stock:78, status:'active',   imageUrl:'klot_website/klot/assets/images/Performance Tee_main.png',image2:'klot_website/klot/assets/images/Performance Tee_front.png',image3:'klot_website/klot/assets/images/Performance Tee_rear.png',image4:'klot_website/klot/assets/images/Performance Tee_detail.png', description:'Breathable performance tee in cream.'},
   {id:14, sku:'MN-014', name:'Draped Midi Skirt',     category:'fashion', tag:'new',     priceNGN:78000,  priceUSD:48,  sizes:'XS-XL',    color:'#c8bfaa', style:'women',  activity:'training', stock:17, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTQiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2I0YWE5NiIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M4YmZhYSIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjE0IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNjOGJmYWEiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNjOGJmYWEiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTQpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDE0IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M4YmZhYSIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDE0KSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIHdhaXN0YmFuZCAtLT4KICAgICAgPHJlY3QgeD0iMTQ4IiB5PSIxMDAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjIiIHJ4PSIzIiBmaWxsPSIjYjRhYTk2Ii8+CiAgICAgIDwhLS0gbWlkaSBza2lydCBmbGFyZWQgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNDggMTIyIEwxMTggMzgwIEwyODIgMzgwIEwyNTIgMTIyWiIgZmlsbD0iI2M4YmZhYSIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEuOCIvPgogICAgICA8IS0tIGRyYXBlIGxpbmVzIC0tPgogICAgICA8cGF0aCBkPSJNMTY1IDEzMCBMMTQwIDM3NSIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9IjAuMyIvPgogICAgICA8cGF0aCBkPSJNMjAwIDEyMiBMMjAwIDM4MCIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9IjAuMyIvPgogICAgICA8cGF0aCBkPSJNMjM1IDEzMCBMMjYwIDM3NSIgc3Ryb2tlPSIjMGUxYzM4IiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9IjAuMyIvPgogICAgCiAgPC9nPgoKICA8IS0tIEJvdHRvbSBpbmZvIHBhbmVsIC0tPgogIDxyZWN0IHg9IjAiIHk9IjQwMCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjc2hlbGYxNCkiLz4KICA8cmVjdCB4PSIwIiB5PSIzOTgiIHdpZHRoPSI0MDAiIGhlaWdodD0iMSIgZmlsbD0iI2M4YmZhYSIgb3BhY2l0eT0iMC4xNSIvPgoKICA8IS0tIENhdGVnb3J5IGxhYmVsIC0tPgogIDxyZWN0IHg9IjE2IiB5PSI0MTIiIHdpZHRoPSI2OSIgaGVpZ2h0PSIxNiIgcng9IjIiIGZpbGw9IiMyYTZiMmEiLz4KICA8dGV4dCB4PSIyNiIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGxldHRlci1zcGFjaW5nPSIxLjUiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0id2hpdGUiIHRleHQtdHJhbnNmb3JtPSJ1cHBlcmNhc2UiPkZBU0hJT048L3RleHQ+CgogIDwhLS0gU0tVIC0tPgogIDx0ZXh0IHg9IjM4NCIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjguNSIgbGV0dGVyLXNwYWNpbmc9IjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM1YTZlN2YiPk1OLTAxNDwvdGV4dD4KCiAgPCEtLSBQcm9kdWN0IG5hbWUgLS0+CiAgPHRleHQgeD0iMTYiIHk9IjQ0OSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNDAwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMwZTFjMzgiPkRyYXBlZCBNaWRpIFNraXJ0PC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjYzhiZmFhIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iI2M4YmZhYSIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiNjOGJmYWEiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjYzhiZmFhIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iI2M4YmZhYSIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiNjOGJmYWEiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Fluid draped midi skirt in warm sand.'},
   {id:15, sku:'MN-015', name:'Kids Jogger Pant',      category:'kids',    tag:'',        priceNGN:24000,  priceUSD:15,  sizes:'2-12 yrs', color:'#1a2d42', style:'unisex', activity:'training', stock:39, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTUiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBkMWIyYSIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFhMmQ0MiIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjE1IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxYTJkNDIiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTJkNDIiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTUpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDE1IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFhMmQ0MiIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDE1KSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIHdhaXN0YmFuZCAtLT4KICAgICAgPHJlY3QgeD0iMTMwIiB5PSIxMTUiIHdpZHRoPSIxNDAiIGhlaWdodD0iMjIiIHJ4PSI0IiBmaWxsPSIjMGQxYjJhIi8+CiAgICAgIDwhLS0gbGVmdCBsZWcgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xMzAgMTM3IEwxMjUgMzEwIEwxODAgMzE1IEwyMDAgMjAwIEwyMjAgMzE1IEwyNzUgMzEwIEwyNzAgMTM3WiIgZmlsbD0iIzFhMmQ0MiIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTgpIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgICA8IS0tIGFua2xlIGN1ZmZzIC0tPgogICAgICA8cmVjdCB4PSIxMjIiIHk9IjMwOCIgd2lkdGg9IjYxIiBoZWlnaHQ9IjE4IiByeD0iNCIgZmlsbD0iIzBkMWIyYSIvPgogICAgICA8cmVjdCB4PSIyMTciIHk9IjMwOCIgd2lkdGg9IjYxIiBoZWlnaHQ9IjE4IiByeD0iNCIgZmlsbD0iIzBkMWIyYSIvPgogICAgICA8IS0tIGRyYXdzdHJpbmcgLS0+CiAgICAgIDxsaW5lIHgxPSIxODUiIHkxPSIxMjYiIHgyPSIyMTUiIHkyPSIxMjYiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICAgIAogIDwvZz4KCiAgPCEtLSBCb3R0b20gaW5mbyBwYW5lbCAtLT4KICA8cmVjdCB4PSIwIiB5PSI0MDAiIHdpZHRoPSI0MDAiIGhlaWdodD0iMTAwIiBmaWxsPSJ1cmwoI3NoZWxmMTUpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiMxYTJkNDIiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNDgiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjNWEzYTdhIi8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5LSURTPC90ZXh0PgoKICA8IS0tIFNLVSAtLT4KICA8dGV4dCB4PSIzODQiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4LjUiIGxldHRlci1zcGFjaW5nPSIxIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjOWFhYmFkIj5NTi0wMTU8L3RleHQ+CgogIDwhLS0gUHJvZHVjdCBuYW1lIC0tPgogIDx0ZXh0IHg9IjE2IiB5PSI0NDkiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjQwMCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSIjMGUxYzM4Ij5LaWRzIEpvZ2dlciBQYW50PC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjMWEyZDQyIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iIzFhMmQ0MiIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiMxYTJkNDIiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjMWEyZDQyIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iIzFhMmQ0MiIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiMxYTJkNDIiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Comfortable jogger pant for everyday wear.'},
   {id:16, sku:'MN-016', name:'Ultra Stretch Tight',   category:'sports',  tag:'',        priceNGN:46000,  priceUSD:29,  sizes:'XS-XL',    color:'#0d1b2a', style:'unisex', activity:'yoga',     stock:44, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTYiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzFhMmQ0MiIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBkMWIyYSIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjE2IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwZDFiMmEiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwZDFiMmEiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTYpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDE2IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzBkMWIyYSIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDE2KSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIHdhaXN0YmFuZCAtLT4KICAgICAgPHJlY3QgeD0iMTM4IiB5PSIxMDAiIHdpZHRoPSIxMjQiIGhlaWdodD0iMjIiIHJ4PSI0IiBmaWxsPSIjMWEyZDQyIi8+CiAgICAgIDwhLS0gbGVmdCBsZWcgdGlnaHQgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xMzggMTIyIEwxMzIgMzQwIEwxOTIgMzQwIEwyMDAgMjE4IEwyMDggMzQwIEwyNjggMzQwIEwyNjIgMTIyWiIgZmlsbD0iIzBkMWIyYSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTgpIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgICA8IS0tIHNlYW0gcGFuZWxzIC0tPgogICAgICA8bGluZSB4MT0iMTYwIiB5MT0iMTIyIiB4Mj0iMTU1IiB5Mj0iMzQwIiBzdHJva2U9IiMxYTJkNDIiIHN0cm9rZS13aWR0aD0iMS44IiBvcGFjaXR5PSIwLjQ1Ii8+CiAgICAgIDxsaW5lIHgxPSIyNDAiIHkxPSIxMjIiIHgyPSIyNDUiIHkyPSIzNDAiIHN0cm9rZT0iIzFhMmQ0MiIgc3Ryb2tlLXdpZHRoPSIxLjgiIG9wYWNpdHk9IjAuNDUiLz4KICAgIAogIDwvZz4KCiAgPCEtLSBCb3R0b20gaW5mbyBwYW5lbCAtLT4KICA8cmVjdCB4PSIwIiB5PSI0MDAiIHdpZHRoPSI0MDAiIGhlaWdodD0iMTAwIiBmaWxsPSJ1cmwoI3NoZWxmMTYpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiMwZDFiMmEiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNjIiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjMGUxYzM4Ii8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5TUE9SVFM8L3RleHQ+CgogIDwhLS0gU0tVIC0tPgogIDx0ZXh0IHg9IjM4NCIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjguNSIgbGV0dGVyLXNwYWNpbmc9IjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM5YWFiYWQiPk1OLTAxNjwvdGV4dD4KCiAgPCEtLSBQcm9kdWN0IG5hbWUgLS0+CiAgPHRleHQgeD0iMTYiIHk9IjQ0OSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNDAwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMwZTFjMzgiPlVsdHJhIFN0cmV0Y2ggVGlnaHQ8L3RleHQ+CgogIDwhLS0gTSBtYXJrIHdhdGVybWFyayAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMzAsIDQxOCkiIG9wYWNpdHk9IjAuMDgiPgogICAgPHJlY3QgeD0iMCIgeT0iMCIgICB3aWR0aD0iNi41IiAgaGVpZ2h0PSIxMSIgIGZpbGw9IiMwZDFiMmEiLz4KICAgIDxyZWN0IHg9IjAiIHk9IjEzIiAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTUiICBmaWxsPSIjMGQxYjJhIi8+CiAgICA8cmVjdCB4PSI4LjMiIHk9IjQiIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjcuNSIgZmlsbD0iIzBkMWIyYSIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgIGZpbGw9IiMwZDFiMmEiLz4KICAgIDxyZWN0IHg9IjE2LjUiIHk9IjAiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTEiICBmaWxsPSIjMGQxYjJhIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgZmlsbD0iIzBkMWIyYSIvPgogIDwvZz4KPC9zdmc+', description:'Four-way stretch tight for yoga and training.'},
   {id:17, sku:'MN-017', name:'Linen Wide-Leg Pant',   category:'fashion', tag:'',        priceNGN:68000,  priceUSD:42,  sizes:'XS-XL',    color:'#e8e0d0', style:'unisex', activity:'training', stock:31, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Q0YzhiMCIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U4ZTBkMCIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjE3IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNlOGUwZDAiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlOGUwZDAiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTcpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDE3IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4ZTBkMCIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDE3KSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIHdhaXN0YmFuZCAtLT4KICAgICAgPHJlY3QgeD0iMTQ4IiB5PSIxMDUiIHdpZHRoPSIxMDQiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZDRjOGIwIi8+CiAgICAgIDwhLS0gd2lkZSBsZWdzIC0tPgogICAgICA8cGF0aCBkPSJNMTQ4IDEyNSBMMTA4IDM3MCBMMTk1IDM3MCBMMjAwIDIxMCBMMjA1IDM3MCBMMjkyIDM3MCBMMjUyIDEyNVoiIGZpbGw9IiNlOGUwZDAiIHN0cm9rZT0iIzBlMWMzOCIgc3Ryb2tlLXdpZHRoPSIxLjgiLz4KICAgICAgPCEtLSBjcmVhc2UgbGluZSAtLT4KICAgICAgPGxpbmUgeDE9IjE0OCIgeTE9IjEyNSIgeDI9IjExNSIgeTI9IjM3MCIgc3Ryb2tlPSIjZDRjOGIwIiBzdHJva2Utd2lkdGg9IjEuNSIgb3BhY2l0eT0iMC40Ii8+CiAgICAgIDxsaW5lIHgxPSIyNTIiIHkxPSIxMjUiIHgyPSIyODUiIHkyPSIzNzAiIHN0cm9rZT0iI2Q0YzhiMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuNCIvPgogICAgCiAgPC9nPgoKICA8IS0tIEJvdHRvbSBpbmZvIHBhbmVsIC0tPgogIDxyZWN0IHg9IjAiIHk9IjQwMCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9InVybCgjc2hlbGYxNykiLz4KICA8cmVjdCB4PSIwIiB5PSIzOTgiIHdpZHRoPSI0MDAiIGhlaWdodD0iMSIgZmlsbD0iI2U4ZTBkMCIgb3BhY2l0eT0iMC4xNSIvPgoKICA8IS0tIENhdGVnb3J5IGxhYmVsIC0tPgogIDxyZWN0IHg9IjE2IiB5PSI0MTIiIHdpZHRoPSI2OSIgaGVpZ2h0PSIxNiIgcng9IjIiIGZpbGw9IiMyYTZiMmEiLz4KICA8dGV4dCB4PSIyNiIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjgiIGxldHRlci1zcGFjaW5nPSIxLjUiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0id2hpdGUiIHRleHQtdHJhbnNmb3JtPSJ1cHBlcmNhc2UiPkZBU0hJT048L3RleHQ+CgogIDwhLS0gU0tVIC0tPgogIDx0ZXh0IHg9IjM4NCIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjguNSIgbGV0dGVyLXNwYWNpbmc9IjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM1YTZlN2YiPk1OLTAxNzwvdGV4dD4KCiAgPCEtLSBQcm9kdWN0IG5hbWUgLS0+CiAgPHRleHQgeD0iMTYiIHk9IjQ0OSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNDAwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMwZTFjMzgiPkxpbmVuIFdpZGUtTGVnIFBhbnQ8L3RleHQ+CgogIDwhLS0gTSBtYXJrIHdhdGVybWFyayAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMzAsIDQxOCkiIG9wYWNpdHk9IjAuMDgiPgogICAgPHJlY3QgeD0iMCIgeT0iMCIgICB3aWR0aD0iNi41IiAgaGVpZ2h0PSIxMSIgIGZpbGw9IiNlOGUwZDAiLz4KICAgIDxyZWN0IHg9IjAiIHk9IjEzIiAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTUiICBmaWxsPSIjZThlMGQwIi8+CiAgICA8cmVjdCB4PSI4LjMiIHk9IjQiIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjcuNSIgZmlsbD0iI2U4ZTBkMCIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgIGZpbGw9IiNlOGUwZDAiLz4KICAgIDxyZWN0IHg9IjE2LjUiIHk9IjAiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTEiICBmaWxsPSIjZThlMGQwIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgZmlsbD0iI2U4ZTBkMCIvPgogIDwvZz4KPC9zdmc+', description:'Relaxed wide-leg pant in premium linen.'},
   {id:18, sku:'MN-018', name:'Kids Luxe Tracksuit',   category:'kids',    tag:'limited', priceNGN:52000,  priceUSD:32,  sizes:'2-12 yrs', color:'#2a1a0d', style:'unisex', activity:'training', stock:14, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTgiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzFhMGQwNSIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzJhMWEwZCIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjE4IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMyYTFhMGQiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyYTFhMGQiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTgpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDE4IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJhMWEwZCIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDE4KSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIGphY2tldCB0b3AgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNTIgMTAwIEwxMjggMTI4IEwxMjQgMjIwIEwyNzYgMjIwIEwyNzIgMTI4IEwyNDggMTAwIiBmaWxsPSIjMmExYTBkIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMS44Ii8+CiAgICAgIDwhLS0gc2xlZXZlcyAtLT4KICAgICAgPHBhdGggZD0iTTEyOCAxMjggTDkwIDIzOCBMMTE2IDI0NSBMMTQwIDE1NSIgZmlsbD0iIzJhMWEwZCIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTgpIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgICA8cGF0aCBkPSJNMjcyIDEyOCBMMzEwIDIzOCBMMjg0IDI0NSBMMjYwIDE1NSIgZmlsbD0iIzJhMWEwZCIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMTgpIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgICA8IS0tIGNvbGxhciAtLT4KICAgICAgPHBhdGggZD0iTTE2MiAxMDAgTDIwMCA4OCBMMjM4IDEwMCBMMjQ4IDEwMCBMMjAwIDExNSBMMTUyIDEwMFoiIGZpbGw9IiMxYTBkMDUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBqb2dnZXIgYm90dG9tIHdhaXN0IC0tPgogICAgICA8cmVjdCB4PSIxNDgiIHk9IjIzMiIgd2lkdGg9IjEwNCIgaGVpZ2h0PSIxOCIgcng9IjMiIGZpbGw9IiMxYTBkMDUiLz4KICAgICAgPCEtLSBsZWdzIC0tPgogICAgICA8cGF0aCBkPSJNMTQ4IDI1MCBMMTQyIDM3MCBMMTk2IDM3MCBMMjAwIDMwMCBMMjA0IDM3MCBMMjU4IDM3MCBMMjUyIDI1MFoiIGZpbGw9IiMyYTFhMGQiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBhbmtsZSBjdWZmcyAtLT4KICAgICAgPHJlY3QgeD0iMTM5IiB5PSIzNjciIHdpZHRoPSI1OCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IiMxYTBkMDUiLz4KICAgICAgPHJlY3QgeD0iMjAzIiB5PSIzNjciIHdpZHRoPSI1OCIgaGVpZ2h0PSIxNCIgcng9IjMiIGZpbGw9IiMxYTBkMDUiLz4KICAgIAogIDwvZz4KCiAgPCEtLSBCb3R0b20gaW5mbyBwYW5lbCAtLT4KICA8cmVjdCB4PSIwIiB5PSI0MDAiIHdpZHRoPSI0MDAiIGhlaWdodD0iMTAwIiBmaWxsPSJ1cmwoI3NoZWxmMTgpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiMyYTFhMGQiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNDgiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjNWEzYTdhIi8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5LSURTPC90ZXh0PgoKICA8IS0tIFNLVSAtLT4KICA8dGV4dCB4PSIzODQiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4LjUiIGxldHRlci1zcGFjaW5nPSIxIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjOWFhYmFkIj5NTi0wMTg8L3RleHQ+CgogIDwhLS0gUHJvZHVjdCBuYW1lIC0tPgogIDx0ZXh0IHg9IjE2IiB5PSI0NDkiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCBzZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjQwMCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSIjMGUxYzM4Ij5LaWRzIEx1eGUgVHJhY2tzdWl0PC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjMmExYTBkIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iIzJhMWEwZCIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiMyYTFhMGQiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjMmExYTBkIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iIzJhMWEwZCIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiMyYTFhMGQiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Matching luxe tracksuit set for kids.'},
   {id:19, sku:'MN-019', name:'Trail Windbreaker',     category:'sports',  tag:'new',     priceNGN:72000,  priceUSD:45,  sizes:'XS-XL',    color:'#3a4a2a', style:'unisex', activity:'running',  stock:29, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMTkiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzJhM2ExYSIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNhNGEyYSIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjE5IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMzYTRhMmEiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzYTRhMmEiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMTkpIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDE5IiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzNhNGEyYSIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDE5KSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIGJvZHkgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNDggMTE4IEwxMjAgMTQ4IEwxMTUgMzIwIEwyODUgMzIwIEwyODAgMTQ4IEwyNTIgMTE4IiBmaWxsPSIjM2E0YTJhIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8IS0tIHNsZWV2ZXMgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xMjAgMTQ4IEw4MCAyNzUgTDEwOCAyODMgTDEzNSAxNzUiIGZpbGw9IiMzYTRhMmEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPHBhdGggZD0iTTI4MCAxNDggTDMyMCAyNzUgTDI5MiAyODMgTDI2NSAxNzUiIGZpbGw9IiMzYTRhMmEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSBob29kIGF0dGFjaGVkIC0tPgogICAgICA8cGF0aCBkPSJNMTU4IDExOCBMMTQ4IDc4IEwyMDAgNjAgTDI1MiA3OCBMMjQyIDExOCBMMjAwIDEwOFoiIGZpbGw9IiMyYTNhMWEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSB6aXAgLS0+CiAgICAgIDxsaW5lIHgxPSIyMDAiIHkxPSIxMTgiIHgyPSIyMDAiIHkyPSIzMjAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtZGFzaGFycmF5PSI1LDIuNSIvPgogICAgICA8IS0tIGNoZXN0IHBvY2tldCAtLT4KICAgICAgPHJlY3QgeD0iMTU4IiB5PSIxNjUiIHdpZHRoPSIzOCIgaGVpZ2h0PSIzMCIgcng9IjMiIGZpbGw9IiMyYTNhMWEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjIiLz4KICAgIAogIDwvZz4KCiAgPCEtLSBCb3R0b20gaW5mbyBwYW5lbCAtLT4KICA8cmVjdCB4PSIwIiB5PSI0MDAiIHdpZHRoPSI0MDAiIGhlaWdodD0iMTAwIiBmaWxsPSJ1cmwoI3NoZWxmMTkpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMzk4IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEiIGZpbGw9IiMzYTRhMmEiIG9wYWNpdHk9IjAuMTUiLz4KCiAgPCEtLSBDYXRlZ29yeSBsYWJlbCAtLT4KICA8cmVjdCB4PSIxNiIgeT0iNDEyIiB3aWR0aD0iNjIiIGhlaWdodD0iMTYiIHJ4PSIyIiBmaWxsPSIjMGUxYzM4Ii8+CiAgPHRleHQgeD0iMjYiIHk9IjQyNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IndoaXRlIiB0ZXh0LXRyYW5zZm9ybT0idXBwZXJjYXNlIj5TUE9SVFM8L3RleHQ+CgogIDwhLS0gU0tVIC0tPgogIDx0ZXh0IHg9IjM4NCIgeT0iNDI0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjguNSIgbGV0dGVyLXNwYWNpbmc9IjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM5YWFiYWQiPk1OLTAxOTwvdGV4dD4KCiAgPCEtLSBQcm9kdWN0IG5hbWUgLS0+CiAgPHRleHQgeD0iMTYiIHk9IjQ0OSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsIHNlcmlmIiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iNDAwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZpbGw9IiMwZTFjMzgiPlRyYWlsIFdpbmRicmVha2VyPC90ZXh0PgoKICA8IS0tIE0gbWFyayB3YXRlcm1hcmsgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCA0MTgpIiBvcGFjaXR5PSIwLjA4Ij4KICAgIDxyZWN0IHg9IjAiIHk9IjAiICAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTEiICBmaWxsPSIjM2E0YTJhIi8+CiAgICA8cmVjdCB4PSIwIiB5PSIxMyIgIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjE1IiAgZmlsbD0iIzNhNGEyYSIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSI0IiB3aWR0aD0iNi41IiAgaGVpZ2h0PSI3LjUiIGZpbGw9IiMzYTRhMmEiLz4KICAgIDxyZWN0IHg9IjguMyIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiICBmaWxsPSIjM2E0YTJhIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIwIiB3aWR0aD0iNi41IiBoZWlnaHQ9IjExIiAgZmlsbD0iIzNhNGEyYSIvPgogICAgPHJlY3QgeD0iMTYuNSIgeT0iMTMiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTUiIGZpbGw9IiMzYTRhMmEiLz4KICA8L2c+Cjwvc3ZnPg==', description:'Packable windbreaker for trail running.'},
+  {id:21, sku:'KL-021', name:'KLØT CHISOM Slide',   category:'sports',  tag:'new',     priceNGN:48000,  priceUSD:30,  sizes:'39-45', color:'#FF2D2D', style:'unisex', activity:'training', stock:60, status:'active',
+    tagline:'Built for Movement',
+    sizeList:['39','40','41','42','43','44','45'],
+    colorways:[{name:'Navy Blue',hex:'#1a2d42'},{name:'Klot Red',hex:'#FF2D2D'},{name:'All Black',hex:'#0D0D0D'}],
+    highlights:['Lightweight EVA foam footbed construction','Cushioned anatomic arch support','Water-friendly quick-dry PVC strap','Enhanced grip rubber outsole','Toe-separated sole for natural movement','Unisex sizing EU 39–45'],
+    specs:{'Sole Thickness':'18mm (heel) / 12mm (toe)','Arch Support':'Anatomic contour','Footbed':'EVA foam — cushioned','Strap Material':'PVC — water-friendly','Outsole':'Rubber — high grip','Finish':'Matte','Sizing':'EU 39–45 · Unisex','Care':'Wipe clean · Air dry'},
+    story:{heading:'Chisom — God Walks With Me',quote:'Meaning in every step.',body:['The name Chisom is Igbo for "God is walking with me." We chose it deliberately — because great footwear is not just worn, it is felt. Every stride in the CHISOM Slide is a reminder that movement itself is sacred.','Built for the body in motion and finished for the eye at rest. The CHISOM is KLOT\'s answer to a question the active lifestyle world rarely asks: why can\'t what you wear to the pool be as considered as what you wear to the boardroom?','Water-friendly, anatomically supportive, and unmistakably KLOT.']},
+    imageUrl:'klot_website/klot/assets/images/chisomslide_main.png',image2:'klot_website/klot/assets/images/chisomslide_front.png',image3:'klot_website/klot/assets/images/chisomslide_rear.png',image4:'klot_website/klot/assets/images/chisomslide_detail.png'},
   {id:20, sku:'MN-020', name:'Merino Turtleneck',     category:'fashion', tag:'',        priceNGN:92000,  priceUSD:57,  sizes:'XS-XL',    color:'#8a6a4a', style:'unisex', activity:'training', stock:23, status:'active',   imageUrl:'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAwIDUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMjAiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzZhNGEyYSIgc3RvcC1vcGFjaXR5PSIwLjE4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhhNmE0YSIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZjIwIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM4YTZhNGEiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4YTZhNGEiIHN0b3Atb3BhY2l0eT0iMC4yMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CgogIDwhLS0gQmFja2dyb3VuZCAtLT4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y1ZjBlOCIvPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJ1cmwoI2JnMjApIi8+CgogIDwhLS0gU3VidGxlIGdyaWQgdGV4dHVyZSAtLT4KICA8cGF0dGVybiBpZD0iZ3JpZDIwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzhhNmE0YSIgc3Ryb2tlLXdpZHRoPSIwLjQiIG9wYWNpdHk9IjAuMDgiLz4KICA8L3BhdHRlcm4+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9InVybCgjZ3JpZDIwKSIvPgoKICA8IS0tIFByb2R1Y3Qgc2lsaG91ZXR0ZSBhcmVhIChjZW50cmVkLCBwcm9kdWN0IGltYWdlIHpvbmUgNDAweDM4MCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgMzApIj4KICAgIAogICAgICA8IS0tIGJvZHkgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xNTIgMTYwIEwxMjggMTg4IEwxMjIgMzQwIEwyNzggMzQwIEwyNzIgMTg4IEwyNDggMTYwIiBmaWxsPSIjOGE2YTRhIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8IS0tIHNsZWV2ZXMgLS0+CiAgICAgIDxwYXRoIGQ9Ik0xMjggMTg4IEw5MCAzMTAgTDExOCAzMTggTDE0MCAyMTUiIGZpbGw9IiM4YTZhNGEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPHBhdGggZD0iTTI3MiAxODggTDMxMCAzMTAgTDI4MiAzMTggTDI2MCAyMTUiIGZpbGw9IiM4YTZhNGEiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgICAgPCEtLSB0dXJ0bGVuZWNrIGNvbGxhciAtLT4KICAgICAgPHBhdGggZD0iTTE2MiAxNjAgTDE1OCAxMTAgUTIwMCA5NSAyNDIgMTEwIEwyMzggMTYwIFEyMDAgMTQ1IDE2MiAxNjBaIiBmaWxsPSIjNmE0YTJhIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICAgIDwhLS0gcmliIHRleHR1cmUgb24gY29sbGFyIC0tPgogICAgICA8bGluZSB4MT0iMTcwIiB5MT0iMTEwIiB4Mj0iMTY4IiB5Mj0iMTYwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4yNSIvPgogICAgICA8bGluZSB4MT0iMTg1IiB5MT0iMTAwIiB4Mj0iMTgzIiB5Mj0iMTU4IiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xOCkiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4yNSIvPgogICAgICA8bGluZSB4MT0iMjAwIiB5MT0iOTUiIHgyPSIyMDAiIHkyPSIxNjAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIwLjI1Ii8+CiAgICAgIDxsaW5lIHgxPSIyMTUiIHkxPSIxMDAiIHgyPSIyMTciIHkyPSIxNTgiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIwLjI1Ii8+CiAgICAgIDxsaW5lIHgxPSIyMzAiIHkxPSIxMTAiIHgyPSIyMzIiIHkyPSIxNjAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjE4KSIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIwLjI1Ii8+CiAgICAKICA8L2c+CgogIDwhLS0gQm90dG9tIGluZm8gcGFuZWwgLS0+CiAgPHJlY3QgeD0iMCIgeT0iNDAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzaGVsZjIwKSIvPgogIDxyZWN0IHg9IjAiIHk9IjM5OCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxIiBmaWxsPSIjOGE2YTRhIiBvcGFjaXR5PSIwLjE1Ii8+CgogIDwhLS0gQ2F0ZWdvcnkgbGFiZWwgLS0+CiAgPHJlY3QgeD0iMTYiIHk9IjQxMiIgd2lkdGg9IjY5IiBoZWlnaHQ9IjE2IiByeD0iMiIgZmlsbD0iIzJhNmIyYSIvPgogIDx0ZXh0IHg9IjI2IiB5PSI0MjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iOCIgbGV0dGVyLXNwYWNpbmc9IjEuNSIgdGV4dC1hbmNob3I9InN0YXJ0IiBmaWxsPSJ3aGl0ZSIgdGV4dC10cmFuc2Zvcm09InVwcGVyY2FzZSI+RkFTSElPTjwvdGV4dD4KCiAgPCEtLSBTS1UgLS0+CiAgPHRleHQgeD0iMzg0IiB5PSI0MjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iOC41IiBsZXR0ZXItc3BhY2luZz0iMSIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzlhYWJhZCI+TU4tMDIwPC90ZXh0PgoKICA8IS0tIFByb2R1Y3QgbmFtZSAtLT4KICA8dGV4dCB4PSIxNiIgeT0iNDQ5IiBmb250LWZhbWlseT0iR2VvcmdpYSwgc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI0MDAiIHRleHQtYW5jaG9yPSJzdGFydCIgZmlsbD0iIzBlMWMzOCI+TWVyaW5vIFR1cnRsZW5lY2s8L3RleHQ+CgogIDwhLS0gTSBtYXJrIHdhdGVybWFyayAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMzAsIDQxOCkiIG9wYWNpdHk9IjAuMDgiPgogICAgPHJlY3QgeD0iMCIgeT0iMCIgICB3aWR0aD0iNi41IiAgaGVpZ2h0PSIxMSIgIGZpbGw9IiM4YTZhNGEiLz4KICAgIDxyZWN0IHg9IjAiIHk9IjEzIiAgd2lkdGg9IjYuNSIgIGhlaWdodD0iMTUiICBmaWxsPSIjOGE2YTRhIi8+CiAgICA8cmVjdCB4PSI4LjMiIHk9IjQiIHdpZHRoPSI2LjUiICBoZWlnaHQ9IjcuNSIgZmlsbD0iIzhhNmE0YSIvPgogICAgPHJlY3QgeD0iOC4zIiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgIGZpbGw9IiM4YTZhNGEiLz4KICAgIDxyZWN0IHg9IjE2LjUiIHk9IjAiIHdpZHRoPSI2LjUiIGhlaWdodD0iMTEiICBmaWxsPSIjOGE2YTRhIi8+CiAgICA8cmVjdCB4PSIxNi41IiB5PSIxMyIgd2lkdGg9IjYuNSIgaGVpZ2h0PSIxNSIgZmlsbD0iIzhhNmE0YSIvPgogIDwvZz4KPC9zdmc+', description:'Fine merino turtleneck in warm cognac.'}
 ];
 
@@ -2418,20 +2664,20 @@ function showPage(page) {
 function productCard(p) {
   var tagHtml = p.tag ? '<div class="product-badge">' + (p.tag === 'new' ? 'New' : p.tag === 'limited' ? 'Limited' : p.tag) + '</div>' : '';
   var imgContent = p.imageUrl
-    ? '<img src="' + p.imageUrl + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center" onerror="this.style.display=\'none\'" alt="' + p.name + '">'
+    ? '<img src="' + p.imageUrl + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px" onerror="this.style.display=\'none\'" alt="' + p.name + '">'
     : '<span class="product-img-icon">' + LOGO_SVG('#0e1c38', 48) + '</span>';
   var sizeOpts = (p.sizes && p.sizes.indexOf('yr') > -1)
     ? '<option>2Y</option><option>4Y</option><option>6Y</option><option>8Y</option><option>10Y</option><option>12Y</option>'
     : '<option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option>';
-  return '<div class="product-card">' +
+  return '<div class="product-card" onclick="openPDP(' + p.id + ')">' +
     tagHtml +
     '<div class="product-img">' +
       '<div class="product-img-bg" style="background:' + (p.imageUrl ? '#f5f0e8' : 'linear-gradient(135deg,' + p.color + '88,' + p.color + ')') + '"></div>' +
       imgContent +
       '<div class="product-actions">' +
-        '<select class="size-select" id="size-' + p.id + '"><option value="">Size</option>' + sizeOpts + '</select>' +
-        '<button class="add-cart-btn" onclick="addToCart(' + p.id + ')">Add to Bag</button>' +
-        '<button class="wishlist-btn">\u2661</button>' +
+        '<select class="size-select" id="size-' + p.id + '" onclick="event.stopPropagation()"><option value="">Size</option>' + sizeOpts + '</select>' +
+        '<button class="add-cart-btn" onclick="event.stopPropagation();addToCart(' + p.id + ')">Add to Bag</button>' +
+        '<button class="wishlist-btn" onclick="event.stopPropagation()">\u2661</button>' +
       '</div>' +
     '</div>' +
     '<div class="product-info">' +
@@ -2473,6 +2719,156 @@ function filterSports(act, btn) {
   var base = products.filter(function(p){return p.category==='sports';});
   renderGrid('sports-grid', act === 'all' ? base : base.filter(function(p){return p.activity===act;}));
 }
+
+// ── PRODUCT DETAIL PAGE ──
+var _pdpProduct = null;
+var _pdpZoomed = false;
+
+function openPDP(pid) {
+  var p = products.find(function(x){ return x.id === pid; });
+  if (!p) return;
+  _pdpProduct = p;
+  _pdpZoomed = false;
+
+  var activePage = document.querySelector('.page.active');
+  window._pdpReturn = activePage ? activePage.id.replace('page-','') : 'shop';
+
+  // Main image
+  var imgs = p.images || [p.imageUrl, p.image2||p.imageUrl, p.image3||p.imageUrl, p.image4||p.imageUrl];
+  var labels = ['Main','Front','Rear','Detail'];
+  var mainImg = document.getElementById('pdp-main-img');
+  mainImg.src = imgs[0] || '';
+  mainImg.alt = p.name;
+  mainImg.style.transform = '';
+  var viewer = document.getElementById('pdp-viewer');
+  viewer.classList.remove('zoomed');
+  document.getElementById('pdp-zoom-badge').textContent = '+ Zoom';
+
+  // Thumbnails
+  document.getElementById('pdp-thumbs').innerHTML = imgs.slice(0,4).map(function(url,i){
+    return '<div class="pdp-thumb-wrap">' +
+      '<div class="pdp-thumb' + (i===0?' active':'') + '" onclick="pdpSetImage(\'' + (url||'').replace(/'/g,"\\'") + '\',this)">' +
+        '<img src="' + (url||'') + '" alt="' + labels[i] + '" onerror="this.parentElement.style.background=\'#e8e8e8\'">' +
+      '</div>' +
+      '<div class="pdp-thumb-label">' + labels[i] + '</div>' +
+    '</div>';
+  }).join('');
+
+  // Eyebrow / title / subtitle / price
+  document.getElementById('pdp-eyebrow').textContent = (p.category||'').toUpperCase() + ' · ' + (p.style||'UNISEX').toUpperCase();
+  document.getElementById('pdp-title').textContent = p.name;
+  document.getElementById('pdp-subtitle').textContent = p.tagline || 'Built for Movement';
+  var primary = currentCurrency === 'NGN' ? '₦' + Number(p.priceNGN).toLocaleString() : '$' + p.priceUSD;
+  var secondary = currentCurrency === 'NGN' ? '$' + p.priceUSD : '₦' + Number(p.priceNGN).toLocaleString();
+  document.getElementById('pdp-price').innerHTML = primary + '<span class="pdp-price-alt">' + secondary + '</span>';
+
+  // Sizes
+  var sizes = p.sizeList || (function(){
+    if (!p.sizes) return ['XS','S','M','L','XL'];
+    if (p.sizes.indexOf('-') > -1) {
+      var parts = p.sizes.split('-'), a = parseInt(parts[0]), b = parseInt(parts[1]);
+      if (!isNaN(a) && !isNaN(b)) { var r=[]; for(var i=a;i<=b;i++) r.push(String(i)); return r; }
+    }
+    return p.sizes.split(',').map(function(s){return s.trim();});
+  })();
+  document.getElementById('pdp-sizes').innerHTML = sizes.map(function(s,i){
+    return '<button class="pdp-size-btn' + (i===0?' active':'') + '" onclick="pdpSelectSize(this)">' + s + '</button>';
+  }).join('');
+
+  // Colorways
+  var colors = p.colorways || [{name:'Classic',hex: p.color||'#0D0D0D'}];
+  document.getElementById('pdp-color-label-head').textContent = 'Colorway — ' + colors[0].name;
+  document.getElementById('pdp-colorways').innerHTML = colors.map(function(c,i){
+    return '<div class="pdp-color-swatch' + (i===0?' active':'') + '" style="background:' + c.hex + '" title="' + c.name + '" data-name="' + c.name + '" onclick="pdpSelectColor(this)"></div>';
+  }).join('') + '<span class="pdp-color-label" id="pdp-active-color">' + colors[0].name + '</span>';
+
+  // Highlights
+  var hi = p.highlights || ['Premium quality construction','Designed for movement and style','Unisex sizing','Lightweight and breathable'];
+  document.getElementById('pdp-highlights-list').innerHTML = hi.map(function(h){ return '<li>' + h + '</li>'; }).join('');
+
+  // Specs
+  var sp = p.specs || {Category:p.category||'—', Style:p.style||'Unisex', Sizes:p.sizes||'—'};
+  document.getElementById('pdp-specs-table').innerHTML = Object.keys(sp).map(function(k){
+    return '<tr><td>' + k + '</td><td>' + sp[k] + '</td></tr>';
+  }).join('');
+
+  // Story
+  var st = p.story || {heading:'Built for Movement', quote:'Every piece tells a story.', body:['Designed with intention — to move with you, not against you.']};
+  document.getElementById('pdp-story-content').innerHTML =
+    (st.heading ? '<h3>' + st.heading + '</h3>' : '') +
+    (st.quote   ? '<blockquote>' + st.quote + '</blockquote>' : '') +
+    (st.body    ? st.body.map(function(b){ return '<p>' + b + '</p>'; }).join('') : '');
+
+  // Reset tab
+  pdpTab('highlights', document.querySelector('.pdp-tab-btn'));
+
+  showPage('pdp');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function pdpSetImage(url, thumbEl) {
+  document.getElementById('pdp-main-img').src = url;
+  document.getElementById('pdp-main-img').style.transform = '';
+  document.querySelectorAll('.pdp-thumb').forEach(function(t){t.classList.remove('active');});
+  if (thumbEl) thumbEl.classList.add('active');
+  _pdpZoomed = false;
+  document.getElementById('pdp-viewer').classList.remove('zoomed');
+  document.getElementById('pdp-zoom-badge').textContent = '+ Zoom';
+}
+
+function pdpToggleZoom() {
+  _pdpZoomed = !_pdpZoomed;
+  var viewer = document.getElementById('pdp-viewer');
+  var badge  = document.getElementById('pdp-zoom-badge');
+  if (_pdpZoomed) {
+    viewer.classList.add('zoomed');
+    badge.textContent = '− Zoom';
+  } else {
+    viewer.classList.remove('zoomed');
+    badge.textContent = '+ Zoom';
+    document.getElementById('pdp-main-img').style.transform = 'scale(1)';
+  }
+}
+
+function pdpPanZoom(e) {
+  if (!_pdpZoomed) return;
+  var viewer = document.getElementById('pdp-viewer');
+  var img    = document.getElementById('pdp-main-img');
+  var rect   = viewer.getBoundingClientRect();
+  var x = (e.clientX - rect.left) / rect.width;
+  var y = (e.clientY - rect.top)  / rect.height;
+  var scale = 2.4;
+  var tx = (0.5 - x) * (scale - 1) * 100 / scale;
+  var ty = (0.5 - y) * (scale - 1) * 100 / scale;
+  img.style.transform = 'scale(' + scale + ') translate(' + tx + '%, ' + ty + '%)';
+}
+
+function pdpSelectSize(btn) {
+  if (btn.classList.contains('out')) return;
+  document.querySelectorAll('.pdp-size-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+}
+
+function pdpSelectColor(swatch) {
+  document.querySelectorAll('.pdp-color-swatch').forEach(function(s){s.classList.remove('active');});
+  swatch.classList.add('active');
+  var label = document.getElementById('pdp-active-color');
+  if (label) label.textContent = swatch.dataset.name || '';
+  var head = document.getElementById('pdp-color-label-head');
+  if (head) head.textContent = 'Colorway — ' + (swatch.dataset.name || '');
+}
+
+function pdpTab(name, btn) {
+  document.querySelectorAll('.pdp-tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.pdp-tab-btn').forEach(function(b){b.classList.remove('active');});
+  var panel = document.getElementById('pdp-panel-' + name);
+  if (panel) panel.classList.add('active');
+  if (btn) { btn.classList.add('active'); }
+  else { var first = document.querySelector('.pdp-tab-btn'); if (first) first.classList.add('active'); }
+}
+
+function pdpAddToCart() { if (_pdpProduct) addToCart(_pdpProduct.id); }
+function pdpBuyNow()    { if (_pdpProduct) { addToCart(_pdpProduct.id); showPage(window._pdpReturn||'shop'); toggleCart(); } }
 
 // ── CART ──
 function addToCart(pid) {
@@ -2651,6 +3047,7 @@ function showAdminTab(tab, el) {
   if(tab==='inventory')  populateInventory();
   if(tab==='customers')  populateCustomers();
   if(tab==='audit')      renderAuditLog();
+  if(tab==='team')       syncExecPreviews();
 }
 
 function statusBadge(s) { return '<span class="status-badge status-'+s+'">'+s+'</span>'; }
@@ -2951,7 +3348,7 @@ function pmOpenEdit(idx){
   g('edit-tag').value=p.tag||''; g('edit-style').value=p.style||'unisex';
   g('edit-activity').value=p.activity||'training'; g('edit-sizes').value=p.sizes||'XS-XL';
   g('edit-color').value=p.color||'#1a2d42'; g('edit-color-picker').value=p.color||'#1a2d42';
-  g('edit-imageUrl').value=p.imageUrl||''; g('edit-description').value=p.description||'';
+  g('edit-imageUrl').value=p.imageUrl||''; g('edit-image2').value=p.image2||''; g('edit-image3').value=p.image3||''; g('edit-image4').value=p.image4||''; g('edit-description').value=p.description||'';
   g('pm-char-count').textContent=(p.description||'').length+' / 500'; g('pm-val-msg').textContent='';
   var st=p.status||'active'; g('edit-status').value=st; pmSetStatusUI(st);
   pmPreviewImg(p.imageUrl||'');
@@ -2989,7 +3386,7 @@ function pmSave(){
   if(isNaN(ngn)||ngn<=0){vm.textContent='Invalid NGN price';return;}
   if(isNaN(usd)||usd<=0){vm.textContent='Invalid USD price';return;}
   if(isNaN(stk)||stk<0){vm.textContent='Invalid stock';return;}
-  if(img&&!/^(https?:\/\/\S+|assets\/[^\s]+\.(svg|png|jpg|jpeg|webp|gif))$/i.test(img)){vm.textContent='Invalid image URL';return;}
+  if(img&&!/^(https?:\/\/\S+|[^\/\s].*\.(svg|png|jpg|jpeg|webp|gif))$/i.test(img)){vm.textContent='Invalid image URL';return;}
   products[idx]=Object.assign({},p,{name:name,category:cat,priceNGN:Math.round(ngn),priceUSD:parseFloat(usd.toFixed(2)),stock:stk,
     status:document.getElementById('edit-status').value,
     tag:document.getElementById('edit-tag').value,
@@ -2997,6 +3394,9 @@ function pmSave(){
     activity:document.getElementById('edit-activity').value,
     sizes:document.getElementById('edit-sizes').value.trim()||p.sizes,
     color:col||p.color,imageUrl:img,
+    image2:document.getElementById('edit-image2').value.trim(),
+    image3:document.getElementById('edit-image3').value.trim(),
+    image4:document.getElementById('edit-image4').value.trim(),
     description:document.getElementById('edit-description').value.trim()
   });
   vm.textContent=''; document.getElementById('pm-modal-overlay').classList.remove('open');
@@ -3009,17 +3409,17 @@ function pmExportExcel(){
     return {'SKU':p.sku||'','ID':p.id,'Name':p.name,'Category':p.category,'Style':p.style||'',
       'Price_NGN':p.priceNGN,'Price_USD':p.priceUSD,'Stock':p.stock!==undefined?p.stock:'',
       'Status':(p.status||'active').toUpperCase(),'Tag':p.tag||'','Sizes':p.sizes||'',
-      'Image_URL':p.imageUrl||'','Description':p.description||''};
+      'Image_URL':p.imageUrl||'','Image_2':p.image2||'','Image_3':p.image3||'','Image_4':p.image4||'','Description':p.description||''};
   });
   var ws=XLSX.utils.json_to_sheet(data);
-  ws['!cols']=[{wch:12},{wch:6},{wch:28},{wch:12},{wch:10},{wch:14},{wch:12},{wch:8},{wch:10},{wch:8},{wch:10},{wch:40},{wch:40}];
+  ws['!cols']=[{wch:12},{wch:6},{wch:28},{wch:12},{wch:10},{wch:14},{wch:12},{wch:8},{wch:10},{wch:8},{wch:10},{wch:40},{wch:40},{wch:40},{wch:40},{wch:40}];
   var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Products');
   XLSX.writeFile(wb,'klot_products_'+today()+'.xlsx'); showToast('Products exported');
 }
 function pmExportCSV(){
   var data=pmState.filtered.length?pmState.filtered:products;
-  var hdrs='SKU,ID,Name,Category,Style,Price_NGN,Price_USD,Stock,Status,Tag,Sizes,Image_URL,Description';
-  var rows=data.map(function(p){return [p.sku||'',p.id,'"'+(p.name||'').replace(/"/g,'""')+'"',p.category,p.style||'',p.priceNGN,p.priceUSD,p.stock!==undefined?p.stock:'',(p.status||'active').toUpperCase(),p.tag||'',p.sizes||'','"'+(p.imageUrl||'').replace(/"/g,'""')+'"','"'+(p.description||'').replace(/"/g,'""')+'"'].join(',');});
+  var hdrs='SKU,ID,Name,Category,Style,Price_NGN,Price_USD,Stock,Status,Tag,Sizes,Image_URL,Image_2,Image_3,Image_4,Description';
+  var rows=data.map(function(p){return [p.sku||'',p.id,'"'+(p.name||'').replace(/"/g,'""')+'"',p.category,p.style||'',p.priceNGN,p.priceUSD,p.stock!==undefined?p.stock:'',(p.status||'active').toUpperCase(),p.tag||'',p.sizes||'','"'+(p.imageUrl||'').replace(/"/g,'""')+'"','"'+(p.image2||'').replace(/"/g,'""')+'"','"'+(p.image3||'').replace(/"/g,'""')+'"','"'+(p.image4||'').replace(/"/g,'""')+'"','"'+(p.description||'').replace(/"/g,'""')+'"'].join(',');});
   dlFile([hdrs].concat(rows).join('\n'),'text/csv','klot_products_'+today()+'.csv');
   showToast('Products exported to CSV');
 }
@@ -3102,6 +3502,9 @@ function runValidation(){
     parsed.sizes=impCell(row,'sizes')||'XS-XL';
     var tag=impCell(row,'tag').toLowerCase(); parsed.tag=['new','limited','sale'].indexOf(tag)>-1?tag:'';
     parsed.imageUrl=impCell(row,'imageUrl');
+    parsed.image2=impCell(row,'image2');
+    parsed.image3=impCell(row,'image3');
+    parsed.image4=impCell(row,'image4');
     parsed.description=impCell(row,'description').slice(0,500);
     var col=impCell(row,'color'); parsed.color=/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(col)?col:'#1a2d42';
     var act=impCell(row,'activity').toLowerCase(); parsed.activity=['running','training','yoga'].indexOf(act)>-1?act:'training';
@@ -3161,7 +3564,7 @@ function confirmImport(){
     var p=Math.round((i/total)*100);
     if(fill)fill.style.width=p+'%'; if(pct)pct.textContent=p+'%'; if(lbl)lbl.textContent='Processing '+i+'/'+total+': '+(row.name||row.sku);
     try{
-      var pd={id:row._ei!==undefined?products[row._ei].id:products.length+1,sku:row.sku,name:row.name,category:row.category,priceNGN:row.priceNGN,priceUSD:row.priceUSD,style:row.style||'unisex',sizes:row.sizes||'XS-XL',tag:row.tag||'',imageUrl:row.imageUrl||'',description:row.description||'',color:row.color||'#1a2d42',activity:row.activity||'training',stock:row.stock||0,status:row.status||'active'};
+      var pd={id:row._ei!==undefined?products[row._ei].id:products.length+1,sku:row.sku,name:row.name,category:row.category,priceNGN:row.priceNGN,priceUSD:row.priceUSD,style:row.style||'unisex',sizes:row.sizes||'XS-XL',tag:row.tag||'',imageUrl:row.imageUrl||'',image2:row.image2||'',image3:row.image3||'',image4:row.image4||'',description:row.description||'',color:row.color||'#1a2d42',activity:row.activity||'training',stock:row.stock||0,status:row.status||'active'};
       if(row._st==='update'&&row._ei!==undefined)Object.assign(products[row._ei],pd);
       else products.push(pd);
     }catch(err){postErrs.push({row:row._rn,sku:row.sku||'-',msg:err.message});}
@@ -3187,7 +3590,11 @@ function exportErrorLog(){
 }
 function downloadTemplate(){
   if(typeof XLSX==='undefined'){showToast('Loading...');return;}
-  var data=[['sku','name','category','priceNGN','priceUSD','style','sizes','tag','imageUrl','description','color','activity','stock','status'],['MN-021','Example Jacket','fashion',89000,55,'unisex','XS-XL','new','https://example.com/img.jpg','A luxury jacket.','#1a2d42','training',50,'active'],['MN-022','Example Jogger','fashion',65000,40,'unisex','XS-XL','','','','#e8e0d0','training',30,'active']];
+  var data=[
+    ['sku','name','category','priceNGN','priceUSD','style','sizes','tag','imageUrl','image2','image3','image4','description','color','activity','stock','status'],
+    ['KL-022','Example Jacket','fashion',89000,55,'unisex','XS-XL','new','https://example.com/main.jpg','https://example.com/front.jpg','https://example.com/rear.jpg','https://example.com/detail.jpg','A luxury jacket.','#1a2d42','training',50,'active'],
+    ['KL-023','Example Slide','sports',48000,30,'unisex','39-45','','https://example.com/main.jpg','https://example.com/front.jpg','https://example.com/sole.jpg','https://example.com/strap.jpg','Lightweight sports slide.','#FF2D2D','training',60,'active']
+  ];
   var ws=XLSX.utils.aoa_to_sheet(data); ws['!cols']=data[0].map(function(){return {wch:20};});
   var wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Products');
   XLSX.writeFile(wb,'klot_template.xlsx'); showToast('Template downloaded');
@@ -3536,6 +3943,70 @@ function updateExecPhoto(slug, input) {
   input.value = '';
 }
 
+
+// ── Admin exec photo upload (team panel only) ──
+function adminExecUpload(slug, input) {
+  if (!input.files || !input.files[0]) return;
+  var file = input.files[0];
+  if (file.size > 5 * 1024 * 1024) { showToast('Photo must be under 5 MB'); return; }
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    var testImg = new Image();
+    testImg.onload = function() {
+      // Update the live team card on the About page
+      var liveImg = document.getElementById('team-photo-' + slug);
+      if (liveImg) { liveImg.src = dataUrl; liveImg.style.display = 'block'; }
+      // Update the admin preview
+      var prev = document.getElementById('admin-preview-' + slug);
+      if (prev) { prev.src = dataUrl; prev.style.opacity = '1'; }
+      // Flash the live card
+      var wrap = document.getElementById('photo-wrap-' + slug);
+      if (wrap) { wrap.classList.add('team-photo-uploading'); setTimeout(function(){ wrap.classList.remove('team-photo-uploading'); }, 600); }
+      var status = document.getElementById('admin-status-' + slug);
+      if (status) { status.textContent = '&#10003; Photo updated'; setTimeout(function(){ status.textContent = ''; }, 3000); }
+      logAudit('exec-photo-upload', 'Uploaded photo for ' + slug);
+      showToast('Photo updated');
+    };
+    testImg.onerror = function() { showToast('Invalid image file'); };
+    testImg.src = dataUrl;
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function adminSaveBio(slug) {
+  var bioEl = document.getElementById('admin-bio-' + slug);
+  var statusEl = document.getElementById('admin-status-' + slug);
+  if (!bioEl) return;
+  var bio = bioEl.value.trim();
+  if (!bio) { showToast('Bio cannot be empty'); return; }
+  // Update the live team bio on the About page
+  var wrap = document.getElementById('photo-wrap-' + slug);
+  if (wrap) {
+    var card = wrap.parentElement;
+    var bioP = card ? card.querySelector('.team-bio') : null;
+    if (bioP) bioP.textContent = bio;
+  }
+  if (statusEl) {
+    statusEl.innerHTML = '&#10003; Bio saved';
+    setTimeout(function(){ statusEl.textContent = ''; }, 3000);
+  }
+  logAudit('exec-bio-update', 'Updated bio for ' + slug);
+  showToast('Bio saved');
+}
+
+function syncExecPreviews() {
+  ['adaeze','kofi','zara'].forEach(function(slug) {
+    var liveImg = document.getElementById('team-photo-' + slug);
+    var prev    = document.getElementById('admin-preview-' + slug);
+    if (liveImg && prev && liveImg.src && !liveImg.src.endsWith('#')) {
+      prev.src = liveImg.src;
+      prev.style.opacity = '1';
+    }
+  });
+}
 
 // ══════════════════════════════════════════════
 //  ADMIN SECURITY ENHANCEMENTS
