@@ -3331,10 +3331,10 @@ function pmGoPage(p){var pages=Math.ceil(pmState.filtered.length/pmState.perPage
 function pmToggleRow(idx,cb){if(cb.checked)pmState.selected.add(idx);else pmState.selected.delete(idx);pmRender();}
 function pmToggleAll(cb){var pi=pmState.filtered.slice((pmState.page-1)*pmState.perPage,pmState.page*pmState.perPage);pi.forEach(function(p){var i=products.indexOf(p);if(cb.checked)pmState.selected.add(i);else pmState.selected.delete(i);});pmRender();}
 function pmClearSel(){pmState.selected.clear();pmRender();}
-function pmQuickStatus(idx){if(!products[idx])return;products[idx].status=(products[idx].status||'active')==='active'?'inactive':'active';renderAllGrids();pmRender();showToast(products[idx].name+' -> '+products[idx].status.toUpperCase());}
-function pmBulkStatus(s){pmState.selected.forEach(function(i){if(products[i])products[i].status=s;});renderAllGrids();pmRender();showToast(pmState.selected.size+' products set to '+s.toUpperCase());}
-function pmBulkDelete(){var n=pmState.selected.size;if(!n||!confirm('Delete '+n+' products?'))return;Array.from(pmState.selected).sort(function(a,b){return b-a;}).forEach(function(i){products.splice(i,1);});pmState.selected.clear();renderAllGrids();populateAdmin();pmRender();showToast(n+' deleted');}
-function pmDelete(idx){var p=products[idx];if(!p||!confirm('Delete "'+p.name+'"?'))return;products.splice(idx,1);pmState.selected.delete(idx);renderAllGrids();populateAdmin();pmRender();showToast('"'+p.name+'" deleted');}
+function pmQuickStatus(idx){if(!products[idx])return;products[idx].status=(products[idx].status||'active')==='active'?'inactive':'active';persistProducts();renderAllGrids();pmRender();showToast(products[idx].name+' -> '+products[idx].status.toUpperCase());}
+function pmBulkStatus(s){pmState.selected.forEach(function(i){if(products[i])products[i].status=s;});persistProducts();renderAllGrids();pmRender();showToast(pmState.selected.size+' products set to '+s.toUpperCase());}
+function pmBulkDelete(){var n=pmState.selected.size;if(!n||!confirm('Delete '+n+' products?'))return;Array.from(pmState.selected).sort(function(a,b){return b-a;}).forEach(function(i){products.splice(i,1);});pmState.selected.clear();persistProducts();renderAllGrids();populateAdmin();pmRender();showToast(n+' deleted');}
+function pmDelete(idx){var p=products[idx];if(!p||!confirm('Delete "'+p.name+'"?'))return;products.splice(idx,1);pmState.selected.delete(idx);persistProducts();renderAllGrids();populateAdmin();pmRender();showToast('"'+p.name+'" deleted');}
 
 function pmOpenEdit(idx){
   var p=products[idx]; if(!p)return;
@@ -3400,7 +3400,7 @@ function pmSave(){
     description:document.getElementById('edit-description').value.trim()
   });
   vm.textContent=''; document.getElementById('pm-modal-overlay').classList.remove('open');
-  renderAllGrids(); populateAdmin(); pmRender(); showToast('"'+name+'" updated');
+  persistProducts(); renderAllGrids(); populateAdmin(); pmRender(); showToast('"'+name+'" updated');
 }
 
 function pmExportExcel(){
@@ -3552,7 +3552,7 @@ function confirmImport(){
     if(i>=total){
       if(pw)pw.classList.remove('show');
       if(postErrs.length){var pe=document.getElementById('post-error-section');if(pe)pe.style.display='block';var el=document.getElementById('error-log');if(el)el.innerHTML=postErrs.map(function(e){return '<div class="error-log-item"><span class="error-log-row">Row '+e.row+'</span><div class="error-log-msg">'+esc(e.msg)+'</div></div>';}).join('');}
-      renderAllGrids();populateAdmin();
+      persistProducts();renderAllGrids();populateAdmin();
       var nc=ready.filter(function(r){return r._st==='new';}).length, uc=ready.filter(function(r){return r._st==='update';}).length;
       var sm=document.getElementById('import-success-msg'); if(sm)sm.textContent=nc+' created, '+uc+' updated';
       var succ=document.getElementById('import-success'); if(succ)succ.classList.add('show');
@@ -4324,6 +4324,7 @@ pmBulkStatus = function(s) {
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
+  loadPersistedProducts();
   showPage('home');
   // Pre-render shop grid so it loads instantly on navigation
   renderGrid('shop-grid', products);
@@ -4348,6 +4349,20 @@ function storageSet(key, val) {
 }
 function storageRemove(key) {
   try { localStorage.removeItem(key); } catch(e) {}
+}
+function persistProducts() {
+  storageSet('klot_products', JSON.stringify(products));
+}
+function loadPersistedProducts() {
+  var raw = storageGet('klot_products');
+  if (!raw) return;
+  try {
+    var saved = JSON.parse(raw);
+    if (Array.isArray(saved) && saved.length) {
+      products.splice(0, products.length);
+      saved.forEach(function(p){ products.push(p); });
+    }
+  } catch(e) {}
 }
 
 // ── Password hashing (PBKDF2 via SubtleCrypto) ──
