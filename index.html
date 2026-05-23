@@ -2981,15 +2981,29 @@ function pdpTab(name, btn) {
   else { var first = document.querySelector('.pdp-tab-btn'); if (first) first.classList.add('active'); }
 }
 
-function pdpAddToCart() { if (_pdpProduct) addToCart(_pdpProduct.id); }
-function pdpBuyNow()    { if (_pdpProduct) { addToCart(_pdpProduct.id); showPage(window._pdpReturn||'shop'); toggleCart(); } }
+function pdpAddToCart() {
+  if (!_pdpProduct) return;
+  var activeSize = document.querySelector('.pdp-size-btn.active');
+  if (!activeSize) { showToast('Please select a size'); return; }
+  addToCart(_pdpProduct.id, activeSize.textContent.trim());
+}
+function pdpBuyNow() {
+  if (!_pdpProduct) return;
+  var activeSize = document.querySelector('.pdp-size-btn.active');
+  if (!activeSize) { showToast('Please select a size'); return; }
+  addToCart(_pdpProduct.id, activeSize.textContent.trim());
+  showPage(window._pdpReturn||'shop');
+  toggleCart();
+}
 
 // ── CART ──
-function addToCart(pid) {
+function addToCart(pid, size) {
   var p = products.find(function(x){return x.id===pid;});
   if (!p) return;
-  var sizeEl = document.getElementById('size-' + pid);
-  var size = sizeEl ? sizeEl.value : '';
+  if (!size) {
+    var sizeEl = document.getElementById('size-' + pid);
+    size = sizeEl ? sizeEl.value : '';
+  }
   if (!size) { showToast('Please select a size'); return; }
   var ex = cart.find(function(c){return c.id===pid && c.size===size;});
   if (ex) { ex.qty++; } else { cart.push(Object.assign({}, p, {size:size, qty:1})); }
