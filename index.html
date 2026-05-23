@@ -283,21 +283,51 @@ nav { max-width:1400px; margin:0 auto; padding:0 40px; height:72px; display:flex
 .team-card p { font-size:11px; letter-spacing:.12em; color:var(--green); text-transform:uppercase; }
 
 /* ── Contact ── */
-.contact-layout { display:grid; grid-template-columns:1fr 1fr; max-width:1400px; margin:0 auto; min-height:80vh; }
-.contact-info { background:var(--navy); padding:80px; display:flex; flex-direction:column; justify-content:center; }
-.contact-detail { margin-bottom:28px; padding-bottom:28px; border-bottom:1px solid rgba(245,240,232,.1); }
-.contact-detail:last-child { border-bottom:none; }
-.contact-detail h4 { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--green); margin-bottom:8px; }
-.contact-detail p { font-family:'Inter',sans-serif; font-size:18px; color:rgba(245,240,232,.8); line-height:1.6; }
-.contact-form-wrap { background:var(--white); padding:80px; display:flex; flex-direction:column; justify-content:center; }
-.form-title { font-family:'Barlow Condensed',sans-serif; font-size:36px; font-weight:400; color:var(--navy); margin-bottom:8px; }
-.form-sub { font-family:'Inter',sans-serif; font-size:17px; color:var(--muted); margin-bottom:40px; }
-.form-group { margin-bottom:24px; }
-.form-group label { display:block; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--navy); margin-bottom:8px; }
-.form-group input, .form-group textarea, .form-group select { width:100%; padding:14px 16px; border:1px solid var(--border); background:var(--white); font-family:'Inter',sans-serif; font-size:14px; color:var(--navy); outline:none; transition:border-color .2s; appearance:none; }
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--green); }
-.form-group textarea { height:120px; resize:vertical; }
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.contact-page-wrap { display:grid; grid-template-columns:45fr 55fr; min-height:100vh; }
+.contact-visual { position:relative; overflow:hidden; min-height:600px; display:flex; flex-direction:column; }
+.contact-visual-bg { position:absolute; inset:0; background:#050505; }
+.contact-visual-bg img { width:100%; height:100%; object-fit:contain; object-position:center; display:block; opacity:.32; }
+.contact-visual-overlay { position:absolute; inset:0; background:linear-gradient(160deg, rgba(0,0,0,.55) 0%, rgba(13,13,13,.72) 55%, rgba(255,45,45,.05) 100%); }
+.contact-visual-accent { position:absolute; top:0; left:0; width:3px; height:100%; background:var(--green); }
+.contact-visual-content { position:relative; z-index:2; padding:80px 64px; display:flex; flex-direction:column; justify-content:space-between; flex:1; box-sizing:border-box; }
+.contact-visual-label { font-size:9px; letter-spacing:.5em; text-transform:uppercase; color:var(--green); font-family:'Barlow Condensed',sans-serif; }
+.contact-visual-heading { font-family:'Barlow Condensed',sans-serif; font-size:clamp(60px,8vw,108px); font-weight:700; line-height:.84; color:#fff; letter-spacing:-.01em; text-transform:uppercase; margin-top:auto; margin-bottom:44px; }
+.contact-visual-heading em { font-style:italic; color:var(--green); font-weight:400; }
+.contact-details-grid { display:grid; grid-template-columns:1fr 1fr; gap:28px 36px; margin-bottom:40px; }
+.cd-label { font-size:8px; letter-spacing:.35em; text-transform:uppercase; color:rgba(255,45,45,.85); font-family:'Barlow Condensed',sans-serif; margin-bottom:5px; }
+.cd-val { font-family:'Inter',sans-serif; font-size:13px; line-height:1.65; color:rgba(245,240,232,.68); }
+.contact-visual-social { display:flex; gap:14px; }
+.cv-social-link { width:34px; height:34px; border:1px solid rgba(245,240,232,.14); display:flex; align-items:center; justify-content:center; color:rgba(245,240,232,.42); font-size:13px; transition:border-color .25s, color .25s; text-decoration:none; }
+.cv-social-link:hover { border-color:var(--green); color:var(--green); }
+.contact-form-panel { background:#0D0D0D; padding:80px 72px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+.contact-form-panel::before { content:'KLOT'; position:absolute; top:50%; right:-28px; transform:translateY(-50%); font-family:'Barlow Condensed',sans-serif; font-size:220px; font-weight:700; color:rgba(255,255,255,.022); letter-spacing:-.04em; pointer-events:none; line-height:1; white-space:nowrap; z-index:0; }
+.cfp-content { position:relative; z-index:1; }
+.cfp-eyebrow { font-size:9px; letter-spacing:.45em; text-transform:uppercase; color:var(--green); font-family:'Barlow Condensed',sans-serif; margin-bottom:16px; }
+.cfp-title { font-family:'Barlow Condensed',sans-serif; font-size:clamp(38px,4vw,58px); font-weight:400; color:#fff; line-height:1.0; margin-bottom:10px; }
+.cfp-title strong { font-weight:700; }
+.cfp-sub { font-family:'Inter',sans-serif; font-size:13px; color:rgba(245,240,232,.36); margin-bottom:16px; line-height:1.7; }
+.cfp-divider { width:40px; height:2px; background:var(--green); margin-bottom:36px; }
+.cf-row { display:grid; grid-template-columns:1fr 1fr; gap:0 24px; }
+.cf-field { position:relative; margin-bottom:30px; }
+.cf-field input, .cf-field textarea, .cf-field select { width:100%; background:transparent; border:none; border-bottom:1px solid rgba(245,240,232,.13); color:#fff; font-family:'Inter',sans-serif; font-size:14px; padding:20px 0 10px; outline:none; transition:border-color .25s; box-sizing:border-box; appearance:none; -webkit-appearance:none; }
+.cf-field select { cursor:pointer; }
+.cf-field select option { background:#111; color:#fff; }
+.cf-field textarea { height:92px; resize:none; }
+.cf-field label { position:absolute; top:20px; left:0; font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:rgba(245,240,232,.28); font-family:'Barlow Condensed',sans-serif; pointer-events:none; transition:transform .2s cubic-bezier(.25,.46,.45,.94), color .2s; transform-origin:left top; }
+.cf-field input:focus ~ label, .cf-field input:not(:placeholder-shown) ~ label,
+.cf-field textarea:focus ~ label, .cf-field textarea:not(:placeholder-shown) ~ label,
+.cf-field.has-val label, .cf-field select:focus ~ label { transform:translateY(-18px) scale(.82); color:var(--green); }
+.cf-line { position:absolute; bottom:0; left:0; width:0; height:1px; background:var(--green); transition:width .32s cubic-bezier(.25,.46,.45,.94); }
+.cf-field input:focus ~ .cf-line, .cf-field textarea:focus ~ .cf-line, .cf-field select:focus ~ .cf-line { width:100%; }
+.cf-submit { display:flex; align-items:center; gap:22px; margin-top:6px; }
+.cf-btn { background:var(--green); color:#fff; border:none; font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:.25em; text-transform:uppercase; padding:16px 44px; cursor:pointer; transition:background .25s, transform .15s; position:relative; overflow:hidden; white-space:nowrap; }
+.cf-btn::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); transform:translateX(-100%); transition:transform .3s ease; }
+.cf-btn:hover::after { transform:translateX(0); }
+.cf-btn:hover { background:#e02020; }
+.cf-btn:active { transform:scale(.97); }
+.cf-note { font-family:'Inter',sans-serif; font-size:11px; color:rgba(245,240,232,.2); line-height:1.65; }
+@media(max-width:960px) { .contact-page-wrap { grid-template-columns:1fr; } .contact-visual { min-height:420px; } .contact-visual-content { padding:56px 40px; } .contact-form-panel { padding:64px 40px; } .cf-row { grid-template-columns:1fr; } }
+@media(max-width:560px) { .contact-visual-content { padding:44px 24px; } .contact-form-panel { padding:48px 24px; } .contact-details-grid { grid-template-columns:1fr; } .contact-form-panel::before { font-size:130px; } }
 
 /* ── Cart ── */
 .cart-overlay { position:fixed; inset:0; background:rgba(13,27,42,.4); z-index:240; display:none; }
@@ -1577,32 +1607,94 @@ input.pm-inp.pfx { padding-left:26px; }
      CONTACT PAGE
      ====================================== -->
 <div class="page" id="page-contact">
-  <div class="contact-layout">
-    <div class="contact-info">
-      <span class="section-label">Get in Touch</span>
-      <h2 class="section-title" style="color:var(--cream)">We&rsquo;d Love to<br><em>Hear From You</em></h2>
-      <div class="contact-detail"><h4>Studio Address</h4><p>15 Victoria Island Boulevard<br>Lagos, Nigeria</p></div>
-      <div class="contact-detail"><h4>Email</h4><p>hello&#64;klot.com<br>press&#64;klot.com</p></div>
-      <div class="contact-detail"><h4>Phone</h4><p>+234 (0) 801 234 5678</p></div>
-      <div class="contact-detail"><h4>Hours</h4><p>Mon&ndash;Fri: 9am&ndash;6pm WAT<br>Saturday: 10am&ndash;4pm</p></div>
-    </div>
-    <div class="contact-form-wrap">
-      <h3 class="form-title">Send a Message</h3>
-      <p class="form-sub">For orders, press, or wholesale requests.</p>
-      <div class="form-row">
-        <div class="form-group"><label>First Name</label><input type="text" placeholder="Adaeze"></div>
-        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Okonkwo"></div>
+  <div class="contact-page-wrap">
+
+    <!-- ── Visual / Info Panel ── -->
+    <div class="contact-visual">
+      <div class="contact-visual-bg">
+        <img src="klot_website/klot/assets/images/klot-logo.png.jpeg" alt="" role="presentation" onerror="this.parentElement.style.background='#0D0D0D'">
       </div>
-      <div class="form-group"><label>Email</label><input type="email" placeholder="hello&#64;yourname.com"></div>
-      <div class="form-group"><label>Subject</label>
-        <select>
-          <option>General Inquiry</option><option>Order Support</option>
-          <option>Press &amp; Media</option><option>Wholesale</option><option>Returns</option>
-        </select>
+      <div class="contact-visual-overlay"></div>
+      <div class="contact-visual-accent"></div>
+      <div class="contact-visual-content">
+        <div class="contact-visual-label">KLOT&thinsp;&sol;&thinsp;Contact</div>
+        <div>
+          <div class="contact-visual-heading">Let&rsquo;s<br><em>Talk.</em></div>
+          <div class="contact-details-grid">
+            <div>
+              <div class="cd-label">Studio</div>
+              <div class="cd-val">15 Victoria Island Blvd<br>Lagos, Nigeria</div>
+            </div>
+            <div>
+              <div class="cd-label">Email</div>
+              <div class="cd-val">hello&#64;klot.com<br>press&#64;klot.com</div>
+            </div>
+            <div>
+              <div class="cd-label">Phone</div>
+              <div class="cd-val">+234 (0) 801 234 5678</div>
+            </div>
+            <div>
+              <div class="cd-label">Hours</div>
+              <div class="cd-val">Mon&ndash;Fri 9am&ndash;6pm WAT<br>Sat 10am&ndash;4pm</div>
+            </div>
+          </div>
+          <div class="contact-visual-social">
+            <a href="https://instagram.com/klot" target="_blank" rel="noopener" class="cv-social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com/klot" target="_blank" rel="noopener" class="cv-social-link" title="X / Twitter"><i class="fab fa-x-twitter"></i></a>
+            <a href="https://tiktok.com/&#64;klot" target="_blank" rel="noopener" class="cv-social-link" title="TikTok"><i class="fab fa-tiktok"></i></a>
+          </div>
+        </div>
       </div>
-      <div class="form-group"><label>Message</label><textarea placeholder="Tell us how we can help&hellip;"></textarea></div>
-      <button class="btn-primary" onclick="showToast('Message sent! We\'ll be in touch within 24 hours.')">Send Message</button>
     </div>
+
+    <!-- ── Form Panel ── -->
+    <div class="contact-form-panel">
+      <div class="cfp-content">
+        <div class="cfp-eyebrow">Send a Message</div>
+        <h2 class="cfp-title">How can<br><strong>we help?</strong></h2>
+        <p class="cfp-sub">For orders, press inquiries, or wholesale requests &mdash; we respond within 24 hours.</p>
+        <div class="cfp-divider"></div>
+        <div class="cf-row">
+          <div class="cf-field">
+            <input type="text" id="cf-fname" placeholder=" ">
+            <label for="cf-fname">First Name</label>
+            <div class="cf-line"></div>
+          </div>
+          <div class="cf-field">
+            <input type="text" id="cf-lname" placeholder=" ">
+            <label for="cf-lname">Last Name</label>
+            <div class="cf-line"></div>
+          </div>
+        </div>
+        <div class="cf-field">
+          <input type="email" id="cf-email" placeholder=" ">
+          <label for="cf-email">Email Address</label>
+          <div class="cf-line"></div>
+        </div>
+        <div class="cf-field">
+          <select id="cf-subject" onchange="this.closest('.cf-field').classList.toggle('has-val',this.value!=='')">
+            <option value=""></option>
+            <option>General Inquiry</option>
+            <option>Order Support</option>
+            <option>Press &amp; Media</option>
+            <option>Wholesale</option>
+            <option>Returns</option>
+          </select>
+          <label for="cf-subject">Subject</label>
+          <div class="cf-line"></div>
+        </div>
+        <div class="cf-field">
+          <textarea id="cf-msg" placeholder=" "></textarea>
+          <label for="cf-msg">Message</label>
+          <div class="cf-line"></div>
+        </div>
+        <div class="cf-submit">
+          <button class="cf-btn" onclick="showToast('Message sent! We\'ll be in touch within 24 hours.')">Send Message</button>
+          <span class="cf-note">We&rsquo;ll respond within<br>24 business hours.</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
