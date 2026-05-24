@@ -117,14 +117,22 @@ nav { max-width:1400px; margin:0 auto; padding:0 40px; height:72px; display:flex
 /* ── Category Cards ── */
 .categories { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); margin-top:60px; }
 .cat-card { background:var(--white); aspect-ratio:3/4; position:relative; overflow:hidden; cursor:pointer; display:flex; align-items:flex-end; }
-.cat-bg { position:absolute; inset:0; transition:transform .6s ease; }
-.cat-card:hover .cat-bg { transform:scale(1.04); }
-.cat-bg-1 { background:linear-gradient(160deg,#1a2d42,#0d1b2a); }
-.cat-bg-2 { background:linear-gradient(160deg,#2a3d4a,#1a2d42); }
+.cat-card::after { content:''; position:absolute; bottom:0; left:0; width:0; height:3px; background:var(--green); transition:width .45s cubic-bezier(.25,.46,.45,.94); z-index:4; }
+.cat-card:hover::after { width:100%; }
+.cat-bg { position:absolute; inset:0; transition:transform .7s cubic-bezier(.25,.46,.45,.94); }
+.cat-card:hover .cat-bg { transform:scale(1.06); }
+.cat-bg-1 { background:#0d1b2a; }
+.cat-bg-2 { background:#1a2d42; }
 .cat-bg-3 { background:linear-gradient(160deg,#0d1b2a,#1a3a2a); }
+.cat-bg-img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
+.cat-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.3) 45%, rgba(0,0,0,.1) 100%); z-index:1; pointer-events:none; transition:opacity .4s; }
+.cat-card:hover .cat-overlay { opacity:.75; }
+.cat-label { position:absolute; top:28px; left:32px; font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:.35em; text-transform:uppercase; color:rgba(245,240,232,.5); z-index:3; }
 .cat-icon { position:absolute; top:50%; left:50%; transform:translate(-50%,-60%); font-size:72px; opacity:.15; color:var(--accent-light); font-family:'Barlow Condensed',sans-serif; font-style:italic; }
-.cat-info { position:relative; z-index:2; padding:32px; width:100%; background:linear-gradient(transparent,rgba(13,27,42,.9)); }
-.cat-info h3 { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:400; color:var(--cream); margin-bottom:6px; }
+.cat-info { position:relative; z-index:3; padding:32px; width:100%; background:none; transition:transform .4s ease; }
+.cat-card:hover .cat-info { transform:translateY(-6px); }
+.cat-info h3 { font-family:'Barlow Condensed',sans-serif; font-size:32px; font-weight:400; color:var(--cream); margin-bottom:6px; letter-spacing:.02em; }
+.cat-explore { display:inline-flex; align-items:center; gap:8px; font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:var(--green); margin-top:10px; font-family:'Inter',sans-serif; }
 .cat-info p { font-size:11px; letter-spacing:.15em; color:var(--accent-light); text-transform:uppercase; }
 
 /* ── Promise ── */
@@ -1306,20 +1314,40 @@ input.pm-inp.pfx { padding-left:26px; }
     <span class="section-label">Shop by Category</span>
     <h2 class="section-title">Dress Every<br><em>Dimension</em> of Life</h2>
     <div class="categories">
-      <div class="cat-card" onclick="showPage('shop')">
-        <div class="cat-bg cat-bg-1"></div>
-        <div class="cat-icon">F</div>
-        <div class="cat-info"><h3>Fashion</h3><p>Editorial Luxury Wear</p></div>
+      <div class="cat-card" onclick="goToCategory('fashion')" role="button" aria-label="Browse Fashion">
+        <div class="cat-bg cat-bg-1">
+          <img class="cat-bg-img" src="klot_website/klot/assets/images/fashion_section.jpeg" alt="KLOT Fashion" onerror="this.style.display='none'">
+        </div>
+        <div class="cat-overlay"></div>
+        <span class="cat-label">KLOT / Fashion</span>
+        <div class="cat-info">
+          <h3>Fashion</h3>
+          <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,240,232,.55);margin:0 0 0">Editorial Luxury Wear</p>
+          <div class="cat-explore">Explore &#8594;</div>
+        </div>
       </div>
-      <div class="cat-card" onclick="showPage('shop')">
-        <div class="cat-bg cat-bg-2"></div>
-        <div class="cat-icon">S</div>
-        <div class="cat-info"><h3>Sports</h3><p>Active Performance Wear</p></div>
+      <div class="cat-card" onclick="goToCategory('sports')" role="button" aria-label="Browse Sports">
+        <div class="cat-bg cat-bg-2">
+          <img class="cat-bg-img" src="klot_website/klot/assets/images/sports_section.jpeg" alt="KLOT Sports" onerror="this.style.display='none'">
+        </div>
+        <div class="cat-overlay"></div>
+        <span class="cat-label">KLOT / Sports</span>
+        <div class="cat-info">
+          <h3>Sports</h3>
+          <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,240,232,.55);margin:0 0 0">Active Performance Wear</p>
+          <div class="cat-explore">Explore &#8594;</div>
+        </div>
       </div>
-      <div class="cat-card" onclick="showPage('shop')">
+      <div class="cat-card" onclick="showPage('shop')" role="button" aria-label="Browse Kids">
         <div class="cat-bg cat-bg-3"></div>
+        <div class="cat-overlay" style="background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.1) 60%,transparent 100%)"></div>
         <div class="cat-icon">K</div>
-        <div class="cat-info"><h3>Kids</h3><p>Mini Luxury Collection</p></div>
+        <span class="cat-label">KLOT / Kids</span>
+        <div class="cat-info">
+          <h3>Kids</h3>
+          <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,240,232,.55);margin:0 0 0">Mini Luxury Collection</p>
+          <div class="cat-explore">Explore &#8594;</div>
+        </div>
       </div>
     </div>
   </div>
@@ -2813,6 +2841,15 @@ function renderGrid(id, items) {
 function renderAllGrids() {
   var sg = document.getElementById('shop-grid');
   if (sg) renderGrid('shop-grid', products);
+}
+
+// ── CATEGORY NAV ──
+function goToCategory(cat) {
+  showPage('shop');
+  var btns = document.querySelectorAll('#page-shop .filter-btn');
+  for (var i = 0; i < btns.length; i++) {
+    if (btns[i].textContent.trim().toLowerCase() === cat) { btns[i].click(); break; }
+  }
 }
 
 // ── FILTERS ──
