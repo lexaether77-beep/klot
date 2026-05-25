@@ -1811,7 +1811,7 @@ input.pm-inp.pfx { padding-left:26px; }
           <div class="cf-line"></div>
         </div>
         <div class="cf-submit">
-          <button class="cf-btn" onclick="showToast('Message sent! We\'ll be in touch within 24 hours.')">Send Message</button>
+          <button class="cf-btn" id="cf-submit-btn" onclick="cfSubmit()">Send Message</button>
           <span class="cf-note">We&rsquo;ll respond within<br>24 business hours.</span>
         </div>
       </div>
@@ -3764,6 +3764,8 @@ function mcRenderInbox() {
 }
 
 // ── Received emails ──
+var _mcReceivedEmails = [];
+
 async function mcLoadReceived() {
   var list = document.getElementById('mc-received-list');
   var empty = document.getElementById('mc-received-empty');
@@ -3777,13 +3779,13 @@ async function mcLoadReceived() {
       list.innerHTML=''; if(empty)empty.style.display='none'; if(setup)setup.style.display='block'; return;
     }
     if(setup)setup.style.display='none';
-    var emails = data.emails||[];
-    if(!emails.length) { list.innerHTML=''; if(empty)empty.style.display='block'; return; }
+    _mcReceivedEmails = data.emails||[];
+    if(!_mcReceivedEmails.length) { list.innerHTML=''; if(empty)empty.style.display='block'; return; }
     if(empty)empty.style.display='none';
-    list.innerHTML = emails.map(function(e,i) {
+    list.innerHTML = _mcReceivedEmails.map(function(e,i) {
       var d = new Date(e.receivedAt);
       var ds = d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-      return '<div class="mc-row" onclick="mcPreviewReceived('+i+',this)" style="cursor:pointer" data-html="'+encodeURIComponent(e.html||e.text||'')+'">'+
+      return '<div class="mc-row" onclick="mcPreviewReceived('+i+')" style="cursor:pointer">'+
         '<div class="mc-col"><span class="mc-dot new"></span></div>'+
         '<div class="mc-col"><div class="mc-subject">'+escHtml(e.subject)+'</div><div class="mc-recip">'+escHtml(e.from)+'</div></div>'+
         '<div class="mc-col" style="font-size:11px;color:rgba(245,240,232,.5)">'+escHtml(e.to)+'</div>'+
@@ -3795,10 +3797,11 @@ async function mcLoadReceived() {
   }
 }
 
-function mcPreviewReceived(i, row) {
-  var encoded = row ? row.getAttribute('data-html') : '';
-  var content = encoded ? decodeURIComponent(encoded) : '';
-  if(!content) return;
+function mcPreviewReceived(i) {
+  var e = _mcReceivedEmails[i]; if(!e) return;
+  var content = e.html && e.html.trim()
+    ? e.html
+    : '<pre style="font-family:sans-serif;padding:24px;white-space:pre-wrap">'+escHtml(e.text||'(empty)')+'</pre>';
   var w = window.open('','_blank','width=640,height=800');
   if(w) { w.document.write(content); w.document.close(); }
 }
@@ -4468,6 +4471,58 @@ function downloadTemplate(){
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function today(){return new Date().toISOString().split('T')[0];}
 function dlFile(content,type,name){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:type}));a.download=name;a.click();URL.revokeObjectURL(a.href);}
+
+// ── Contact form submit ──
+async function cfSubmit() {
+  var fname   = (document.getElementById('cf-fname')||{}).value||'';
+  var lname   = (document.getElementById('cf-lname')||{}).value||'';
+  var email   = (document.getElementById('cf-email')||{}).value||'';
+  var subject = (document.getElementById('cf-subject')||{}).value||'General Inquiry';
+  var msg     = (document.getElementById('cf-msg')||{}).value||'';
+
+  if(!fname.trim()||!email.trim()||!msg.trim()) { showToast('Please fill in your name, email and message.'); return; }
+
+  var btn = document.getElementById('cf-submit-btn');
+  if(btn) { btn.disabled=true; btn.textContent='Sending…'; }
+
+  var html = '<div style="font-family:sans-serif;max-width:600px;padding:32px">'
+    +'<h2 style="margin:0 0 8px">New contact message — '+escHtml(subject)+'</h2>'
+    +'<p style="color:#555;margin:0 0 24px">From the KLOT website contact form</p>'
+    +'<table style="width:100%;border-collapse:collapse">'
+    +'<tr><td style="padding:8px 0;color:#888;width:100px">Name</td><td style="padding:8px 0"><strong>'+escHtml(fname+' '+lname)+'</strong></td></tr>'
+    +'<tr><td style="padding:8px 0;color:#888">Email</td><td style="padding:8px 0"><a href="mailto:'+escHtml(email)+'">'+escHtml(email)+'</a></td></tr>'
+    +'<tr><td style="padding:8px 0;color:#888">Subject</td><td style="padding:8px 0">'+escHtml(subject)+'</td></tr>'
+    +'</table>'
+    +'<hr style="margin:24px 0;border:none;border-top:1px solid #eee">'
+    +'<p style="white-space:pre-wrap;line-height:1.7">'+escHtml(msg)+'</p>'
+    +'</div>';
+
+  try {
+    var res = await fetch('/api/send-email', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        to: 'info@klotworld.com',
+        subject: 'Contact: '+subject+' — '+fname+' '+lname,
+        html: html,
+        fromName: 'KLOT Website',
+        fromEmail: 'hello@klotworld.com'
+      })
+    });
+    var data = await res.json();
+    if(data.id) {
+      showToast('Message sent! We\'ll be in touch within 24 hours.');
+      ['cf-fname','cf-lname','cf-email','cf-msg'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+      var sel=document.getElementById('cf-subject'); if(sel){sel.value='';sel.closest('.cf-field').classList.remove('has-val');}
+    } else {
+      showToast('Could not send — please email us directly at info@klotworld.com');
+    }
+  } catch(e) {
+    showToast('Network error — please email us at info@klotworld.com');
+  } finally {
+    if(btn) { btn.disabled=false; btn.textContent='Send Message'; }
+  }
+}
 
 function showToast(msg){
   var t=document.getElementById('toast'); if(!t)return;
