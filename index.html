@@ -389,8 +389,8 @@ footer { background:var(--navy); padding:80px 40px 40px; }
 .kpop-overlay.open .kpop { transform:none; }
 .kpop-close { position:absolute; top:16px; right:20px; background:none; border:none; font-size:28px; color:#111; cursor:pointer; z-index:10; line-height:1; opacity:.6; transition:opacity .2s; }
 .kpop-close:hover { opacity:1; }
-.kpop-visual { background:#efefef; display:flex; align-items:center; justify-content:center; padding:20px; min-height:420px; overflow:hidden; }
-.kpop-visual img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; transform:translateY(0); transition:transform .6s cubic-bezier(.22,1,.36,1); }
+.kpop-visual { background:#efefef; display:flex; align-items:center; justify-content:center; padding:32px; min-height:420px; overflow:hidden; }
+.kpop-visual img { width:100%; height:100%; object-fit:contain; display:block; transform:translateY(0); transition:transform .6s cubic-bezier(.22,1,.36,1); }
 .kpop-overlay.open .kpop-visual img { transform:translateY(-4px); }
 .kpop-body { padding:52px 44px; display:flex; flex-direction:column; justify-content:center; }
 .kpop-tag { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:#006A4E; font-weight:700; margin-bottom:14px; font-family:'Inter',sans-serif; }
@@ -1629,7 +1629,7 @@ input.pm-inp.pfx { padding-left:26px; }
       <!-- Phoenix Nwankwo -->
       <div class="team-card">
         <div class="team-photo-wrap" id="photo-wrap-kofi" style="position:relative;overflow:hidden">
-          <img src="klot_website/klot/assets/images/exec-phoenix.png"
+          <img src="klot_website/klot/assets/images/exec_phoenix.jpeg"
                id="team-photo-kofi"
                class="team-photo"
                alt="Phoenix Nwankwo — Head of Design"
@@ -5070,7 +5070,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="kpop">
     <button class="kpop-close" onclick="closeKpop()" aria-label="Close popup">&times;</button>
     <div class="kpop-visual">
-      <img src="klot_website/klot/assets/images/pop_up.jpeg" alt="KLOT x Bigbird — Limited Slide" onerror="this.style.display='none'">
+      <img src="klot_website/klot/assets/images/pop_up.png" alt="KLOT x Bigbird — Limited Slide" onerror="this.style.display='none'">
     </div>
     <div class="kpop-body">
       <div class="kpop-tag">Limited Collaboration</div>
