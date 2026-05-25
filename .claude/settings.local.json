@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Rename-Item -Path \"c:\\\\Users\\\\aether77\\\\Desktop\\\\Klot\\\\klot_website\\\\manoshia\" -NewName \"klot\")",
+      "PowerShell(Copy-Item -Path \"c:\\\\Users\\\\aether77\\\\Desktop\\\\Klot\\\\klot.html\" -Destination \"c:\\\\Users\\\\aether77\\\\Desktop\\\\Klot\\\\index.html\" -Force)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(python3 -c ' *)",
+      "Bash(sed -n '3315,3340p' \"c:/Users/aether77/Desktop/Klot/index.html\")",
+      "Bash(sed -n '3395,3420p' \"c:/Users/aether77/Desktop/Klot/index.html\")",
+      "Bash(sed -n '3455,3500p' \"c:/Users/aether77/Desktop/Klot/index.html\")",
+      "Bash(sed -n '3488,3496p' \"c:/Users/aether77/Desktop/Klot/index.html\")",
+      "Bash(grep -o \"sku:'MN-007'.\\\\{1,60\\\\}\" \"c:/Users/aether77/Desktop/Klot/index.html\")",
+      "Bash(grep -o \"Sprint Elite Shorts.\\\\{1,120\\\\}\" \"c:/Users/aether77/Desktop/Klot/index.html\")",
+      "Bash(grep -o \"imageUrl:'[^']\\\\{1,60\\\\}\" \"c:/Users/aether77/Desktop/Klot/index.html\")",
+      "Bash(grep -o \"activity:'running'[^}]\\\\{1,200\\\\}\" \"c:/Users/aether77/Desktop/Klot/index.html\")",
+      "Bash(git rm *)",
+      "Bash(git push *)"
+    ]
+  }
+}

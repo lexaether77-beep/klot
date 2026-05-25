@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit -m ' *)",
+      "Bash(phillip)",
+      "Bash(exec-\")",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel link --yes --project klot-worx)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel env add RESEND_API_KEY production)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel --prod)",
+      "Bash(curl -s \"https://klot-worx.vercel.app/api/test-connection\")",
+      "Bash(python3 -m json.tool)",
+      "Bash(NODE_OPTIONS=--use-system-ca node -e ' *)"
+    ]
+  }
+}
