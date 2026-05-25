@@ -382,6 +382,40 @@ footer { background:var(--navy); padding:80px 40px 40px; }
 #admin-toggle { position:fixed; bottom:24px; right:24px; background:var(--navy); color:var(--green); border:1px solid var(--accent); padding:12px 20px; font-size:10px; letter-spacing:.15em; text-transform:uppercase; font-family:'Inter',sans-serif; z-index:200; transition:all .2s; }
 #admin-toggle:hover { background:var(--green); color:var(--navy); }
 
+/* ── Klot x Bigbird Waitlist Popup ── */
+.kpop-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:300; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .35s ease; backdrop-filter:blur(2px); }
+.kpop-overlay.open { opacity:1; pointer-events:all; }
+.kpop { background:#fafafa; width:100%; max-width:860px; display:grid; grid-template-columns:1fr 1fr; position:relative; overflow:hidden; box-shadow:0 32px 80px rgba(0,0,0,.25); transform:translateY(20px) scale(.97); transition:transform .45s cubic-bezier(.22,1,.36,1); }
+.kpop-overlay.open .kpop { transform:none; }
+.kpop-close { position:absolute; top:16px; right:20px; background:none; border:none; font-size:28px; color:#111; cursor:pointer; z-index:10; line-height:1; opacity:.6; transition:opacity .2s; }
+.kpop-close:hover { opacity:1; }
+.kpop-visual { background:#efefef; display:flex; align-items:center; justify-content:center; padding:48px 36px; min-height:420px; overflow:hidden; }
+.kpop-visual img { width:100%; max-width:300px; height:auto; object-fit:contain; transform:rotate(-4deg) translateY(0); filter:drop-shadow(0 18px 36px rgba(0,0,0,.18)); transition:transform .6s cubic-bezier(.22,1,.36,1); }
+.kpop-overlay.open .kpop-visual img { transform:rotate(-4deg) translateY(-6px); }
+.kpop-body { padding:52px 44px; display:flex; flex-direction:column; justify-content:center; }
+.kpop-tag { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:#006A4E; font-weight:700; margin-bottom:14px; font-family:'Inter',sans-serif; }
+.kpop-title { font-family:'Barlow Condensed',sans-serif; font-size:44px; font-weight:700; line-height:1.0; color:#111; text-transform:uppercase; margin:0 0 24px; }
+.kpop-title span { color:#006A4E; display:block; }
+.kpop-urgency { border-left:3px solid #FCD116; padding-left:16px; margin-bottom:30px; }
+.kpop-urgency p { font-family:'Inter',sans-serif; margin:0 0 6px; line-height:1.55; }
+.kpop-urgency .kpop-main { font-size:15px; color:#111; }
+.kpop-urgency .kpop-sub { font-size:13px; color:#555; }
+.kpop-form { display:flex; flex-direction:column; gap:10px; }
+.kpop-form input[type="email"] { padding:15px 16px; border:1px solid #ccc; background:#fff; font-family:'Inter',sans-serif; font-size:12px; letter-spacing:.1em; outline:none; transition:border-color .25s; border-radius:0; width:100%; box-sizing:border-box; }
+.kpop-form input[type="email"]:focus { border-color:#006A4E; }
+.kpop-form input[type="email"]::placeholder { text-transform:uppercase; letter-spacing:.12em; color:#bbb; font-size:11px; }
+.kpop-cta { background:#006A4E; color:#fff; border:none; padding:16px; font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:700; cursor:pointer; transition:background .25s; }
+.kpop-cta:hover { background:#004d36; }
+.kpop-dismiss { display:block; text-align:center; margin-top:14px; font-family:'Inter',sans-serif; font-size:11px; color:#bbb; cursor:pointer; letter-spacing:.06em; background:none; border:none; transition:color .2s; padding:0; }
+.kpop-dismiss:hover { color:#555; }
+@media (max-width:680px) {
+  .kpop { grid-template-columns:1fr; }
+  .kpop-visual { min-height:180px; padding:28px; }
+  .kpop-visual img { max-width:160px; }
+  .kpop-body { padding:30px 28px; }
+  .kpop-title { font-size:34px; }
+}
+
 /* ── Admin Login Modal ── */
 .admin-login-overlay { position:fixed; inset:0; z-index:400; background:rgba(13,27,42,.96); display:none; align-items:center; justify-content:center; backdrop-filter:blur(6px); }
 .admin-login-overlay.open { display:flex; }
@@ -4999,9 +5033,62 @@ openCheckout = function() {
 // ── Init: restore session on load ──
 document.addEventListener('DOMContentLoaded', function() {
   loadSession();
+
+  // ── Klot x Bigbird Waitlist Popup ──
+  window.closeKpop = function() {
+    document.getElementById('kpop-overlay').classList.remove('open');
+    sessionStorage.setItem('kpop_dismissed', '1');
+  };
+  window.kpopSubmit = function(e) {
+    e.preventDefault();
+    closeKpop();
+    showToast('You\'re on the waitlist! We\'ll be in touch soon.');
+  };
+  (function() {
+    if (sessionStorage.getItem('kpop_dismissed')) return;
+    var shown = false;
+    function openKpop() {
+      if (shown) return;
+      shown = true;
+      document.getElementById('kpop-overlay').classList.add('open');
+    }
+    // Trigger after 10 seconds on page
+    setTimeout(openKpop, 10000);
+    // Exit intent on desktop
+    document.addEventListener('mouseleave', function(e) {
+      if (e.clientY < 20) openKpop();
+    });
+    // Click outside modal to close
+    document.getElementById('kpop-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeKpop();
+    });
+  })();
 });
 
 </script>
+<!-- Klot x Bigbird Waitlist Popup -->
+<div class="kpop-overlay" id="kpop-overlay" role="dialog" aria-modal="true" aria-labelledby="kpop-heading">
+  <div class="kpop">
+    <button class="kpop-close" onclick="closeKpop()" aria-label="Close popup">&times;</button>
+    <div class="kpop-visual">
+      <img src="klot_website/klot/assets/images/pop_up.jpeg" alt="KLOT x Bigbird — Limited Slide" onerror="this.style.display='none'">
+    </div>
+    <div class="kpop-body">
+      <div class="kpop-tag">Limited Collaboration</div>
+      <h2 class="kpop-title" id="kpop-heading">Coming<br>Soon<br><span>Klot x<br>Bigbird</span></h2>
+      <div class="kpop-urgency">
+        <p class="kpop-main">Pre-order launching soon.</p>
+        <p class="kpop-sub"><strong>50 autographed pairs</strong> to be given away to early waitlist members.</p>
+      </div>
+      <form class="kpop-form" onsubmit="kpopSubmit(event)">
+        <input type="email" placeholder="Enter your email" required aria-label="Email address">
+        <button type="submit" class="kpop-cta">Join the Waitlist</button>
+      </form>
+      <button class="kpop-dismiss" onclick="closeKpop()">No thanks, I'll miss out</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 <script src="https://js.paystack.co/v1/inline.js" defer></script>
 </body>
