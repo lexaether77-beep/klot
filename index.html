@@ -3799,9 +3799,14 @@ async function mcLoadReceived() {
 
 function mcPreviewReceived(i) {
   var e = _mcReceivedEmails[i]; if(!e) return;
-  var content = e.html && e.html.trim()
-    ? e.html
-    : '<pre style="font-family:sans-serif;padding:24px;white-space:pre-wrap">'+escHtml(e.text||'(empty)')+'</pre>';
+  var content;
+  if(e.html && e.html.trim()) {
+    content = e.html;
+  } else if(e.text && e.text.trim()) {
+    content = '<!doctype html><html><body style="font-family:sans-serif;padding:32px;max-width:600px;line-height:1.7"><pre style="white-space:pre-wrap;font-family:inherit">'+escHtml(e.text)+'</pre></body></html>';
+  } else {
+    content = '<!doctype html><html><body style="font-family:sans-serif;padding:32px;color:#888"><p>No message body available for this email.<br>From: '+escHtml(e.from)+'<br>Subject: '+escHtml(e.subject)+'</p></body></html>';
+  }
   var w = window.open('','_blank','width=640,height=800');
   if(w) { w.document.write(content); w.document.close(); }
 }
@@ -4498,18 +4503,20 @@ async function cfSubmit() {
     +'</div>';
 
   try {
-    var res = await fetch('/api/send-email', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        to: 'info@klotworld.com',
-        subject: 'Contact: '+subject+' — '+fname+' '+lname,
-        html: html,
-        fromName: 'KLOT Website',
-        fromEmail: 'hello@klotworld.com'
+    var emailSubject = 'Contact: '+subject+' — '+fname+' '+lname;
+    var [sendRes, storeRes] = await Promise.all([
+      fetch('/api/send-email', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ to:'info@klotworld.com', subject:emailSubject, html:html, fromName:'KLOT Website', fromEmail:'hello@klotworld.com' })
+      }),
+      fetch('/api/store-contact', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ from:fname+' '+lname+' <'+email+'>', subject:emailSubject, html:html, text:msg })
       })
-    });
-    var data = await res.json();
+    ]);
+    var data = await sendRes.json();
     if(data.id) {
       showToast('Message sent! We\'ll be in touch within 24 hours.');
       ['cf-fname','cf-lname','cf-email','cf-msg'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
