@@ -36,6 +36,12 @@ export default async function handler(req, res) {
 
   try {
     const d = event.data || {};
+    const fromAddr = (d.from || '').toLowerCase();
+
+    // Skip our own outbound notification emails (contact form → info@klotworld.com)
+    // These are already stored with full body by /api/store-contact
+    if (fromAddr.includes('klotworld.com')) return res.status(200).json({ ok: true });
+
     const email = {
       id: d.email_id || String(Date.now()),
       from: d.from || '',
