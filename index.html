@@ -2562,10 +2562,9 @@ input.pm-inp.pfx { padding-left:26px; }
         <div class="mc-panel" id="mc-settings">
           <div class="mc-settings-grid">
             <div class="mc-settings-card">
-              <div class="mc-settings-title">Resend API Configuration</div>
-              <div class="mc-field">
-                <label class="mc-label">API Key</label>
-                <input class="mc-input" id="mc-api-key" type="password" placeholder="re_xxxxxxxxxxxxxxxxxxxx" autocomplete="new-password">
+              <div class="mc-settings-title">Resend Configuration</div>
+              <div style="background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);padding:14px 16px;margin-bottom:20px;font-family:'Inter',sans-serif;font-size:12px;color:#fbbf24;line-height:1.6">
+                &#128274; API key is stored securely in Vercel environment variables — never exposed to the browser.
               </div>
               <div class="mc-field">
                 <label class="mc-label">From Name</label>
@@ -3646,10 +3645,8 @@ function mcRefreshPreview() {
   doc.open(); doc.write(html); doc.close();
 }
 
-// ── Send via Resend ──
+// ── Send via /api/send-email ──
 async function mcSend() {
-  var apiKey = storageGet('mc_api_key');
-  if(!apiKey) { showToast('Add your Resend API key in Settings first'); return; }
   var to = document.getElementById('mc-to').value.trim();
   if(!to) { showToast('Enter a recipient email'); return; }
   var subject = document.getElementById('mc-subject').value.trim();
@@ -3661,14 +3658,14 @@ async function mcSend() {
   try { v = JSON.parse(varsRaw||'{}'); } catch(e){}
   var html = t.render(v);
   var fromName = storageGet('mc_from_name')||'KLOT';
-  var fromEmail = storageGet('mc_from_email')||'hello@klotworld.com';
+  var fromEmail = storageGet('mc_from_email')||'onboarding@resend.dev';
   var btn = document.getElementById('mc-send-btn');
   btn.disabled=true; btn.textContent='Sending…';
   try {
-    var res = await fetch('https://api.resend.com/emails', {
+    var res = await fetch('/api/send-email', {
       method:'POST',
-      headers:{'Authorization':'Bearer '+apiKey,'Content-Type':'application/json'},
-      body: JSON.stringify({ from: fromName+' <'+fromEmail+'>', to:[to], subject:subject, html:html })
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ to:to, subject:subject, html:html, fromName:fromName, fromEmail:fromEmail })
     });
     var data = await res.json();
     if(data.id) {
@@ -3678,23 +3675,21 @@ async function mcSend() {
       mcPanel('inbox', document.querySelector('.mc-nav-btn'));
       mcRenderInbox(); mcRenderMetrics();
     } else {
-      showToast('Send failed: '+(data.message||'Unknown error'));
+      showToast('Send failed: '+(data.message||data.error||'Unknown error'));
     }
-  } catch(err) { showToast('Network error — check your API key and connection'); }
+  } catch(err) { showToast('Network error — is the site deployed to Vercel?'); }
   finally { btn.disabled=false; btn.textContent='✉ Send Email'; }
 }
 
 // ── Status refresh ──
 async function mcRefreshStatuses() {
-  var apiKey = storageGet('mc_api_key');
-  if(!apiKey) { showToast('API key required'); return; }
   var logs = mcGetLogs();
   var pending = logs.filter(function(l){ return l.status==='pending' && l.id; });
   if(!pending.length) { showToast('No pending emails to refresh'); return; }
   var updated = 0;
   for(var i=0;i<pending.length;i++) {
     try {
-      var res = await fetch('https://api.resend.com/emails/'+pending[i].id, { headers:{'Authorization':'Bearer '+apiKey} });
+      var res = await fetch('/api/email-status?id='+pending[i].id);
       var d = await res.json();
       if(d.last_event) {
         var s = d.last_event;
@@ -3805,7 +3800,6 @@ function mcRenderStats() {
 
 // ── Settings ──
 function mcSaveSettings() {
-  storageSet('mc_api_key', document.getElementById('mc-api-key').value.trim());
   storageSet('mc_from_name', document.getElementById('mc-from-name').value.trim());
   storageSet('mc_from_email', document.getElementById('mc-from-email').value.trim());
   showToast('Settings saved');
@@ -3813,25 +3807,23 @@ function mcSaveSettings() {
 }
 
 function mcLoadSettings() {
-  var k=document.getElementById('mc-api-key'), n=document.getElementById('mc-from-name'), e=document.getElementById('mc-from-email');
-  if(k)k.value=storageGet('mc_api_key')||'';
+  var n=document.getElementById('mc-from-name'), e=document.getElementById('mc-from-email');
   if(n)n.value=storageGet('mc_from_name')||'KLOT';
   if(e)e.value=storageGet('mc_from_email')||'';
 }
 
 async function mcTestConnection() {
-  var apiKey = storageGet('mc_api_key');
   var el = document.getElementById('mc-api-status');
-  if(!apiKey) { if(el)el.innerHTML='<span class="mc-api-err">⚠ No API key saved</span>'; return; }
   if(el) el.innerHTML = '<span style="color:rgba(245,240,232,.4);font-family:\'Inter\',sans-serif;font-size:11px">Testing…</span>';
   try {
-    var res = await fetch('https://api.resend.com/domains', { headers:{'Authorization':'Bearer '+apiKey} });
-    if(res.ok) {
-      if(el) el.innerHTML = '<span class="mc-api-ok">✓ Connected — Resend API key is valid</span>';
+    var res = await fetch('/api/test-connection');
+    var d = await res.json();
+    if(res.ok && d.configured) {
+      if(el) el.innerHTML = '<span class="mc-api-ok">✓ Connected — Resend API key is valid on server</span>';
     } else {
-      if(el) el.innerHTML = '<span class="mc-api-err">✗ Invalid API key ('+res.status+')</span>';
+      if(el) el.innerHTML = '<span class="mc-api-err">✗ '+(d.error||'Connection failed')+'</span>';
     }
-  } catch(e) { if(el) el.innerHTML = '<span class="mc-api-err">✗ Network error</span>'; }
+  } catch(e) { if(el) el.innerHTML = '<span class="mc-api-err">✗ Network error — deploy to Vercel first</span>'; }
 }
 
 function mcClearLogs() {
