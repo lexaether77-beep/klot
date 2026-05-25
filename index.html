@@ -416,6 +416,56 @@ footer { background:var(--navy); padding:80px 40px 40px; }
   .kpop-title { font-size:34px; }
 }
 
+/* ── Message Center ── */
+.mc-nav{display:flex;gap:0;margin-bottom:28px;border-bottom:1px solid rgba(184,151,74,.15)}
+.mc-nav-btn{background:none;border:none;border-bottom:2px solid transparent;padding:12px 26px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,240,232,.4);cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;margin-bottom:-1px}
+.mc-nav-btn.active{color:var(--green);border-bottom-color:var(--green)}
+.mc-panel{display:none}.mc-panel.active{display:block}
+.mc-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.mc-metric{background:rgba(255,255,255,.04);border:1px solid rgba(184,151,74,.1);padding:20px 24px}
+.mc-metric-val{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:400;color:var(--cream);line-height:1}
+.mc-metric-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,240,232,.35);margin-top:6px;font-family:'Inter',sans-serif}
+.mc-metric-sub{font-size:11px;color:rgba(245,240,232,.25);font-family:'Inter',sans-serif;margin-top:4px}
+.mc-filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.mc-filter-btn{background:rgba(255,255,255,.04);border:1px solid rgba(184,151,74,.15);padding:6px 16px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,232,.45);cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.mc-filter-btn.active{background:rgba(255,45,45,.08);border-color:rgba(255,45,45,.3);color:var(--green)}
+.mc-search{background:rgba(255,255,255,.04);border:1px solid rgba(184,151,74,.15);color:var(--cream);padding:7px 14px;font-size:12px;font-family:'Inter',sans-serif;outline:none;min-width:200px;margin-left:auto}
+.mc-search::placeholder{color:rgba(245,240,232,.2)}
+.mc-table-wrap{border:1px solid rgba(184,151,74,.1);overflow:hidden}
+.mc-row{display:grid;grid-template-columns:24px 1fr 150px 100px 90px 130px;gap:0;align-items:center;padding:0 16px;border-bottom:1px solid rgba(255,255,255,.035);cursor:pointer;transition:background .15s}
+.mc-row:hover{background:rgba(255,255,255,.03)}.mc-row.hdr{background:rgba(0,0,0,.25);cursor:default;padding:0 16px}.mc-row.hdr:hover{background:rgba(0,0,0,.25)}
+.mc-col{padding:13px 8px;font-family:'Inter',sans-serif;font-size:12px;color:rgba(245,240,232,.6)}
+.mc-col.bold{font-weight:500;color:var(--cream)}.mc-col-h{padding:9px 8px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-family:'Inter',sans-serif;font-weight:400}
+.mc-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin:0 auto}.mc-dot.new{background:var(--green)}.mc-dot.old{background:transparent}
+.mc-subject{font-size:12px;color:var(--cream);font-family:'Inter',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-recip{font-size:11px;color:rgba(245,240,232,.4);font-family:'Inter',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge-delivered{background:rgba(52,211,153,.12);color:#34d399;padding:3px 9px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.badge-opened{background:rgba(99,102,241,.12);color:#818cf8;padding:3px 9px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.badge-clicked{background:rgba(52,211,153,.12);color:#6ee7b7;padding:3px 9px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.badge-bounced{background:rgba(248,113,113,.12);color:#f87171;padding:3px 9px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.badge-pending{background:rgba(251,191,36,.12);color:#fbbf24;padding:3px 9px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.badge-failed{background:rgba(248,113,113,.12);color:#f87171;padding:3px 9px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.mc-type-tx{background:rgba(59,130,246,.1);color:#60a5fa;padding:2px 8px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.mc-type-mkt{background:rgba(168,85,247,.1);color:#c084fc;padding:2px 8px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.mc-compose-grid{display:grid;grid-template-columns:1fr 400px;gap:20px}
+.mc-compose-form{background:rgba(255,255,255,.03);border:1px solid rgba(184,151,74,.1);padding:28px}
+.mc-preview-pane{background:rgba(255,255,255,.02);border:1px solid rgba(184,151,74,.1);display:flex;flex-direction:column}
+.mc-preview-header{padding:12px 18px;border-bottom:1px solid rgba(184,151,74,.1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.mc-preview-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,232,.35);font-family:'Inter',sans-serif}
+.mc-preview-frame{flex:1;border:none;background:#fff;min-height:480px;width:100%}
+.mc-field{margin-bottom:16px}
+.mc-label{display:block;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:7px;font-family:'Inter',sans-serif}
+.mc-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(184,151,74,.15);color:var(--cream);padding:10px 13px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;transition:border-color .2s}
+.mc-input:focus{border-color:rgba(255,45,45,.4)}
+.mc-select{width:100%;background:#0a1520;border:1px solid rgba(184,151,74,.15);color:var(--cream);padding:10px 13px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box}
+.mc-textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(184,151,74,.15);color:var(--cream);padding:11px 13px;font-size:12px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;resize:vertical;min-height:120px;line-height:1.6}
+.mc-settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mc-settings-card{background:rgba(255,255,255,.03);border:1px solid rgba(184,151,74,.1);padding:28px}
+.mc-settings-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;color:var(--cream);margin-bottom:20px;font-weight:400;letter-spacing:.03em}
+.mc-api-ok{color:#34d399;font-size:11px;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px}
+.mc-api-err{color:#f87171;font-size:11px;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px}
+@media(max-width:1100px){.mc-compose-grid{grid-template-columns:1fr}.mc-metrics{grid-template-columns:repeat(2,1fr)}.mc-settings-grid{grid-template-columns:1fr}}
+
 /* ── Admin Login Modal ── */
 .admin-login-overlay { position:fixed; inset:0; z-index:400; background:rgba(13,27,42,.96); display:none; align-items:center; justify-content:center; backdrop-filter:blur(6px); }
 .admin-login-overlay.open { display:flex; }
@@ -1924,6 +1974,7 @@ input.pm-inp.pfx { padding-left:26px; }
       <div class="admin-nav-item" onclick="showAdminTab('import',this)">&#128229; Import</div>
       <div class="admin-nav-item" onclick="showAdminTab('team',this)">&#128100; Team Photos</div>
       <div class="admin-nav-item" onclick="showAdminTab('audit',this)">&#128196; Audit Log</div>
+      <div class="admin-nav-item" onclick="showAdminTab('messages',this)">&#9993; Message Center</div>
     </div>
 
     <div class="admin-content">
@@ -2421,6 +2472,137 @@ input.pm-inp.pfx { padding-left:26px; }
         <div id="audit-log-list" style="max-height:520px;overflow-y:auto;border:1px solid rgba(184,151,74,.1)"></div>
         <div id="audit-empty" style="display:none;text-align:center;padding:40px;font-family:'Inter',sans-serif;font-size:18px;color:rgba(245,240,232,.3);font-style:italic">No admin actions logged yet.</div>
       </div>
+
+      <!-- MESSAGE CENTER TAB -->
+      <div class="admin-tab" id="admin-messages">
+        <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:24px">
+          <h3 class="admin-section-title" style="margin:0">Message Center</h3>
+          <span style="font-size:10px;color:rgba(245,240,232,.3);letter-spacing:.12em;font-family:'Inter',sans-serif">Powered by Resend</span>
+        </div>
+
+        <div class="mc-nav">
+          <button class="mc-nav-btn active" onclick="mcPanel('inbox',this)">&#128235; Inbox</button>
+          <button class="mc-nav-btn" onclick="mcPanel('compose',this)">&#9997; Compose</button>
+          <button class="mc-nav-btn" onclick="mcPanel('settings',this)">&#9881; Settings</button>
+        </div>
+
+        <!-- INBOX -->
+        <div class="mc-panel active" id="mc-inbox">
+          <div class="mc-metrics" id="mc-metrics"></div>
+          <div class="mc-filter-bar">
+            <button class="mc-filter-btn active" onclick="mcFilter('all',this)">All</button>
+            <button class="mc-filter-btn" onclick="mcFilter('transactional',this)">Transactional</button>
+            <button class="mc-filter-btn" onclick="mcFilter('marketing',this)">Marketing</button>
+            <button class="mc-filter-btn" onclick="mcFilter('bounced',this)">Bounced</button>
+            <button class="abtn abtn-outline" style="margin-left:auto;font-size:9px" onclick="mcRefreshStatuses()">&#8635; Refresh</button>
+            <input class="mc-search" id="mc-search" placeholder="Search by recipient or subject…" oninput="mcRenderInbox()">
+          </div>
+          <div class="mc-table-wrap">
+            <div class="mc-row hdr">
+              <div class="mc-col-h"></div>
+              <div class="mc-col-h">Recipient &amp; Subject</div>
+              <div class="mc-col-h">Template</div>
+              <div class="mc-col-h">Type</div>
+              <div class="mc-col-h">Status</div>
+              <div class="mc-col-h">Sent</div>
+            </div>
+            <div id="mc-inbox-list"></div>
+          </div>
+          <div id="mc-inbox-empty" style="display:none;text-align:center;padding:60px 20px;font-family:'Inter',sans-serif;font-size:17px;color:rgba(245,240,232,.22);font-style:italic">No emails sent yet. Use Compose to send your first email.</div>
+        </div>
+
+        <!-- COMPOSE -->
+        <div class="mc-panel" id="mc-compose">
+          <div class="mc-compose-grid">
+            <div class="mc-compose-form">
+              <div class="mc-field">
+                <label class="mc-label" for="mc-to">To</label>
+                <input class="mc-input" id="mc-to" type="email" placeholder="customer@email.com">
+              </div>
+              <div class="mc-field">
+                <label class="mc-label" for="mc-template">Template</label>
+                <select class="mc-select" id="mc-template" onchange="mcLoadTemplate()">
+                  <optgroup label="─ Transactional">
+                    <option value="order-confirmation">Order Confirmation</option>
+                    <option value="shipping-update">Shipping Update</option>
+                    <option value="password-reset">Password Reset</option>
+                  </optgroup>
+                  <optgroup label="─ Marketing">
+                    <option value="newsletter-welcome">Newsletter Welcome</option>
+                    <option value="product-launch">Product Launch</option>
+                    <option value="promotion">Promotion / Offer</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="mc-field">
+                <label class="mc-label" for="mc-subject">Subject Line</label>
+                <input class="mc-input" id="mc-subject" type="text" placeholder="Your order is confirmed — KLOT">
+              </div>
+              <div class="mc-field">
+                <label class="mc-label" for="mc-vars">Variables (JSON)</label>
+                <textarea class="mc-textarea" id="mc-vars" oninput="mcRefreshPreview()" placeholder='{"name":"Alex","orderId":"KW-0042","total":"₦85,000"}'></textarea>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:4px">
+                <button class="abtn abtn-outline" onclick="mcRefreshPreview()" style="flex:1">&#128065; Preview</button>
+                <button class="abtn abtn-gold" onclick="mcSend()" style="flex:2" id="mc-send-btn">&#9993; Send Email</button>
+              </div>
+              <p style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(245,240,232,.25);margin-top:14px;line-height:1.6">Emails are sent via the Resend REST API. Configure your API key in Settings before sending.</p>
+            </div>
+            <div class="mc-preview-pane">
+              <div class="mc-preview-header">
+                <span class="mc-preview-title">Live Preview</span>
+                <span style="font-size:10px;color:rgba(245,240,232,.25);font-family:'Inter',sans-serif">Updates as you edit</span>
+              </div>
+              <iframe class="mc-preview-frame" id="mc-preview-frame" title="Email preview" sandbox="allow-same-origin"></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div class="mc-panel" id="mc-settings">
+          <div class="mc-settings-grid">
+            <div class="mc-settings-card">
+              <div class="mc-settings-title">Resend API Configuration</div>
+              <div class="mc-field">
+                <label class="mc-label">API Key</label>
+                <input class="mc-input" id="mc-api-key" type="password" placeholder="re_xxxxxxxxxxxxxxxxxxxx" autocomplete="new-password">
+              </div>
+              <div class="mc-field">
+                <label class="mc-label">From Name</label>
+                <input class="mc-input" id="mc-from-name" type="text" placeholder="KLOT">
+              </div>
+              <div class="mc-field">
+                <label class="mc-label">From Email (must be verified in Resend)</label>
+                <input class="mc-input" id="mc-from-email" type="email" placeholder="hello@klotworld.com">
+              </div>
+              <div style="display:flex;gap:10px;margin-top:4px">
+                <button class="abtn abtn-gold" onclick="mcSaveSettings()">Save</button>
+                <button class="abtn abtn-outline" onclick="mcTestConnection()">Test Connection</button>
+              </div>
+              <div id="mc-api-status" style="margin-top:14px"></div>
+            </div>
+            <div class="mc-settings-card">
+              <div class="mc-settings-title">Delivery Statistics</div>
+              <div id="mc-stats-detail"></div>
+              <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+                <button class="abtn abtn-outline" onclick="mcClearLogs()">&#128465; Clear Logs</button>
+                <button class="abtn abtn-gold" onclick="mcExportLogs()">&#11015; Export CSV</button>
+              </div>
+            </div>
+          </div>
+          <div class="mc-settings-card" style="margin-top:16px">
+            <div class="mc-settings-title">Setup Guide</div>
+            <ol style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(245,240,232,.45);line-height:2.4;padding-left:18px;margin:0">
+              <li>Sign up at <strong style="color:var(--cream)">resend.com</strong> and add your domain</li>
+              <li>Verify the domain's DNS records (SPF, DKIM, DMARC)</li>
+              <li>Go to <strong style="color:var(--cream)">API Keys</strong> → create key with <em>Sending access</em></li>
+              <li>Paste the key above, set your From email, and save</li>
+              <li>Use <em>Test Connection</em> to verify everything works</li>
+              <li><strong style="color:#fbbf24">Production note:</strong> proxy API calls through a serverless function to keep your key off the client</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /admin-messages -->
 
     </div><!-- /admin-content -->
   </div><!-- /admin-body -->
@@ -3247,7 +3429,429 @@ function showAdminTab(tab, el) {
   if(tab==='customers')  populateCustomers();
   if(tab==='audit')      renderAuditLog();
   if(tab==='team')       syncExecPreviews();
+  if(tab==='messages')   mcInit();
 }
+
+// ════════════════════════════════════════════════════
+//  MESSAGE CENTER
+// ════════════════════════════════════════════════════
+var MC_STORE = 'klot_mc_logs';
+var MC_FILTER = 'all';
+
+function mcInit() {
+  mcLoadSettings();
+  mcRenderMetrics();
+  mcRenderInbox();
+  mcRenderStats();
+  mcLoadTemplate();
+}
+
+function mcPanel(name, btn) {
+  document.querySelectorAll('.mc-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.mc-nav-btn').forEach(function(b){b.classList.remove('active');});
+  var el = document.getElementById('mc-'+name);
+  if(el) el.classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(name==='inbox') { mcRenderMetrics(); mcRenderInbox(); }
+  if(name==='settings') { mcRenderStats(); mcLoadSettings(); }
+  if(name==='compose') { mcLoadTemplate(); setTimeout(mcRefreshPreview,100); }
+}
+
+function mcFilter(f, btn) {
+  MC_FILTER = f;
+  document.querySelectorAll('.mc-filter-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+  mcRenderInbox();
+}
+
+// ── Email Logs ──
+function mcGetLogs() {
+  try { return JSON.parse(storageGet(MC_STORE)||'[]'); } catch(e){ return []; }
+}
+function mcSaveLogs(logs) { storageSet(MC_STORE, JSON.stringify(logs)); }
+function mcAddLog(entry) {
+  var logs = mcGetLogs();
+  logs.unshift(entry);
+  mcSaveLogs(logs);
+}
+
+// ── Templates ──
+var MC_TEMPLATES = {
+  'order-confirmation': {
+    label:'Order Confirmation', type:'transactional',
+    subject:'Your KLOT order is confirmed — {{orderId}}',
+    vars:'{"name":"Alex","orderId":"KW-0042","items":"1× Performance Tee (M)","total":"₦85,000","date":"25 May 2026"}',
+    render: function(v) {
+      return mcBaseTemplate('Order Confirmed ✓','#0D0D0D',
+        '<h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#0D0D0D;margin:0 0 8px">Thank you, '+v.name+'.</h1>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#555;margin:0 0 32px;line-height:1.6">Your order <strong style="color:#0D0D0D">'+v.orderId+'</strong> has been received and is being processed.</p>'+
+        '<div style="background:#f9f9f9;border:1px solid #eee;padding:24px;border-radius:2px;margin-bottom:28px">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin:0 0 12px">Order Summary</p>'+
+          '<p style="font-family:Arial,sans-serif;font-size:14px;color:#333;margin:0 0 8px">'+v.items+'</p>'+
+          '<div style="border-top:1px solid #eee;margin:16px 0;padding-top:16px;display:flex;justify-content:space-between">'+
+            '<span style="font-family:Arial,sans-serif;font-size:14px;color:#555">Total</span>'+
+            '<strong style="font-family:Arial,sans-serif;font-size:16px;color:#0D0D0D">'+v.total+'</strong>'+
+          '</div>'+
+        '</div>'+
+        '<p style="font-family:Arial,sans-serif;font-size:13px;color:#888;margin:0">Placed on '+v.date+'. You will receive a shipping update when your order is dispatched.</p>'
+      );
+    }
+  },
+  'shipping-update': {
+    label:'Shipping Update', type:'transactional',
+    subject:'Your KLOT order is on the way — {{orderId}}',
+    vars:'{"name":"Alex","orderId":"KW-0042","tracking":"NGS123456789","carrier":"DHL Express","eta":"28 May 2026"}',
+    render: function(v) {
+      return mcBaseTemplate('On Its Way 🚚','#0D0D0D',
+        '<h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#0D0D0D;margin:0 0 8px">Your order is on the way, '+v.name+'.</h1>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#555;margin:0 0 32px;line-height:1.6">Order <strong style="color:#0D0D0D">'+v.orderId+'</strong> has been handed to '+v.carrier+'.</p>'+
+        '<div style="background:#0D0D0D;padding:28px;border-radius:2px;margin-bottom:28px;text-align:center">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin:0 0 8px">Tracking Number</p>'+
+          '<p style="font-family:Georgia,serif;font-size:24px;color:#FF2D2D;letter-spacing:4px;margin:0">'+v.tracking+'</p>'+
+          '<p style="font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,.4);margin:12px 0 0">Estimated delivery: <strong style="color:#fff">'+v.eta+'</strong></p>'+
+        '</div>'+
+        '<a href="#" style="display:inline-block;background:#FF2D2D;color:#fff;padding:14px 36px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border-radius:1px">Track My Order</a>'
+      );
+    }
+  },
+  'password-reset': {
+    label:'Password Reset', type:'transactional',
+    subject:'Reset your KLOT password',
+    vars:'{"name":"Alex","resetLink":"https://klotworld.com/reset?token=abc123","expiry":"24 hours"}',
+    render: function(v) {
+      return mcBaseTemplate('Password Reset','#0D0D0D',
+        '<h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#0D0D0D;margin:0 0 8px">Reset your password</h1>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#555;margin:0 0 28px;line-height:1.6">Hi '+v.name+', we received a request to reset your password. Click the button below to create a new one.</p>'+
+        '<div style="text-align:center;margin:36px 0">'+
+          '<a href="'+v.resetLink+'" style="display:inline-block;background:#0D0D0D;color:#fff;padding:16px 40px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none">Reset Password</a>'+
+        '</div>'+
+        '<p style="font-family:Arial,sans-serif;font-size:12px;color:#aaa;margin:0;line-height:1.7">This link expires in <strong>'+v.expiry+'</strong>. If you did not request a password reset, you can safely ignore this email.</p>'+
+        '<div style="border-top:1px solid #eee;margin-top:28px;padding-top:20px">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;color:#ccc;margin:0;word-break:break-all">Or copy this link: '+v.resetLink+'</p>'+
+        '</div>'
+      );
+    }
+  },
+  'newsletter-welcome': {
+    label:'Newsletter Welcome', type:'marketing',
+    subject:'Welcome to the KLOT world',
+    vars:'{"name":"Alex","discountCode":"WELCOME10","discountAmt":"10%"}',
+    render: function(v) {
+      return mcBaseTemplate('Welcome','#0D0D0D',
+        '<div style="background:#0D0D0D;margin:-40px -40px 36px;padding:52px 40px;text-align:center">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 12px">Welcome to</p>'+
+          '<h1 style="font-family:Georgia,serif;font-size:48px;font-weight:400;color:#fff;margin:0;letter-spacing:6px">KLOT</h1>'+
+          '<div style="width:40px;height:2px;background:#FF2D2D;margin:20px auto 0"></div>'+
+        '</div>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#333;margin:0 0 16px;line-height:1.8">Hi '+v.name+', thank you for joining us.</p>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#555;margin:0 0 32px;line-height:1.8">KLOT is where luxury meets intention. You\'ll be the first to know about new drops, exclusive collaborations, and editorial releases.</p>'+
+        '<div style="background:#f9f9f9;border:1px dashed #ddd;padding:24px;text-align:center;margin-bottom:32px">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin:0 0 10px">Your welcome gift</p>'+
+          '<p style="font-family:Georgia,serif;font-size:32px;letter-spacing:6px;color:#FF2D2D;margin:0">'+v.discountCode+'</p>'+
+          '<p style="font-family:Arial,sans-serif;font-size:13px;color:#555;margin:8px 0 0">'+v.discountAmt+' off your first order</p>'+
+        '</div>'+
+        '<div style="text-align:center">'+
+          '<a href="https://klotworld.com" style="display:inline-block;background:#FF2D2D;color:#fff;padding:16px 40px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none">Shop Now</a>'+
+        '</div>'
+      );
+    }
+  },
+  'product-launch': {
+    label:'Product Launch', type:'marketing',
+    subject:'Introducing {{productName}} — Now Available',
+    vars:'{"name":"Alex","productName":"KLOT x Bigbird Slide","productDesc":"A limited-edition collaboration born from the intersection of Lagos culture and global fashion.","price":"₦45,000","link":"https://klotworld.com"}',
+    render: function(v) {
+      return mcBaseTemplate('New Arrival','#0D0D0D',
+        '<div style="background:#0D0D0D;margin:-40px -40px 0;padding:60px 40px 40px;text-align:center">'+
+          '<p style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#FF2D2D;margin:0 0 16px">New Arrival</p>'+
+          '<h1 style="font-family:Georgia,serif;font-size:36px;font-weight:400;color:#fff;margin:0;line-height:1.15">'+v.productName+'</h1>'+
+        '</div>'+
+        '<div style="background:#f5f5f5;height:240px;margin:0 -40px 32px;display:flex;align-items:center;justify-content:center">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;color:#bbb;text-transform:uppercase;margin:0">Product Image</p>'+
+        '</div>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#555;margin:0 0 28px;line-height:1.8">Hi '+v.name+', '+v.productDesc+'</p>'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">'+
+          '<span style="font-family:Georgia,serif;font-size:24px;color:#0D0D0D">'+v.price+'</span>'+
+          '<a href="'+v.link+'" style="display:inline-block;background:#0D0D0D;color:#fff;padding:14px 32px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;text-decoration:none">Shop Now</a>'+
+        '</div>'
+      );
+    }
+  },
+  'promotion': {
+    label:'Promotion / Offer', type:'marketing',
+    subject:'{{offerAmt}} off — KLOT limited-time offer',
+    vars:'{"name":"Alex","offerAmt":"20%","code":"KLOT20","expiryDate":"31 May 2026","minOrder":"₦50,000"}',
+    render: function(v) {
+      return mcBaseTemplate('Exclusive Offer','#0D0D0D',
+        '<div style="background:linear-gradient(135deg,#0D0D0D 0%,#1a0a0a 100%);margin:-40px -40px 36px;padding:52px 40px;text-align:center">'+
+          '<p style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 12px">Limited Time Offer</p>'+
+          '<p style="font-family:Georgia,serif;font-size:64px;font-weight:400;color:#FF2D2D;margin:0;line-height:1">'+v.offerAmt+'</p>'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5);margin:4px 0 0">Off Your Order</p>'+
+        '</div>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#333;margin:0 0 16px;line-height:1.8">Hi '+v.name+', this one\'s for you.</p>'+
+        '<div style="background:#f9f9f9;border:1px dashed #ddd;padding:24px;text-align:center;margin-bottom:28px">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin:0 0 10px">Your promo code</p>'+
+          '<p style="font-family:Georgia,serif;font-size:32px;letter-spacing:6px;color:#0D0D0D;margin:0">'+v.code+'</p>'+
+          '<p style="font-family:Arial,sans-serif;font-size:12px;color:#999;margin:10px 0 0">Min. order '+v.minOrder+' · Expires '+v.expiryDate+'</p>'+
+        '</div>'+
+        '<div style="text-align:center">'+
+          '<a href="https://klotworld.com" style="display:inline-block;background:#FF2D2D;color:#fff;padding:16px 40px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none">Redeem Offer</a>'+
+        '</div>'
+      );
+    }
+  }
+};
+
+function mcBaseTemplate(eyebrow, accentColor, body) {
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+eyebrow+'</title></head>'+
+    '<body style="margin:0;padding:0;background:#f0f0f0;font-family:Arial,sans-serif">'+
+      '<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f0f0;padding:40px 20px">'+
+        '<tr><td align="center">'+
+          '<table width="100%" style="max-width:560px;background:#ffffff" cellpadding="0" cellspacing="0">'+
+            '<tr><td style="background:'+accentColor+';padding:18px 40px;text-align:center">'+
+              '<span style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:#FF2D2D;font-weight:700">KLOT</span>'+
+              '<span style="font-family:Arial,sans-serif;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.3);margin-left:12px;text-transform:uppercase">'+eyebrow+'</span>'+
+            '</td></tr>'+
+            '<tr><td style="padding:40px">'+body+'</td></tr>'+
+            '<tr><td style="background:#fafafa;padding:24px 40px;border-top:1px solid #eee;text-align:center">'+
+              '<p style="font-family:Arial,sans-serif;font-size:11px;color:#bbb;margin:0 0 6px;letter-spacing:1px">© 2026 KLOT Worx · Lagos, Nigeria</p>'+
+              '<p style="font-family:Arial,sans-serif;font-size:10px;color:#ccc;margin:0"><a href="#" style="color:#ccc">Unsubscribe</a> · <a href="https://klotworld.com" style="color:#ccc">klotworld.com</a></p>'+
+            '</td></tr>'+
+          '</table>'+
+        '</td></tr>'+
+      '</table>'+
+    '</body></html>';
+}
+
+function mcLoadTemplate() {
+  var tid = document.getElementById('mc-template').value;
+  var t = MC_TEMPLATES[tid]; if(!t) return;
+  var subj = document.getElementById('mc-subject');
+  if(!subj.value || subj.dataset.autoSet) { subj.value = t.subject; subj.dataset.autoSet='1'; }
+  var vars = document.getElementById('mc-vars');
+  if(!vars.value || vars.dataset.autoSet) { vars.value = t.vars; vars.dataset.autoSet='1'; }
+  setTimeout(mcRefreshPreview, 50);
+}
+
+function mcRefreshPreview() {
+  var tid = document.getElementById('mc-template').value;
+  var t = MC_TEMPLATES[tid]; if(!t) return;
+  var varsRaw = document.getElementById('mc-vars').value;
+  var v = {};
+  try { v = JSON.parse(varsRaw||'{}'); } catch(e){}
+  var html = t.render(v);
+  var frame = document.getElementById('mc-preview-frame');
+  if(!frame) return;
+  var doc = frame.contentDocument || frame.contentWindow.document;
+  doc.open(); doc.write(html); doc.close();
+}
+
+// ── Send via Resend ──
+async function mcSend() {
+  var apiKey = storageGet('mc_api_key');
+  if(!apiKey) { showToast('Add your Resend API key in Settings first'); return; }
+  var to = document.getElementById('mc-to').value.trim();
+  if(!to) { showToast('Enter a recipient email'); return; }
+  var subject = document.getElementById('mc-subject').value.trim();
+  if(!subject) { showToast('Enter a subject line'); return; }
+  var tid = document.getElementById('mc-template').value;
+  var t = MC_TEMPLATES[tid]; if(!t) return;
+  var varsRaw = document.getElementById('mc-vars').value;
+  var v = {};
+  try { v = JSON.parse(varsRaw||'{}'); } catch(e){}
+  var html = t.render(v);
+  var fromName = storageGet('mc_from_name')||'KLOT';
+  var fromEmail = storageGet('mc_from_email')||'hello@klotworld.com';
+  var btn = document.getElementById('mc-send-btn');
+  btn.disabled=true; btn.textContent='Sending…';
+  try {
+    var res = await fetch('https://api.resend.com/emails', {
+      method:'POST',
+      headers:{'Authorization':'Bearer '+apiKey,'Content-Type':'application/json'},
+      body: JSON.stringify({ from: fromName+' <'+fromEmail+'>', to:[to], subject:subject, html:html })
+    });
+    var data = await res.json();
+    if(data.id) {
+      mcAddLog({ id: data.id, to:to, subject:subject, template:t.label, type:t.type, status:'pending', sentAt:new Date().toISOString(), html:html });
+      logAudit('EMAIL', 'Sent "'+t.label+'" to '+to);
+      showToast('Email sent to '+to);
+      mcPanel('inbox', document.querySelector('.mc-nav-btn'));
+      mcRenderInbox(); mcRenderMetrics();
+    } else {
+      showToast('Send failed: '+(data.message||'Unknown error'));
+    }
+  } catch(err) { showToast('Network error — check your API key and connection'); }
+  finally { btn.disabled=false; btn.textContent='✉ Send Email'; }
+}
+
+// ── Status refresh ──
+async function mcRefreshStatuses() {
+  var apiKey = storageGet('mc_api_key');
+  if(!apiKey) { showToast('API key required'); return; }
+  var logs = mcGetLogs();
+  var pending = logs.filter(function(l){ return l.status==='pending' && l.id; });
+  if(!pending.length) { showToast('No pending emails to refresh'); return; }
+  var updated = 0;
+  for(var i=0;i<pending.length;i++) {
+    try {
+      var res = await fetch('https://api.resend.com/emails/'+pending[i].id, { headers:{'Authorization':'Bearer '+apiKey} });
+      var d = await res.json();
+      if(d.last_event) {
+        var s = d.last_event;
+        if(s==='delivered'||s==='opened'||s==='clicked'||s==='bounced') {
+          var idx = logs.findIndex(function(l){return l.id===pending[i].id;});
+          if(idx>=0){ logs[idx].status=s; updated++; }
+        }
+      }
+    } catch(e){}
+  }
+  if(updated) { mcSaveLogs(logs); mcRenderInbox(); mcRenderMetrics(); showToast(updated+' status'+(updated>1?'es':'')+' updated'); }
+  else showToast('Statuses are current');
+}
+
+// ── Render inbox ──
+function mcRenderInbox() {
+  var logs = mcGetLogs();
+  var search = (document.getElementById('mc-search')||{}).value||'';
+  search = search.toLowerCase();
+  var filtered = logs.filter(function(l) {
+    if(MC_FILTER==='transactional' && l.type!=='transactional') return false;
+    if(MC_FILTER==='marketing' && l.type!=='marketing') return false;
+    if(MC_FILTER==='bounced' && l.status!=='bounced') return false;
+    if(search && l.to.toLowerCase().indexOf(search)<0 && l.subject.toLowerCase().indexOf(search)<0) return false;
+    return true;
+  });
+  var list = document.getElementById('mc-inbox-list');
+  var empty = document.getElementById('mc-inbox-empty');
+  if(!list) return;
+  if(!filtered.length) { list.innerHTML=''; if(empty)empty.style.display='block'; return; }
+  if(empty)empty.style.display='none';
+  list.innerHTML = filtered.map(function(l,i) {
+    var isNew = i===0 && l.status==='pending';
+    var badge = '<span class="badge-'+l.status+'">'+l.status+'</span>';
+    var typeBadge = '<span class="mc-type-'+(l.type==='transactional'?'tx':'mkt')+'">'+l.type.slice(0,2).toUpperCase()+'</span>';
+    var d = new Date(l.sentAt);
+    var ds = d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    return '<div class="mc-row" onclick="mcPreviewLog('+i+')">'+
+      '<div class="mc-col"><span class="mc-dot '+(isNew?'new':'old')+'"></span></div>'+
+      '<div class="mc-col"><div class="mc-subject">'+l.subject+'</div><div class="mc-recip">'+l.to+'</div></div>'+
+      '<div class="mc-col" style="font-size:11px">'+l.template+'</div>'+
+      '<div class="mc-col">'+typeBadge+'</div>'+
+      '<div class="mc-col">'+badge+'</div>'+
+      '<div class="mc-col" style="font-size:11px;color:rgba(245,240,232,.35)">'+ds+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function mcPreviewLog(i) {
+  var logs = mcGetLogs();
+  var filtered = mcGetFilteredLogs();
+  var l = filtered[i]; if(!l||!l.html) return;
+  var w = window.open('','_blank','width=640,height=800');
+  if(w) { w.document.write(l.html); w.document.close(); }
+}
+
+function mcGetFilteredLogs() {
+  var logs = mcGetLogs();
+  var search = (document.getElementById('mc-search')||{}).value||'';
+  search = search.toLowerCase();
+  return logs.filter(function(l){
+    if(MC_FILTER==='transactional' && l.type!=='transactional') return false;
+    if(MC_FILTER==='marketing' && l.type!=='marketing') return false;
+    if(MC_FILTER==='bounced' && l.status!=='bounced') return false;
+    if(search && l.to.toLowerCase().indexOf(search)<0 && l.subject.toLowerCase().indexOf(search)<0) return false;
+    return true;
+  });
+}
+
+// ── Metrics ──
+function mcRenderMetrics() {
+  var el = document.getElementById('mc-metrics'); if(!el) return;
+  var logs = mcGetLogs();
+  var total=logs.length, delivered=0, opened=0, bounced=0;
+  logs.forEach(function(l){
+    if(l.status==='delivered'||l.status==='opened'||l.status==='clicked') delivered++;
+    if(l.status==='opened'||l.status==='clicked') opened++;
+    if(l.status==='bounced') bounced++;
+  });
+  var rate = total ? Math.round((opened/total)*100) : 0;
+  el.innerHTML = [
+    ['Total Sent', total, ''],
+    ['Delivered', delivered, total ? Math.round((delivered/total)*100)+'% delivery' : ''],
+    ['Opened', opened, rate+'% open rate'],
+    ['Bounced', bounced, total ? Math.round((bounced/total)*100)+'% bounce' : '']
+  ].map(function(m) {
+    return '<div class="mc-metric"><div class="mc-metric-val">'+m[1]+'</div><div class="mc-metric-lbl">'+m[0]+'</div><div class="mc-metric-sub">'+m[2]+'</div></div>';
+  }).join('');
+}
+
+function mcRenderStats() {
+  var el = document.getElementById('mc-stats-detail'); if(!el) return;
+  var logs = mcGetLogs();
+  var byType={transactional:0,marketing:0};
+  logs.forEach(function(l){ if(byType[l.type]!==undefined) byType[l.type]++; });
+  var byStatus={pending:0,delivered:0,opened:0,clicked:0,bounced:0,failed:0};
+  logs.forEach(function(l){ if(byStatus[l.status]!==undefined) byStatus[l.status]++; });
+  var rows = [
+    ['Transactional', byType.transactional],
+    ['Marketing', byType.marketing],
+    ['Pending', byStatus.pending],
+    ['Delivered', byStatus.delivered],
+    ['Opened', byStatus.opened],
+    ['Bounced', byStatus.bounced]
+  ];
+  el.innerHTML = rows.map(function(r){ return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(184,151,74,.08)"><span>'+r[0]+'</span><strong style="color:var(--cream)">'+r[1]+'</strong></div>'; }).join('');
+}
+
+// ── Settings ──
+function mcSaveSettings() {
+  storageSet('mc_api_key', document.getElementById('mc-api-key').value.trim());
+  storageSet('mc_from_name', document.getElementById('mc-from-name').value.trim());
+  storageSet('mc_from_email', document.getElementById('mc-from-email').value.trim());
+  showToast('Settings saved');
+  logAudit('EMAIL', 'Message Center settings updated');
+}
+
+function mcLoadSettings() {
+  var k=document.getElementById('mc-api-key'), n=document.getElementById('mc-from-name'), e=document.getElementById('mc-from-email');
+  if(k)k.value=storageGet('mc_api_key')||'';
+  if(n)n.value=storageGet('mc_from_name')||'KLOT';
+  if(e)e.value=storageGet('mc_from_email')||'';
+}
+
+async function mcTestConnection() {
+  var apiKey = storageGet('mc_api_key');
+  var el = document.getElementById('mc-api-status');
+  if(!apiKey) { if(el)el.innerHTML='<span class="mc-api-err">⚠ No API key saved</span>'; return; }
+  if(el) el.innerHTML = '<span style="color:rgba(245,240,232,.4);font-family:\'Inter\',sans-serif;font-size:11px">Testing…</span>';
+  try {
+    var res = await fetch('https://api.resend.com/domains', { headers:{'Authorization':'Bearer '+apiKey} });
+    if(res.ok) {
+      if(el) el.innerHTML = '<span class="mc-api-ok">✓ Connected — Resend API key is valid</span>';
+    } else {
+      if(el) el.innerHTML = '<span class="mc-api-err">✗ Invalid API key ('+res.status+')</span>';
+    }
+  } catch(e) { if(el) el.innerHTML = '<span class="mc-api-err">✗ Network error</span>'; }
+}
+
+function mcClearLogs() {
+  if(!confirm('Clear all email logs? This cannot be undone.')) return;
+  storageSet(MC_STORE,'[]');
+  mcRenderInbox(); mcRenderMetrics(); mcRenderStats();
+  showToast('Email logs cleared');
+}
+
+function mcExportLogs() {
+  var logs = mcGetLogs();
+  if(!logs.length){ showToast('No logs to export'); return; }
+  var csv='Recipient,Subject,Template,Type,Status,Sent At\n';
+  logs.forEach(function(l){ csv+='"'+l.to+'","'+l.subject+'","'+l.template+'","'+l.type+'","'+l.status+'","'+l.sentAt+'"\n'; });
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='klot-email-logs-'+Date.now()+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+// ── END MESSAGE CENTER ──
 
 function statusBadge(s) { return '<span class="status-badge status-'+s+'">'+s+'</span>'; }
 
