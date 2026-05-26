@@ -2249,20 +2249,33 @@ input.pm-inp.pfx { padding-left:26px; }
       <div class="admin-tab" id="admin-customers">
         <div class="admin-toolbar">
           <div style="display:flex;align-items:baseline;gap:14px">
-            <h3 class="admin-section-title" style="margin:0">Customer List</h3>
+            <h3 class="admin-section-title" style="margin:0">Customers</h3>
             <span style="font-size:11px;color:rgba(245,240,232,.35);letter-spacing:.1em" id="cust-count"></span>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
             <input type="text" class="admin-search" id="cust-search" placeholder="Search name or email..." oninput="populateCustomers()">
+            <button class="abtn abtn-outline" id="cust-tab-list" onclick="custSubTab('list')" style="background:rgba(255,45,45,.12);border-color:var(--green);color:var(--green)">List</button>
+            <button class="abtn abtn-outline" id="cust-tab-addr" onclick="custSubTab('addresses')">Addresses</button>
             <button class="abtn abtn-gold" onclick="exportCustomers('xlsx')">&#11015; Excel</button>
             <button class="abtn abtn-outline" onclick="exportCustomers('csv')">&#11015; CSV</button>
           </div>
         </div>
-        <table class="admin-table">
-          <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Orders</th><th>Total Spent</th><th>Last Order</th><th>Location</th><th>Status</th></tr></thead>
-          <tbody id="customers-body"></tbody>
-        </table>
-        <div id="cust-empty" style="display:none;text-align:center;padding:40px;font-family:'Inter',sans-serif;font-size:18px;color:rgba(245,240,232,.3);font-style:italic">No customers yet. Orders will appear here after checkout.</div>
+        <!-- List view -->
+        <div id="cust-view-list">
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Orders</th><th>Total Spent</th><th>Last Order</th><th>Location</th><th>Status</th></tr></thead>
+            <tbody id="customers-body"></tbody>
+          </table>
+          <div id="cust-empty" style="display:none;text-align:center;padding:40px;font-family:'Inter',sans-serif;font-size:18px;color:rgba(245,240,232,.3);font-style:italic">No customers yet. Orders will appear here after checkout.</div>
+        </div>
+        <!-- Addresses view -->
+        <div id="cust-view-addresses" style="display:none">
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Delivery Address</th><th>City / State</th><th>Last Order</th></tr></thead>
+            <tbody id="addresses-body"></tbody>
+          </table>
+          <div id="addr-empty" style="display:none;text-align:center;padding:40px;font-family:'Inter',sans-serif;font-size:18px;color:rgba(245,240,232,.3);font-style:italic">No address data yet.</div>
+        </div>
       </div>
 
       <!-- IMPORT TAB -->
@@ -4548,14 +4561,18 @@ function showToast(msg){
 
 // ── CUSTOMERS DATA ──
 // Seeded with demo customers; new customers added on each Paystack payment
-var customers = [
-  {name:'Amara Okafor',    email:'amara&#64;example.com',   phone:'+234 802 111 2233', orders:8,  total:320000, lastOrder:'Nov 12 2025', location:'Lagos',        status:'vip'},
-  {name:'Emeka Nwosu',     email:'emeka&#64;example.com',   phone:'+234 803 222 3344', orders:5,  total:210000, lastOrder:'Nov 12 2025', location:'Abuja',        status:'active'},
-  {name:'Fatima Al-Hassan',email:'fatima&#64;example.com',  phone:'+234 805 333 4455', orders:12, total:580000, lastOrder:'Nov 11 2025', location:'Kano',         status:'vip'},
-  {name:'Chidera Eze',     email:'chidera&#64;example.com', phone:'+234 806 444 5566', orders:3,  total:145000, lastOrder:'Nov 11 2025', location:'Port Harcourt',status:'active'},
-  {name:'Ngozi Williams',  email:'ngozi&#64;example.com',   phone:'+234 807 555 6677', orders:9,  total:410000, lastOrder:'Nov 10 2025', location:'Lagos',        status:'vip'},
-  {name:'Ibrahim Musa',    email:'ibrahim&#64;example.com', phone:'+234 809 666 7788', orders:6,  total:265000, lastOrder:'Nov 10 2025', location:'Kaduna',       status:'active'}
+var _demoCustomers = [
+  {name:'Amara Okafor',    email:'amara@example.com',   phone:'+234 802 111 2233', orders:8,  total:320000, lastOrder:'Nov 12 2025', location:'Lagos',        address:'',status:'vip'},
+  {name:'Emeka Nwosu',     email:'emeka@example.com',   phone:'+234 803 222 3344', orders:5,  total:210000, lastOrder:'Nov 12 2025', location:'Abuja',        address:'',status:'active'},
+  {name:'Fatima Al-Hassan',email:'fatima@example.com',  phone:'+234 805 333 4455', orders:12, total:580000, lastOrder:'Nov 11 2025', location:'Kano',         address:'',status:'vip'},
+  {name:'Chidera Eze',     email:'chidera@example.com', phone:'+234 806 444 5566', orders:3,  total:145000, lastOrder:'Nov 11 2025', location:'Port Harcourt',address:'',status:'active'},
+  {name:'Ngozi Williams',  email:'ngozi@example.com',   phone:'+234 807 555 6677', orders:9,  total:410000, lastOrder:'Nov 10 2025', location:'Lagos',        address:'',status:'vip'},
+  {name:'Ibrahim Musa',    email:'ibrahim@example.com', phone:'+234 809 666 7788', orders:6,  total:265000, lastOrder:'Nov 10 2025', location:'Kaduna',       address:'',status:'active'}
 ];
+var customers = (function() {
+  try { var s = storageGet('klot_customers'); return s ? JSON.parse(s) : _demoCustomers; } catch(e) { return _demoCustomers; }
+})();
+function persistCustomers() { storageSet('klot_customers', JSON.stringify(customers)); }
 
 function populateCustomers() {
   var q = (document.getElementById('cust-search') || {value:''}).value.toLowerCase();
@@ -4616,6 +4633,7 @@ function addOrUpdateCustomer(customerData, orderTotal) {
     existing.orders++;
     existing.total    += orderTotal;
     existing.lastOrder = today;
+    if (customerData.address) existing.address = customerData.address;
     if (existing.location === 'Nigeria' && location !== 'Nigeria') existing.location = location;
     if (existing.orders >= 5) existing.status = 'vip';
   } else {
@@ -4627,10 +4645,44 @@ function addOrUpdateCustomer(customerData, orderTotal) {
       total:     orderTotal,
       lastOrder: today,
       location:  location,
+      address:   customerData.address || '',
       status:    'active'
     });
   }
+  persistCustomers();
   populateCustomers();
+}
+
+function custSubTab(view) {
+  document.getElementById('cust-view-list').style.display      = view === 'list'      ? '' : 'none';
+  document.getElementById('cust-view-addresses').style.display = view === 'addresses' ? '' : 'none';
+  var activeStyle = 'background:rgba(255,45,45,.12);border-color:var(--green);color:var(--green)';
+  document.getElementById('cust-tab-list').style.cssText = view === 'list'      ? activeStyle : '';
+  document.getElementById('cust-tab-addr').style.cssText = view === 'addresses' ? activeStyle : '';
+  if (view === 'addresses') populateAddresses();
+}
+
+function populateAddresses() {
+  var q = (document.getElementById('cust-search') || {value:''}).value.toLowerCase();
+  var filtered = customers.filter(function(c) {
+    return !q || c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q);
+  });
+  var tbody = document.getElementById('addresses-body');
+  var empty = document.getElementById('addr-empty');
+  if (!tbody) return;
+  if (!filtered.length) { tbody.innerHTML = ''; if(empty)empty.style.display='block'; return; }
+  if (empty) empty.style.display = 'none';
+  tbody.innerHTML = filtered.map(function(c) {
+    var loc = c.location || '—';
+    return '<tr>' +
+      '<td style="color:var(--cream)">' + c.name + '</td>' +
+      '<td style="font-size:12px">' + c.email + '</td>' +
+      '<td style="font-size:12px">' + (c.phone || '—') + '</td>' +
+      '<td style="font-size:12px">' + (c.address || '—') + '</td>' +
+      '<td style="font-size:12px">' + loc + '</td>' +
+      '<td style="font-size:12px">' + (c.lastOrder || '—') + '</td>' +
+    '</tr>';
+  }).join('');
 }
 
 function exportCustomers(fmt) {
@@ -4815,6 +4867,22 @@ function initiatePaystack() {
       });
       // Add/update customer record
       addOrUpdateCustomer(customer, totalNGN);
+      // Auto-send order confirmation email
+      (function() {
+        var itemsText = cart.map(function(i){ return i.qty+'× '+i.name+' ('+i.size+')'; }).join(', ');
+        var confirmHtml = MC_TEMPLATES['order-confirmation'].render({
+          name: customer.firstName,
+          orderId: ref,
+          items: itemsText,
+          total: '₦'+totalNGN.toLocaleString(),
+          date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})
+        });
+        fetch('/api/send-email', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ to:customer.email, subject:'Your KLOT order is confirmed — '+ref, html:confirmHtml, fromName:'KLOT', fromEmail:'hello@klotworld.com' })
+        }).catch(function(){});
+      })();
       // Clear cart
       cart = [];
       updateCartDisplay();
