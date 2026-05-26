@@ -390,7 +390,7 @@ footer { background:var(--navy); padding:80px 40px 40px; }
 .kpop-close { position:absolute; top:16px; right:20px; background:none; border:none; font-size:28px; color:#111; cursor:pointer; z-index:10; line-height:1; opacity:.6; transition:opacity .2s; }
 .kpop-close:hover { opacity:1; }
 .kpop-visual { position:relative; display:flex; align-items:center; justify-content:center; padding:0; min-height:420px; overflow:hidden; background:#e8e1d6; }
-.kpop-visual::before { content:''; position:absolute; inset:-24px; background:url('klot_website/klot/assets/images/pop_up.png') center/cover no-repeat; filter:blur(18px) brightness(1.08) saturate(.85); z-index:0; transform:scale(1.05); }
+.kpop-visual::before { content:''; position:absolute; inset:-24px; background:url('klot_website/klot/assets/images/pop_up.jpeg') center/cover no-repeat; filter:blur(18px) brightness(1.08) saturate(.85); z-index:0; transform:scale(1.05); }
 .kpop-visual img { position:relative; z-index:1; width:100%; height:100%; object-fit:contain; display:block; transform:scale(1); transition:transform .6s cubic-bezier(.22,1,.36,1); }
 .kpop-overlay.open .kpop-visual img { transform:scale(1.02); }
 .kpop-body { padding:52px 44px; display:flex; flex-direction:column; justify-content:center; }
@@ -5891,7 +5891,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="kpop">
     <button class="kpop-close" onclick="closeKpop()" aria-label="Close popup">&times;</button>
     <div class="kpop-visual">
-      <img src="klot_website/klot/assets/images/pop_up.png" alt="KLOT x Bigbird — Limited Slide" onerror="this.style.display='none'">
+      <img src="klot_website/klot/assets/images/pop_up.jpeg" alt="KLOT x Bigbird — Limited Slide" onerror="this.style.display='none'">
     </div>
     <div class="kpop-body">
       <div class="kpop-tag">Limited Collaboration</div>
