@@ -3299,7 +3299,7 @@ function updateCartDisplay() {
     return;
   }
   if (footer) footer.style.display = 'block';
-  list.innerHTML = cart.map(function(item) {
+  list.innerHTML = cart.map(function(item, idx) {
     return '<div class="cart-item">' +
       '<div class="cart-item-img">' +
         (item.imageUrl
@@ -3310,12 +3310,18 @@ function updateCartDisplay() {
         '<div class="cart-item-name">' + item.name + '</div>' +
         '<div class="cart-item-size">Size: ' + item.size + ' &middot; Qty: ' + item.qty + '</div>' +
         '<div class="cart-item-price">' + (currentCurrency==='NGN' ? '\u20A6'+(item.priceNGN*item.qty).toLocaleString() : '$'+(item.priceUSD*item.qty)) + '</div>' +
+        '<button onclick="removeFromCart(' + idx + ')" style="margin-top:8px;background:none;border:none;padding:0;font-family:\'Inter\',sans-serif;font-size:11px;color:var(--muted);cursor:pointer;letter-spacing:.06em;text-decoration:underline;text-underline-offset:3px" onmouseover="this.style.color=\'#FF2D2D\'" onmouseout="this.style.color=\'\'">Remove</button>' +
       '</div></div>';
   }).join('');
   var total = currentCurrency === 'NGN'
     ? '\u20A6' + cart.reduce(function(s,i){return s+i.priceNGN*i.qty;},0).toLocaleString()
     : '$' + cart.reduce(function(s,i){return s+i.priceUSD*i.qty;},0);
   var te = document.getElementById('cart-total'); if (te) te.textContent = total;
+}
+
+function removeFromCart(idx) {
+  cart.splice(idx, 1);
+  updateCartDisplay();
 }
 
 function toggleCart() {
