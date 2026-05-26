@@ -4898,7 +4898,9 @@ function initiatePaystack() {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ to:customer.email, subject:'Your KLOT order is confirmed — '+ref, html:confirmHtml, fromName:'KLOT', fromEmail:'hello@klotworld.com' })
-        }).catch(function(){});
+        }).then(function(r){ return r.json(); }).then(function(d){
+          if(!d.id) { console.error('[KLOT] Confirmation email failed:', JSON.stringify(d)); showToast('Order confirmed! (Confirmation email could not be sent — check admin logs)'); }
+        }).catch(function(e){ console.error('[KLOT] Confirmation email error:', e); });
       })();
       // Clear cart
       cart = [];
