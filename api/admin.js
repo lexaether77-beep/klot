@@ -33,7 +33,14 @@ module.exports = function handler(req, res) {
 
   try {
     const filePath = path.join(__dirname, 'admin-page.html');
-    const html = fs.readFileSync(filePath, 'utf8');
+    let html;
+    try {
+      html = fs.readFileSync(filePath, 'utf8');
+    } catch (readErr) {
+      // Try alternate path (process.cwd()/api/)
+      const altPath = path.join(process.cwd(), 'api', 'admin-page.html');
+      html = fs.readFileSync(altPath, 'utf8');
+    }
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.setHeader('X-Frame-Options', 'DENY');

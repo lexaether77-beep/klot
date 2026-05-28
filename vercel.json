@@ -1,5 +1,10 @@
 {
   "version": 2,
+  "functions": {
+    "api/admin.js": {
+      "includeFiles": "api/admin-page.html"
+    }
+  },
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/admin", "dest": "/api/admin" },
