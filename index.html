@@ -396,6 +396,33 @@ footer { background:var(--navy); padding:80px 40px 40px; }
 #admin-toggle { position:fixed; bottom:24px; right:24px; background:var(--navy); color:var(--green); border:1px solid var(--accent); padding:12px 20px; font-size:10px; letter-spacing:.15em; text-transform:uppercase; font-family:'Inter',sans-serif; z-index:200; transition:all .2s; }
 #admin-toggle:hover { background:var(--green); color:var(--navy); }
 
+/* ── Product Waitlist Modal ── */
+.wl-overlay { position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:400; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s; backdrop-filter:blur(3px); }
+.wl-overlay.open { opacity:1; pointer-events:all; }
+.wl-modal { background:#0D0D0D; border:1px solid rgba(255,255,255,.1); width:100%; max-width:440px; padding:40px 36px 36px; position:relative; transform:translateY(16px); transition:transform .35s cubic-bezier(.22,1,.36,1); }
+.wl-overlay.open .wl-modal { transform:none; }
+.wl-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:rgba(245,240,232,.4); line-height:1; }
+.wl-close:hover { color:var(--cream); }
+
+/* ── Size Guide Modal ── */
+.sg-overlay { position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:400; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s; backdrop-filter:blur(3px); }
+.sg-overlay.open { opacity:1; pointer-events:all; }
+.sg-modal { background:#fff; width:100%; max-width:600px; max-height:88vh; overflow-y:auto; position:relative; padding:40px 36px 32px; transform:translateY(16px); transition:transform .35s cubic-bezier(.22,1,.36,1); }
+.sg-overlay.open .sg-modal { transform:none; }
+.sg-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:24px; cursor:pointer; color:#333; opacity:.5; line-height:1; }
+.sg-close:hover { opacity:1; }
+.sg-title { font-family:'Barlow Condensed',sans-serif; font-size:24px; font-weight:600; letter-spacing:.04em; color:#0D0D0D; margin-bottom:4px; }
+.sg-sub { font-size:12px; color:#888; font-family:'Inter',sans-serif; margin-bottom:24px; }
+.sg-table { width:100%; border-collapse:collapse; font-family:'Inter',sans-serif; font-size:13px; }
+.sg-table th { background:#0D0D0D; color:#fff; padding:10px 12px; text-align:center; font-size:10px; letter-spacing:.14em; text-transform:uppercase; font-weight:600; }
+.sg-table td { padding:10px 12px; text-align:center; border-bottom:1px solid #f0f0f0; color:#333; }
+.sg-table tr:last-child td { border-bottom:none; }
+.sg-table tr:nth-child(even) td { background:#fafafa; }
+.sg-table td:first-child { font-weight:600; color:#0D0D0D; }
+.sg-tab-row { display:flex; gap:0; margin-bottom:20px; border:1px solid #e0e0e0; width:fit-content; }
+.sg-tab { padding:8px 20px; font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-family:'Inter',sans-serif; background:none; border:none; cursor:pointer; color:#888; transition:all .2s; }
+.sg-tab.active { background:#0D0D0D; color:#fff; }
+
 /* ── WhatsApp Float Button ── */
 .wa-float { position:fixed; bottom:28px; right:28px; z-index:250; width:56px; height:56px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(37,211,102,.45); text-decoration:none; transition:transform .2s,box-shadow .2s; }
 .wa-float:hover { transform:scale(1.08); box-shadow:0 6px 28px rgba(37,211,102,.6); }
@@ -1258,7 +1285,7 @@ input.pm-inp.pfx { padding-left:26px; }
 
 <!-- ANNOUNCEMENT BAR -->
 <div id="currency-bar">
-  <span>FREE DELIVERY ON ORDERS OVER &#8358;150,000 &nbsp;/&nbsp; $100 &nbsp;&#183;&nbsp; UNISEX SIZING XS&#8211;XL</span>
+  <span>FREE DELIVERY ON ORDERS OVER &#8358;80,000 &nbsp;/&nbsp; $50 &nbsp;&#183;&nbsp; UNISEX SIZING XS&#8211;XL</span>
   <div class="currency-toggle" onclick="toggleCurrency()">
     <span id="curr-label-ngn" style="color:var(--gold)">&#8358; NGN</span>
     <div class="toggle-pill" id="currency-pill"></div>
@@ -1322,6 +1349,7 @@ input.pm-inp.pfx { padding-left:26px; }
   <div class="cart-items" id="cart-items-list">
     <div class="cart-empty">Your bag is beautifully empty.</div>
   </div>
+  <div id="cart-upsell" style="display:none"></div>
   <div class="cart-footer" id="cart-footer" style="display:none">
     <div class="cart-subtotal">
       <span>Subtotal</span>
@@ -1545,8 +1573,12 @@ input.pm-inp.pfx { padding-left:26px; }
 
       <div class="pdp-variants">
         <div>
-          <div class="pdp-variant-label">Size</div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
+            <div class="pdp-variant-label" style="margin-bottom:0">Size</div>
+            <button onclick="openSizeGuide()" style="background:none;border:none;padding:0;font-size:11px;font-family:'Inter',sans-serif;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;letter-spacing:.06em">Size Guide</button>
+          </div>
           <div class="pdp-sizes" id="pdp-sizes"></div>
+          <span id="pdp-stock-indicator"></span>
         </div>
         <div>
           <div class="pdp-variant-label" id="pdp-color-label-head">Colorway</div>
@@ -1554,13 +1586,26 @@ input.pm-inp.pfx { padding-left:26px; }
         </div>
       </div>
 
-      <div class="pdp-cta">
+      <div class="pdp-cta" id="pdp-cta-main">
         <button class="pdp-add-btn" onclick="pdpAddToCart()">Add to Bag</button>
         <button class="pdp-buy-btn" onclick="pdpBuyNow()">Buy Now</button>
       </div>
+      <div id="pdp-cta-soldout" style="display:none;margin-bottom:24px">
+        <button style="width:100%;padding:16px;background:transparent;border:1px solid rgba(245,240,232,.25);color:var(--cream);font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='rgba(245,240,232,.25)'" onclick="openProductWaitlist()">Notify Me When Available</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+        <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:'Inter',sans-serif">Secure payment via</span>
+        <span style="display:inline-flex;align-items:center;gap:6px">
+          <span style="background:#00c3f7;color:#fff;font-size:9px;font-weight:700;letter-spacing:.08em;padding:3px 7px;border-radius:3px;font-family:'Inter',sans-serif">PAYSTACK</span>
+          <span style="background:#1a1f71;color:#fff;font-size:9px;font-weight:700;letter-spacing:.08em;padding:3px 7px;border-radius:3px;font-family:'Inter',sans-serif">VISA</span>
+          <span style="background:#eb001b;color:#fff;font-size:9px;font-weight:700;letter-spacing:.08em;padding:3px 7px;border-radius:3px;font-family:'Inter',sans-serif">MC</span>
+          <span style="background:#003087;color:#fff;font-size:9px;font-weight:700;letter-spacing:.08em;padding:3px 7px;border-radius:3px;font-family:'Inter',sans-serif">USSD</span>
+        </span>
+      </div>
 
       <div class="pdp-perks">
-        <div class="pdp-perk">Free delivery on orders over &#8358;150,000 / $100</div>
+        <div class="pdp-perk">Free delivery on orders over &#8358;80,000 / $50</div>
         <div class="pdp-perk">30-day hassle-free returns</div>
         <div class="pdp-perk">Authentic KLOT quality guaranteed</div>
       </div>
@@ -2893,7 +2938,7 @@ input.pm-inp.pfx { padding-left:26px; }
     <div class="checkout-hdr">
       <div>
         <h3 class="checkout-title">Checkout</h3>
-        <p class="checkout-sub">Complete your order securely via Paystack</p>
+        <p class="checkout-sub">Complete your order securely via Paystack &nbsp;·&nbsp; <span style="color:rgba(74,222,128,.7)">No account needed</span></p>
       </div>
       <button class="checkout-close" onclick="closeCheckoutDirect()">&#10005;</button>
     </div>
@@ -3058,11 +3103,22 @@ var orders = [
 
 var cart = [];
 var lastShopPage = 'shop';  // tracks last visited shop/category page
-var currentCurrency = 'NGN';
+// Auto-detect currency: default NGN for Nigerian locale, USD otherwise
+// Respect any prior manual choice stored in localStorage
+var currentCurrency = (function() {
+  var saved = storageGet('klot_currency');
+  if (saved === 'NGN' || saved === 'USD') return saved;
+  var lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  var tz   = '';
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e) {}
+  var isNigeria = lang.indexOf('ng') > -1 || lang.indexOf('hausa') > -1 || lang.indexOf('yoruba') > -1 || lang.indexOf('igbo') > -1 || tz.indexOf('Lagos') > -1 || tz.indexOf('Africa') > -1;
+  return isNigeria ? 'NGN' : 'USD';
+})();
 
 // ── CURRENCY ──
 function toggleCurrency() {
   currentCurrency = currentCurrency === 'NGN' ? 'USD' : 'NGN';
+  storageSet('klot_currency', currentCurrency);
   var pill = document.getElementById('currency-pill');
   var ngn  = document.getElementById('curr-label-ngn');
   var usd  = document.getElementById('curr-label-usd');
@@ -3097,6 +3153,9 @@ function showPage(page) {
 // ── PRODUCT RENDERING ──
 function productCard(p) {
   var tagHtml = p.tag ? '<div class="product-badge">' + (p.tag === 'new' ? 'New' : p.tag === 'limited' ? 'Limited' : p.tag) + '</div>' : '';
+  var stockBadge = (p.stock !== undefined && p.stock > 0 && p.stock <= 10)
+    ? '<div style="position:absolute;bottom:8px;left:8px;z-index:3;background:rgba(248,113,113,.92);color:#fff;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;font-family:\'Inter\',sans-serif">Only ' + p.stock + ' left</div>'
+    : (p.stock === 0 ? '<div style="position:absolute;bottom:8px;left:8px;z-index:3;background:rgba(0,0,0,.7);color:rgba(255,255,255,.6);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;font-family:\'Inter\',sans-serif">Sold Out</div>' : '');
   var imgContent = p.imageUrl
     ? '<img src="' + p.imageUrl + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px" onerror="this.style.display=\'none\'" alt="' + p.name + '">'
     : '<span class="product-img-icon">' + LOGO_SVG('#0e1c38', 48) + '</span>';
@@ -3108,6 +3167,7 @@ function productCard(p) {
     '<div class="product-img">' +
       '<div class="product-img-bg" style="background:' + (p.imageUrl ? '#f5f0e8' : 'linear-gradient(135deg,' + p.color + '88,' + p.color + ')') + '"></div>' +
       imgContent +
+      stockBadge +
       '<div class="product-actions">' +
         '<select class="size-select" id="size-' + p.id + '" onclick="event.stopPropagation()"><option value="">Size</option>' + sizeOpts + '</select>' +
         '<button class="add-cart-btn" onclick="event.stopPropagation();addToCart(' + p.id + ')">Add to Bag</button>' +
@@ -3217,6 +3277,26 @@ function openPDP(pid) {
   document.getElementById('pdp-sizes').innerHTML = sizes.map(function(s,i){
     return '<button class="pdp-size-btn' + (i===0?' active':'') + '" onclick="pdpSelectSize(this)">' + s + '</button>';
   }).join('');
+
+  // Stock indicator + sold-out CTA swap
+  var stockEl   = document.getElementById('pdp-stock-indicator');
+  var ctaMain   = document.getElementById('pdp-cta-main');
+  var ctaSoldout= document.getElementById('pdp-cta-soldout');
+  var soldOut   = p.stock === 0;
+  if (ctaMain)    ctaMain.style.display    = soldOut ? 'none' : '';
+  if (ctaSoldout) ctaSoldout.style.display = soldOut ? '' : 'none';
+  if (stockEl) {
+    if (p.stock !== undefined && p.stock > 0 && p.stock <= 10) {
+      stockEl.textContent = 'Only ' + p.stock + ' left in stock';
+      stockEl.style.cssText = 'font-size:11px;font-family:\'Inter\',sans-serif;color:#f87171;letter-spacing:.06em;margin-top:8px;display:block';
+    } else if (soldOut) {
+      stockEl.textContent = 'Currently sold out';
+      stockEl.style.cssText = 'font-size:11px;font-family:\'Inter\',sans-serif;color:rgba(245,240,232,.4);letter-spacing:.06em;margin-top:8px;display:block';
+    } else {
+      stockEl.textContent = 'In stock';
+      stockEl.style.cssText = 'font-size:11px;font-family:\'Inter\',sans-serif;color:#4ade80;letter-spacing:.06em;margin-top:8px;display:block';
+    }
+  }
 
   // Colorways
   var colors = p.colorways || [{name:'Classic',hex: p.color||'#0D0D0D'}];
@@ -3370,6 +3450,35 @@ function updateCartDisplay() {
     ? '\u20A6' + cart.reduce(function(s,i){return s+i.priceNGN*i.qty;},0).toLocaleString()
     : '$' + cart.reduce(function(s,i){return s+i.priceUSD*i.qty;},0);
   var te = document.getElementById('cart-total'); if (te) te.textContent = total;
+
+  // Upsell: You might also like
+  var upsellEl = document.getElementById('cart-upsell');
+  if (upsellEl) {
+    var cartIds = cart.map(function(i){ return i.id; });
+    var cartCats = cart.map(function(i){ return i.category; });
+    var suggestions = products.filter(function(p) {
+      return p.status !== 'inactive' && cartIds.indexOf(p.id) === -1 && (cartCats.indexOf(p.category) > -1);
+    }).slice(0, 3);
+    if (!suggestions.length) suggestions = products.filter(function(p){ return cartIds.indexOf(p.id) === -1; }).slice(0, 3);
+    if (suggestions.length) {
+      upsellEl.innerHTML = '<div style="padding:20px 32px 0;border-top:1px solid var(--border)">' +
+        '<div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-family:\'Inter\',sans-serif">You Might Also Like</div>' +
+        '<div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:4px">' +
+        suggestions.map(function(p) {
+          return '<div style="flex:0 0 90px;cursor:pointer" onclick="toggleCart();openPDP(' + p.id + ')">' +
+            '<div style="width:90px;height:110px;background:' + (p.imageUrl ? '#f5f0e8' : 'linear-gradient(135deg,' + p.color + '88,' + p.color + ')') + ';overflow:hidden;margin-bottom:6px">' +
+            (p.imageUrl ? '<img src="' + p.imageUrl + '" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'">' : '') +
+            '</div>' +
+            '<div style="font-size:11px;font-family:\'Barlow Condensed\',sans-serif;font-weight:600;color:var(--navy);line-height:1.2;margin-bottom:2px">' + p.name + '</div>' +
+            '<div style="font-size:11px;font-family:\'Inter\',sans-serif;color:var(--muted)">' + fmtPrice(p) + '</div>' +
+            '</div>';
+        }).join('') +
+        '</div></div>';
+      upsellEl.style.display = '';
+    } else {
+      upsellEl.style.display = 'none';
+    }
+  }
 }
 
 function removeFromCart(idx) {
@@ -4940,6 +5049,47 @@ function initiatePaystack() {
   handler.openIframe();
 }
 
+// ── Product Waitlist ──
+function openProductWaitlist() {
+  var nameEl = document.getElementById('wl-product-name');
+  if (nameEl && _pdpProduct) nameEl.textContent = _pdpProduct.name;
+  var emailEl = document.getElementById('wl-email'); if (emailEl) emailEl.value = '';
+  var msgEl = document.getElementById('wl-msg'); if (msgEl) msgEl.style.display = 'none';
+  document.getElementById('wl-overlay').classList.add('open');
+}
+function closeProductWaitlist() {
+  document.getElementById('wl-overlay').classList.remove('open');
+}
+function submitProductWaitlist() {
+  var email = (document.getElementById('wl-email') || {}).value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email'); return; }
+  var key = 'klot_waitlist';
+  var list = [];
+  try { list = JSON.parse(storageGet(key) || '[]'); } catch(e) {}
+  var entry = { email: email, product: _pdpProduct ? _pdpProduct.name : '', productId: _pdpProduct ? _pdpProduct.id : null, ts: new Date().toISOString() };
+  list.push(entry);
+  storageSet(key, JSON.stringify(list));
+  var msgEl = document.getElementById('wl-msg');
+  if (msgEl) { msgEl.textContent = "You're on the list! We'll email you when it's back."; msgEl.style.display = 'block'; }
+  setTimeout(closeProductWaitlist, 2200);
+}
+
+// ── Size Guide ──
+function openSizeGuide() {
+  document.getElementById('sg-overlay').classList.add('open');
+}
+function closeSizeGuide() {
+  document.getElementById('sg-overlay').classList.remove('open');
+}
+function sgTab(id, btn) {
+  ['tops','bottoms','kids'].forEach(function(t) {
+    var el = document.getElementById('sg-' + t);
+    if (el) el.style.display = t === id ? '' : 'none';
+  });
+  document.querySelectorAll('.sg-tab').forEach(function(b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+}
+
 function closeOrderSuccess() {
   document.getElementById('order-success-overlay').classList.remove('open');
   showPage(lastShopPage);
@@ -5366,6 +5516,18 @@ pmBulkStatus = function(s) {
 document.addEventListener('DOMContentLoaded', function() {
   loadPersistedProducts();
   showPage('home');
+  // Apply auto-detected/saved currency toggle state
+  (function() {
+    var pill = document.getElementById('currency-pill');
+    var ngn  = document.getElementById('curr-label-ngn');
+    var usd  = document.getElementById('curr-label-usd');
+    if (!pill) return;
+    if (currentCurrency === 'USD') {
+      pill.classList.add('usd'); if(ngn) ngn.style.color=''; if(usd) usd.style.color='var(--gold)';
+    } else {
+      pill.classList.remove('usd'); if(ngn) ngn.style.color='var(--gold)'; if(usd) usd.style.color='';
+    }
+  })();
   // Pre-render shop grid so it loads instantly on navigation
   renderGrid('shop-grid', products);
 });
@@ -5836,13 +5998,6 @@ function populateMyOrders() {
 // ── Checkout auto-fill from user profile ──
 var _origOpenCheckout = openCheckout;
 openCheckout = function() {
-  // If not logged in, prompt login first then resume checkout
-  if (!currentUser) {
-    authPendingCheckout = true;
-    openAuthModal('login');
-    showToast('Sign in to continue to checkout');
-    return;
-  }
   authPendingCheckout = false;
   _origOpenCheckout();
   // Auto-fill customer fields from saved profile
@@ -5932,6 +6087,73 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 <script src="https://js.paystack.co/v1/inline.js" defer></script>
+
+<!-- Product Waitlist Modal -->
+<div class="wl-overlay" id="wl-overlay" onclick="if(event.target===this)closeProductWaitlist()">
+  <div class="wl-modal">
+    <button class="wl-close" onclick="closeProductWaitlist()">&times;</button>
+    <div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--green);font-family:'Inter',sans-serif;margin-bottom:12px">Notify Me</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:600;color:var(--cream);letter-spacing:.02em;margin-bottom:6px" id="wl-product-name">Product</div>
+    <p style="font-size:13px;color:rgba(245,240,232,.45);font-family:'Inter',sans-serif;line-height:1.6;margin-bottom:28px">Enter your email and we'll notify you the moment this item is back in stock.</p>
+    <input type="email" id="wl-email" placeholder="your@email.com" style="width:100%;padding:14px;background:rgba(255,255,255,.06);border:1px solid rgba(245,240,232,.15);color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;outline:none;margin-bottom:12px;box-sizing:border-box" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(245,240,232,.15)'">
+    <button onclick="submitProductWaitlist()" style="width:100%;padding:14px;background:var(--green);border:none;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;cursor:pointer">Join Waitlist</button>
+    <p id="wl-msg" style="font-size:12px;font-family:'Inter',sans-serif;color:#4ade80;text-align:center;margin-top:12px;display:none"></p>
+  </div>
+</div>
+
+<!-- Size Guide Modal -->
+<div class="sg-overlay" id="sg-overlay" onclick="if(event.target===this)closeSizeGuide()">
+  <div class="sg-modal">
+    <button class="sg-close" onclick="closeSizeGuide()">&times;</button>
+    <div class="sg-title">Size Guide</div>
+    <p class="sg-sub">KLOT uses unisex sizing. Measurements are in centimetres. Find your size using chest or waist measurement.</p>
+    <div class="sg-tab-row">
+      <button class="sg-tab active" onclick="sgTab('tops',this)">Tops &amp; Jackets</button>
+      <button class="sg-tab" onclick="sgTab('bottoms',this)">Bottoms</button>
+      <button class="sg-tab" onclick="sgTab('kids',this)">Kids</button>
+    </div>
+    <div id="sg-tops">
+      <table class="sg-table">
+        <thead><tr><th>Size</th><th>Chest (cm)</th><th>Chest (in)</th><th>Shoulder (cm)</th><th>Length (cm)</th></tr></thead>
+        <tbody>
+          <tr><td>XS</td><td>84–88</td><td>33–35</td><td>42</td><td>68</td></tr>
+          <tr><td>S</td><td>88–93</td><td>35–37</td><td>44</td><td>70</td></tr>
+          <tr><td>M</td><td>93–98</td><td>37–39</td><td>46</td><td>72</td></tr>
+          <tr><td>L</td><td>98–104</td><td>39–41</td><td>48</td><td>74</td></tr>
+          <tr><td>XL</td><td>104–110</td><td>41–43</td><td>50</td><td>76</td></tr>
+          <tr><td>XXL</td><td>110–118</td><td>43–46</td><td>52</td><td>78</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="sg-bottoms" style="display:none">
+      <table class="sg-table">
+        <thead><tr><th>Size</th><th>Waist (cm)</th><th>Waist (in)</th><th>Hip (cm)</th><th>Inseam (cm)</th></tr></thead>
+        <tbody>
+          <tr><td>XS</td><td>68–72</td><td>27–28</td><td>88–92</td><td>76</td></tr>
+          <tr><td>S</td><td>72–76</td><td>28–30</td><td>92–96</td><td>77</td></tr>
+          <tr><td>M</td><td>76–81</td><td>30–32</td><td>96–101</td><td>78</td></tr>
+          <tr><td>L</td><td>81–86</td><td>32–34</td><td>101–106</td><td>79</td></tr>
+          <tr><td>XL</td><td>86–92</td><td>34–36</td><td>106–112</td><td>80</td></tr>
+          <tr><td>XXL</td><td>92–99</td><td>36–39</td><td>112–119</td><td>81</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="sg-kids" style="display:none">
+      <table class="sg-table">
+        <thead><tr><th>Age</th><th>Height (cm)</th><th>Chest (cm)</th><th>Waist (cm)</th></tr></thead>
+        <tbody>
+          <tr><td>2Y</td><td>86–92</td><td>52</td><td>50</td></tr>
+          <tr><td>4Y</td><td>98–104</td><td>56</td><td>53</td></tr>
+          <tr><td>6Y</td><td>110–116</td><td>60</td><td>55</td></tr>
+          <tr><td>8Y</td><td>122–128</td><td>64</td><td>58</td></tr>
+          <tr><td>10Y</td><td>134–140</td><td>70</td><td>62</td></tr>
+          <tr><td>12Y</td><td>146–152</td><td>76</td><td>65</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:20px;font-size:11px;color:#aaa;font-family:'Inter',sans-serif">If you are between sizes, size up for a relaxed fit or size down for a more fitted look. For further help <a href="#" onclick="closeSizeGuide();showPage('contact')" style="color:#FF2D2D">contact us</a>.</p>
+  </div>
+</div>
 
 <!-- WhatsApp Support Button -->
 <a class="wa-float" href="https://wa.me/2348000000000?text=Hi%2C%20I%E2%80%99d%20like%20help%20with%20my%20KLOT%20order" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp" title="Chat with us on WhatsApp">
