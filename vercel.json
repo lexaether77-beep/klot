@@ -2,6 +2,9 @@
   "version": 2,
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/admin", "dest": "/api/admin" },
+    { "src": "/admin/login", "dest": "/api/admin-login" },
+    { "src": "/admin/logout", "dest": "/api/admin-logout" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
