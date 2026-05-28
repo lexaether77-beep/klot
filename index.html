@@ -3534,7 +3534,7 @@ function updateAttText() {
   var r=MAX_ATT-loginAttempts; el.textContent=r+' attempt'+(r!==1?'s':'')+' remaining';
 }
 
-function attemptLogin() {
+async function attemptLogin() {
   var now=Date.now();
   if(lockoutUntil>now){showLockout(Math.ceil((lockoutUntil-now)/60000));return;}
   var u=(document.getElementById('admin-username').value||'').trim();
@@ -3544,38 +3544,45 @@ function attemptLogin() {
     document.getElementById('admin-error').classList.add('show'); return;
   }
   var btn=document.getElementById('admin-login-btn');
-  btn.disabled=true; btn.textContent='Verifying\u2026';
-  setTimeout(function(){
-    Promise.all([sha256(u.toLowerCase()), sha256(p), sha256('admin'), sha256('Klot\u00402025')]).then(function(hashes) {
-      if(hashes[0]===hashes[2] && hashes[1]===hashes[3]) {
-        loginAttempts=0;
-        logAdminAction('AUTH', 'Password verified - awaiting MFA');
-        btn.disabled=false; btn.style.display='none';
-        var mfaPanel=document.getElementById('admin-mfa-panel');
-        if(mfaPanel){mfaPanel.style.display='block';var mi=document.getElementById('admin-mfa-code');if(mi){mi.value='';setTimeout(function(){mi.focus();},100);}}
-        pendingLoginUser={user:u,role:ADMIN_ROLE};
-      } else {
-        loginAttempts++;
-        logAdminAction('SECURITY','Failed login attempt '+loginAttempts+'/'+MAX_ATT);
-        document.getElementById('admin-error').textContent='Incorrect username or password.';
-        document.getElementById('admin-error').classList.add('show');
-        var pw=document.getElementById('admin-password'); if(pw)pw.value='';
-        if(loginAttempts>=MAX_ATT) {
-          lockoutUntil=Date.now()+LOCKOUT_MIN*60000; showLockout(LOCKOUT_MIN);
-          setTimeout(function(){
-            lockoutUntil=0; loginAttempts=0;
-            var el=document.getElementById('admin-lockout'); if(el)el.classList.remove('show');
-            var b=document.getElementById('admin-login-btn'); if(b){b.disabled=false;b.style.display='';b.textContent='Sign In to Dashboard';}
-            var u2=document.getElementById('admin-username'); if(u2)u2.disabled=false;
-            var p2=document.getElementById('admin-password'); if(p2)p2.disabled=false;
-            updateAttText();
-          }, LOCKOUT_MIN*60000);
-        } else { btn.disabled=false; btn.textContent='Sign In to Dashboard'; updateAttText(); }
-      }
+  btn.disabled=true; btn.textContent='Verifying…';
+  try {
+    var res = await fetch('/api/admin-login', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({username:u, password:p})
     });
-  }, 600);
+    var data = await res.json();
+    if(data.ok) {
+      loginAttempts=0;
+      logAdminAction('AUTH', 'Password verified - awaiting MFA');
+      btn.disabled=false; btn.style.display='none';
+      var mfaPanel=document.getElementById('admin-mfa-panel');
+      if(mfaPanel){mfaPanel.style.display='block';var mi=document.getElementById('admin-mfa-code');if(mi){mi.value='';setTimeout(function(){mi.focus();},100);}}
+      pendingLoginUser={user:u,role:ADMIN_ROLE};
+    } else {
+      loginAttempts++;
+      logAdminAction('SECURITY','Failed login attempt '+loginAttempts+'/'+MAX_ATT);
+      document.getElementById('admin-error').textContent='Incorrect username or password.';
+      document.getElementById('admin-error').classList.add('show');
+      var pw=document.getElementById('admin-password'); if(pw)pw.value='';
+      if(loginAttempts>=MAX_ATT) {
+        lockoutUntil=Date.now()+LOCKOUT_MIN*60000; showLockout(LOCKOUT_MIN);
+        setTimeout(function(){
+          lockoutUntil=0; loginAttempts=0;
+          var el=document.getElementById('admin-lockout'); if(el)el.classList.remove('show');
+          var b=document.getElementById('admin-login-btn'); if(b){b.disabled=false;b.style.display='';b.textContent='Sign In to Dashboard';}
+          var u2=document.getElementById('admin-username'); if(u2)u2.disabled=false;
+          var p2=document.getElementById('admin-password'); if(p2)p2.disabled=false;
+          updateAttText();
+        }, LOCKOUT_MIN*60000);
+      } else { btn.disabled=false; btn.textContent='Sign In to Dashboard'; updateAttText(); }
+    }
+  } catch(e) {
+    document.getElementById('admin-error').textContent='Network error — please try again.';
+    document.getElementById('admin-error').classList.add('show');
+    btn.disabled=false; btn.textContent='Sign In to Dashboard';
+  }
 }
-
 function openDashboard() {
   document.getElementById('admin-panel').classList.add('open');
   sessionStart=new Date(); updateSessionBar();
