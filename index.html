@@ -2064,6 +2064,7 @@ input.pm-inp.pfx { padding-left:26px; }
       <div class="admin-nav-item" onclick="showAdminTab('customers',this)">&#128100; Customers</div>
       <div class="admin-nav-item" onclick="showAdminTab('import',this)">&#128229; Import</div>
       <div class="admin-nav-item" onclick="showAdminTab('team',this)">&#128100; Team Photos</div>
+      <div class="admin-nav-item" onclick="showAdminTab('leads',this)">&#128205; Waitlist &amp; Subscribers</div>
       <div class="admin-nav-item" onclick="showAdminTab('audit',this)">&#128196; Audit Log</div>
       <div class="admin-nav-item" onclick="showAdminTab('messages',this)">&#9993; Message Center</div>
     </div>
@@ -2576,6 +2577,52 @@ input.pm-inp.pfx { padding-left:26px; }
         <div id="audit-log-list" style="max-height:520px;overflow-y:auto;border:1px solid rgba(184,151,74,.1)"></div>
         <div id="audit-empty" style="display:none;text-align:center;padding:40px;font-family:'Inter',sans-serif;font-size:18px;color:rgba(245,240,232,.3);font-style:italic">No admin actions logged yet.</div>
       </div>
+
+      <!-- WAITLIST & SUBSCRIBERS TAB -->
+      <div class="admin-tab" id="admin-leads">
+        <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px">
+          <h3 class="admin-section-title" style="margin:0">Waitlist &amp; Subscribers</h3>
+          <span style="font-size:11px;color:rgba(245,240,232,.35);letter-spacing:.1em;font-family:'Inter',sans-serif">Saved locally in browser</span>
+        </div>
+
+        <!-- Sub-tabs -->
+        <div style="display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid rgba(184,151,74,.15)">
+          <button id="leads-tab-waitlist" class="mc-nav-btn active" onclick="leadsSubTab('waitlist',this)" style="border-bottom:2px solid var(--green);color:var(--green)">&#128683; Product Waitlist</button>
+          <button id="leads-tab-subscribers" class="mc-nav-btn" onclick="leadsSubTab('subscribers',this)">&#128235; Subscribers</button>
+        </div>
+
+        <!-- Product Waitlist panel -->
+        <div id="leads-panel-waitlist">
+          <div class="admin-toolbar">
+            <span style="font-size:11px;color:rgba(245,240,232,.4);font-family:'Inter',sans-serif">Customers who requested back-in-stock notifications</span>
+            <div style="display:flex;gap:8px">
+              <button class="abtn abtn-gold" onclick="exportLeads('waitlist')">&#11015; Export CSV</button>
+              <button class="abtn abtn-danger" onclick="clearLeads('waitlist')">&#128465; Clear All</button>
+            </div>
+          </div>
+          <div id="leads-waitlist-empty" style="text-align:center;padding:60px 20px;font-family:'Inter',sans-serif;font-size:16px;color:rgba(245,240,232,.25);font-style:italic">No waitlist entries yet. They appear here when customers tap "Notify Me" on a sold-out product.</div>
+          <table class="admin-table" id="leads-waitlist-table" style="display:none">
+            <thead><tr><th>Email</th><th>Product</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="leads-waitlist-body"></tbody>
+          </table>
+        </div>
+
+        <!-- Subscribers panel -->
+        <div id="leads-panel-subscribers" style="display:none">
+          <div class="admin-toolbar">
+            <span style="font-size:11px;color:rgba(245,240,232,.4);font-family:'Inter',sans-serif">Emails collected from the KLOT x Bigbird waitlist popup</span>
+            <div style="display:flex;gap:8px">
+              <button class="abtn abtn-gold" onclick="exportLeads('subscribers')">&#11015; Export CSV</button>
+              <button class="abtn abtn-danger" onclick="clearLeads('subscribers')">&#128465; Clear All</button>
+            </div>
+          </div>
+          <div id="leads-subs-empty" style="text-align:center;padding:60px 20px;font-family:'Inter',sans-serif;font-size:16px;color:rgba(245,240,232,.25);font-style:italic">No subscribers yet. They appear here when someone signs up via the popup.</div>
+          <table class="admin-table" id="leads-subs-table" style="display:none">
+            <thead><tr><th>Email</th><th>Source</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="leads-subs-body"></tbody>
+          </table>
+        </div>
+      </div><!-- /admin-leads -->
 
       <!-- MESSAGE CENTER TAB -->
       <div class="admin-tab" id="admin-messages">
@@ -3729,6 +3776,110 @@ function showAdminTab(tab, el) {
   if(tab==='audit')      renderAuditLog();
   if(tab==='team')       syncExecPreviews();
   if(tab==='messages')   mcInit();
+  if(tab==='leads')      populateLeads();
+}
+
+// ── WAITLIST & SUBSCRIBERS ──
+function leadsSubTab(panel, btn) {
+  document.getElementById('leads-panel-waitlist').style.display   = panel === 'waitlist'     ? '' : 'none';
+  document.getElementById('leads-panel-subscribers').style.display = panel === 'subscribers'  ? '' : 'none';
+  document.querySelectorAll('#admin-leads .mc-nav-btn').forEach(function(b) {
+    b.classList.remove('active');
+    b.style.borderBottom = '2px solid transparent';
+    b.style.color = '';
+  });
+  if (btn) { btn.classList.add('active'); btn.style.borderBottom = '2px solid var(--green)'; btn.style.color = 'var(--green)'; }
+}
+
+function populateLeads() {
+  // Waitlist
+  var waitlist = [];
+  try { waitlist = JSON.parse(storageGet('klot_waitlist') || '[]'); } catch(e) {}
+  var wBody  = document.getElementById('leads-waitlist-body');
+  var wTable = document.getElementById('leads-waitlist-table');
+  var wEmpty = document.getElementById('leads-waitlist-empty');
+  if (wBody) {
+    if (!waitlist.length) {
+      if (wTable) wTable.style.display = 'none';
+      if (wEmpty) wEmpty.style.display = 'block';
+    } else {
+      if (wTable) wTable.style.display = '';
+      if (wEmpty) wEmpty.style.display = 'none';
+      wBody.innerHTML = waitlist.map(function(e, i) {
+        var d = new Date(e.ts).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+        return '<tr>' +
+          '<td style="font-family:\'Inter\',sans-serif">' + (e.email || '—') + '</td>' +
+          '<td>' + (e.product || '—') + '</td>' +
+          '<td style="font-size:11px;color:rgba(245,240,232,.45)">' + d + '</td>' +
+          '<td><button class="pm-act-btn del" onclick="deleteLeadEntry(\'klot_waitlist\',' + i + ')">&#128465;</button></td>' +
+        '</tr>';
+      }).join('');
+    }
+  }
+
+  // Subscribers
+  var subs = [];
+  try { subs = JSON.parse(storageGet('klot_subscribers') || '[]'); } catch(e) {}
+  var sBody  = document.getElementById('leads-subs-body');
+  var sTable = document.getElementById('leads-subs-table');
+  var sEmpty = document.getElementById('leads-subs-empty');
+  if (sBody) {
+    if (!subs.length) {
+      if (sTable) sTable.style.display = 'none';
+      if (sEmpty) sEmpty.style.display = 'block';
+    } else {
+      if (sTable) sTable.style.display = '';
+      if (sEmpty) sEmpty.style.display = 'none';
+      sBody.innerHTML = subs.map(function(e, i) {
+        var d = new Date(e.ts).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+        return '<tr>' +
+          '<td style="font-family:\'Inter\',sans-serif">' + (e.email || '—') + '</td>' +
+          '<td style="font-size:12px">' + (e.source || 'Popup') + '</td>' +
+          '<td style="font-size:11px;color:rgba(245,240,232,.45)">' + d + '</td>' +
+          '<td><button class="pm-act-btn del" onclick="deleteLeadEntry(\'klot_subscribers\',' + i + ')">&#128465;</button></td>' +
+        '</tr>';
+      }).join('');
+    }
+  }
+}
+
+function deleteLeadEntry(key, idx) {
+  var list = [];
+  try { list = JSON.parse(storageGet(key) || '[]'); } catch(e) {}
+  list.splice(idx, 1);
+  storageSet(key, JSON.stringify(list));
+  populateLeads();
+  showToast('Entry removed');
+}
+
+function clearLeads(type) {
+  var key = type === 'waitlist' ? 'klot_waitlist' : 'klot_subscribers';
+  var label = type === 'waitlist' ? 'waitlist' : 'subscriber list';
+  if (!confirm('Clear entire ' + label + '? This cannot be undone.')) return;
+  storageSet(key, '[]');
+  populateLeads();
+  showToast(label.charAt(0).toUpperCase() + label.slice(1) + ' cleared');
+}
+
+function exportLeads(type) {
+  var key   = type === 'waitlist' ? 'klot_waitlist' : 'klot_subscribers';
+  var list  = [];
+  try { list = JSON.parse(storageGet(key) || '[]'); } catch(e) {}
+  if (!list.length) { showToast('Nothing to export'); return; }
+  var headers, rows;
+  if (type === 'waitlist') {
+    headers = 'Email,Product,Product ID,Date';
+    rows = list.map(function(e) {
+      return '"' + (e.email||'') + '","' + (e.product||'') + '","' + (e.productId||'') + '","' + (e.ts||'') + '"';
+    });
+  } else {
+    headers = 'Email,Source,Date';
+    rows = list.map(function(e) {
+      return '"' + (e.email||'') + '","' + (e.source||'') + '","' + (e.ts||'') + '"';
+    });
+  }
+  dlFile([headers].concat(rows).join('\n'), 'text/csv', 'klot_' + type + '_' + today() + '.csv');
+  showToast('Exported ' + list.length + ' entries');
 }
 
 // ════════════════════════════════════════════════════
@@ -6208,6 +6359,17 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   window.kpopSubmit = function(e) {
     e.preventDefault();
+    var emailInput = e.target.querySelector('input[type="email"]');
+    var email = emailInput ? emailInput.value.trim() : '';
+    if (email) {
+      try {
+        var subs = JSON.parse(storageGet('klot_subscribers') || '[]');
+        if (!subs.some(function(s){ return s.email === email; })) {
+          subs.push({ email: email, source: 'KLOT x Bigbird popup', ts: new Date().toISOString() });
+          storageSet('klot_subscribers', JSON.stringify(subs));
+        }
+      } catch(e) {}
+    }
     closeKpop();
     showToast('You\'re on the waitlist! We\'ll be in touch soon.');
   };
