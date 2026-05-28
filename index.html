@@ -5063,7 +5063,7 @@ function syncExecPreviews() {
 var SESSION_TIMEOUT_MS  = 30 * 60 * 1000;   // 30 minutes
 var SESSION_WARN_MS     = 5  * 60 * 1000;   // warn at 5 min remaining
 var SESSION_CHECK_MS    = 10 * 1000;         // check every 10s
-var MFA_DEMO_CODE       = '';
+var MFA_CODE_HASH       = '2c18241aa7b36eb903657e1c0b7547f803b57107d0a3112313a227c34bc7dec0';
 var ADMIN_ROLE          = 'super_admin';     // roles: super_admin | editor | viewer
 var footerClickCount    = 0;
 var footerClickTimer    = null;
@@ -5194,30 +5194,28 @@ function verifyMFA() {
     return;
   }
 
-  // PRODUCTION: Replace this with TOTP verification against your backend
-  // e.g. verify HMAC-based one-time password using a library like otpauth
-  if (code !== MFA_DEMO_CODE) {
-    if (err) { err.textContent = 'Invalid verification code.'; err.classList.add('show'); }
-    logAdminAction('SECURITY', 'Failed MFA attempt');
-    var inp = document.getElementById('admin-mfa-code');
-    if (inp) { inp.value = ''; inp.focus(); }
-    return;
-  }
-
-  // MFA passed
-  mfaPassed = true;
-  var panel = document.getElementById('admin-mfa-panel');
-  if (panel) panel.style.display = 'none';
-  if (err) err.classList.remove('show');
-
-  // Complete login
-  if (pendingLoginUser) {
-    adminAuth = true;
-    closeAdminLogin();
-    openDashboard();
-    logAdminAction('AUTH', 'Admin login successful (MFA verified)');
-    pendingLoginUser = null;
-  }
+  sha256(code).then(function(h) {
+    if (h !== MFA_CODE_HASH) {
+      if (err) { err.textContent = 'Invalid verification code.'; err.classList.add('show'); }
+      logAdminAction('SECURITY', 'Failed MFA attempt');
+      var inp = document.getElementById('admin-mfa-code');
+      if (inp) { inp.value = ''; inp.focus(); }
+      return;
+    }
+    // MFA passed
+    mfaPassed = true;
+    var panel = document.getElementById('admin-mfa-panel');
+    if (panel) panel.style.display = 'none';
+    if (err) err.classList.remove('show');
+    // Complete login
+    if (pendingLoginUser) {
+      adminAuth = true;
+      closeAdminLogin();
+      openDashboard();
+      logAdminAction('AUTH', 'Admin login successful (MFA verified)');
+      pendingLoginUser = null;
+    }
+  });
 }
 
 // ── Session Expiry ──
