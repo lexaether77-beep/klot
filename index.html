@@ -1576,7 +1576,10 @@ input.pm-inp.pfx { padding-left:26px; }
       <div class="pdp-variants">
         <div>
           <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
-            <div class="pdp-variant-label" style="margin-bottom:0">Size</div>
+            <div style="display:flex;align-items:baseline;gap:10px">
+              <div class="pdp-variant-label" style="margin-bottom:0">Size</div>
+              <span id="pdp-eu-note" style="display:none;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);font-family:'Inter',sans-serif">EU Sizing</span>
+            </div>
             <button onclick="openSizeGuide()" style="background:none;border:none;padding:0;font-size:11px;font-family:'Inter',sans-serif;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;letter-spacing:.06em">Size Guide</button>
           </div>
           <div class="pdp-sizes" id="pdp-sizes"></div>
@@ -3141,6 +3144,39 @@ function fmtPrice(p) {
   return currentCurrency === 'NGN' ? '\u20A6' + p.priceNGN.toLocaleString() : '$' + p.priceUSD;
 }
 
+// \u2500\u2500 SIZE HELPERS \u2500\u2500
+var _CLOTHING_SIZES = ['XS','S','M','L','XL','XXL','XXXL'];
+function parseSizes(p) {
+  if (p.sizeList && p.sizeList.length) return p.sizeList;
+  var sz = (p.sizes || '').trim();
+  if (!sz) return ['XS','S','M','L','XL'];
+  // Kids age sizes e.g. "2yr-12yr" or contains "Y"
+  if (sz.toLowerCase().indexOf('yr') > -1 || sz.toUpperCase().indexOf('2Y') > -1) {
+    return ['2Y','4Y','6Y','8Y','10Y','12Y'];
+  }
+  if (sz.indexOf('-') > -1) {
+    var parts = sz.split('-');
+    var a = parts[0].trim(), b = parts[parts.length - 1].trim();
+    // Numeric range (EU shoe sizes e.g. "39-45")
+    var na = parseInt(a), nb = parseInt(b);
+    if (!isNaN(na) && !isNaN(nb) && na > 0 && nb > na) {
+      var r = []; for (var i = na; i <= nb; i++) r.push(String(i)); return r;
+    }
+    // Clothing text range e.g. "XS-XL", "S-XXL"
+    var ia = _CLOTHING_SIZES.indexOf(a.toUpperCase());
+    var ib = _CLOTHING_SIZES.indexOf(b.toUpperCase());
+    if (ia > -1 && ib > -1 && ib >= ia) return _CLOTHING_SIZES.slice(ia, ib + 1);
+  }
+  // Comma-separated e.g. "S,M,L,XL"
+  return sz.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+}
+function isFootwearProduct(p) {
+  var sizes = parseSizes(p);
+  if (!sizes.length) return false;
+  var first = parseInt(sizes[0]);
+  return !isNaN(first) && first >= 30 && first <= 50;
+}
+
 // ── NAVIGATION ──
 function showPage(page) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
@@ -3166,9 +3202,8 @@ function productCard(p) {
   var imgContent = p.imageUrl
     ? '<img src="' + p.imageUrl + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px" onerror="this.style.display=\'none\'" alt="' + p.name + '">'
     : '<span class="product-img-icon">' + LOGO_SVG('#0e1c38', 48) + '</span>';
-  var sizeOpts = (p.sizes && p.sizes.indexOf('yr') > -1)
-    ? '<option>2Y</option><option>4Y</option><option>6Y</option><option>8Y</option><option>10Y</option><option>12Y</option>'
-    : '<option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option>';
+  var _cardSizes = parseSizes(p);
+  var sizeOpts = _cardSizes.map(function(s){ return '<option value="' + s + '">' + s + '</option>'; }).join('');
   return '<div class="product-card" onclick="openPDP(' + p.id + ')">' +
     tagHtml +
     '<div class="product-img">' +
@@ -3184,7 +3219,7 @@ function productCard(p) {
     '<div class="product-info">' +
       '<div class="product-category">' + p.category + ' \u00B7 ' + (p.style || 'unisex') + '</div>' +
       '<div class="product-name">' + p.name + '</div>' +
-      '<div class="product-sizes">' + p.sizes + '</div>' +
+      '<div class="product-sizes">' + (isFootwearProduct(p) ? 'EU ' : '') + parseSizes(p).join(' · ') + '</div>' +
       '<div class="product-price">' + fmtPrice(p) + '</div>' +
     '</div>' +
   '</div>';
@@ -3273,17 +3308,15 @@ function openPDP(pid) {
   document.getElementById('pdp-price').innerHTML = primary + '<span class="pdp-price-alt">' + secondary + '</span>';
 
   // Sizes
-  var sizes = p.sizeList || (function(){
-    if (!p.sizes) return ['XS','S','M','L','XL'];
-    if (p.sizes.indexOf('-') > -1) {
-      var parts = p.sizes.split('-'), a = parseInt(parts[0]), b = parseInt(parts[1]);
-      if (!isNaN(a) && !isNaN(b)) { var r=[]; for(var i=a;i<=b;i++) r.push(String(i)); return r; }
-    }
-    return p.sizes.split(',').map(function(s){return s.trim();});
-  })();
+  var sizes = parseSizes(p);
+  var footwear = isFootwearProduct(p);
   document.getElementById('pdp-sizes').innerHTML = sizes.map(function(s,i){
-    return '<button class="pdp-size-btn' + (i===0?' active':'') + '" onclick="pdpSelectSize(this)">' + s + '</button>';
+    return '<button class="pdp-size-btn' + (i===0?' active':'') + '" onclick="pdpSelectSize(this)">' + (footwear ? 'EU&nbsp;' : '') + s + '</button>';
   }).join('');
+  // EU label on size row
+  var sizeLabel = document.querySelector('#pdp-sizes ~ span, .pdp-variant-label');
+  var euNote = document.getElementById('pdp-eu-note');
+  if (euNote) euNote.style.display = footwear ? 'inline' : 'none';
 
   // Stock indicator + sold-out CTA swap
   var stockEl   = document.getElementById('pdp-stock-indicator');
