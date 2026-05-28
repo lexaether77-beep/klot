@@ -1279,6 +1279,8 @@ input.pm-inp.pfx { padding-left:26px; }
 
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Product schema — updated dynamically when a product page is opened -->
+<script type="application/ld+json" id="pdp-schema-ld"></script>
 
 </head>
 <body>
@@ -1368,7 +1370,7 @@ input.pm-inp.pfx { padding-left:26px; }
   <section class="hero">
     <div class="hero-text">
       <p class="hero-eyebrow">The Klot Worx Company &middot; Est. 2026</p>
-      <h1 class="hero-title">Quality<br>Clothing<br><em>Redefined</em></h1>
+      <h1 class="hero-title">Luxury<br>Streetwear<br><em>Lagos</em></h1>
       <p class="hero-sub">Built different. In God&rsquo;s time. Crafted for those who move with purpose and refuse to blend in.</p>
       <div class="hero-btns">
         <button class="btn-primary" onclick="showPage('shop')">Shop the Collection</button>
@@ -1589,6 +1591,7 @@ input.pm-inp.pfx { padding-left:26px; }
       <div class="pdp-cta" id="pdp-cta-main">
         <button class="pdp-add-btn" onclick="pdpAddToCart()">Add to Bag</button>
         <button class="pdp-buy-btn" onclick="pdpBuyNow()">Buy Now</button>
+        <button id="pdp-wl-btn" onclick="pdpToggleWishlist()" title="Save to wishlist" style="background:none;border:1px solid var(--border);color:var(--navy);padding:18px 16px;font-size:20px;cursor:pointer;transition:all .2s;flex-shrink:0" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">&#9825;</button>
       </div>
       <div id="pdp-cta-soldout" style="display:none;margin-bottom:24px">
         <button style="width:100%;padding:16px;background:transparent;border:1px solid rgba(245,240,232,.25);color:var(--cream);font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='rgba(245,240,232,.25)'" onclick="openProductWaitlist()">Notify Me When Available</button>
@@ -3175,7 +3178,7 @@ function productCard(p) {
       '<div class="product-actions">' +
         '<select class="size-select" id="size-' + p.id + '" onclick="event.stopPropagation()"><option value="">Size</option>' + sizeOpts + '</select>' +
         '<button class="add-cart-btn" onclick="event.stopPropagation();addToCart(' + p.id + ')">Add to Bag</button>' +
-        '<button class="wishlist-btn" onclick="event.stopPropagation()">\u2661</button>' +
+        '<button class="wishlist-btn" id="wl-card-'+p.id+'" onclick="event.stopPropagation();toggleWishlist('+p.id+',this)" title="Save to wishlist">'+(isWishlisted(p.id)?'\u2665':'\u2661')+'</button>' +
       '</div>' +
     '</div>' +
     '<div class="product-info">' +
@@ -3329,6 +3332,32 @@ function openPDP(pid) {
   // Reset tab
   pdpTab('highlights', document.querySelector('.pdp-tab-btn'));
 
+  // Wishlist button state on PDP
+  var pdpWlBtn = document.getElementById('pdp-wl-btn');
+  if (pdpWlBtn) pdpWlBtn.innerHTML = isWishlisted(p.id) ? '&#9829;' : '&#9825;';
+
+  // Product schema (JSON-LD) for Google rich results
+  var schemaEl = document.getElementById('pdp-schema-ld');
+  if (schemaEl) {
+    schemaEl.textContent = JSON.stringify({
+      '@context': 'https://schema.org/',
+      '@type': 'Product',
+      name: p.name,
+      description: p.description || p.tagline || 'Luxury streetwear from KLOT — Lagos.',
+      image: p.imageUrl ? ['https://www.klotworld.com/' + p.imageUrl] : [],
+      sku: p.sku || ('KL-' + p.id),
+      brand: { '@type': 'Brand', name: 'KLOT' },
+      offers: {
+        '@type': 'Offer',
+        url: 'https://www.klotworld.com',
+        priceCurrency: 'NGN',
+        price: p.priceNGN,
+        availability: (p.stock === 0) ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+        seller: { '@type': 'Organization', name: 'KLOT' }
+      }
+    });
+  }
+
   showPage('pdp');
   window.scrollTo({top:0,behavior:'instant'});
 }
@@ -3368,6 +3397,35 @@ function pdpPanZoom(e) {
   var tx = (0.5 - x) * (scale - 1) * 100 / scale;
   var ty = (0.5 - y) * (scale - 1) * 100 / scale;
   img.style.transform = 'scale(' + scale + ') translate(' + tx + '%, ' + ty + '%)';
+}
+
+// ── WISHLIST ──
+function getWishlist() {
+  try { return JSON.parse(storageGet('klot_wishlist') || '[]'); } catch(e) { return []; }
+}
+function saveWishlist(ids) { storageSet('klot_wishlist', JSON.stringify(ids)); }
+function isWishlisted(pid) { return getWishlist().indexOf(pid) > -1; }
+function toggleWishlist(pid, btn) {
+  var ids = getWishlist();
+  var idx = ids.indexOf(pid);
+  if (idx > -1) {
+    ids.splice(idx, 1);
+    if (btn) btn.innerHTML = '&#9825;';
+    showToast('Removed from wishlist');
+  } else {
+    ids.push(pid);
+    if (btn) btn.innerHTML = '&#9829;';
+    showToast('Saved to wishlist');
+  }
+  saveWishlist(ids);
+  // Sync any other card buttons for this product
+  var card = document.getElementById('wl-card-' + pid);
+  if (card && card !== btn) card.innerHTML = ids.indexOf(pid) > -1 ? '&#9829;' : '&#9825;';
+}
+function pdpToggleWishlist() {
+  if (!_pdpProduct) return;
+  var btn = document.getElementById('pdp-wl-btn');
+  toggleWishlist(_pdpProduct.id, btn);
 }
 
 function pdpSelectSize(btn) {
@@ -3420,6 +3478,7 @@ function addToCart(pid, size) {
   if (!size) { showToast('Please select a size'); return; }
   var ex = cart.find(function(c){return c.id===pid && c.size===size;});
   if (ex) { ex.qty++; } else { cart.push(Object.assign({}, p, {size:size, qty:1})); }
+  persistCart();
   updateCartDisplay();
   showToast(p.name + ' added to bag');
 }
@@ -3487,7 +3546,12 @@ function updateCartDisplay() {
 
 function removeFromCart(idx) {
   cart.splice(idx, 1);
+  persistCart();
   updateCartDisplay();
+}
+
+function persistCart() {
+  storageSet('klot_cart', JSON.stringify(cart));
 }
 
 function toggleCart() {
@@ -5083,6 +5147,7 @@ function initiatePaystack() {
       })();
       // Clear cart
       cart = [];
+      persistCart();
       updateCartDisplay();
       populateAdmin();
       // Show success
@@ -5562,6 +5627,32 @@ pmBulkStatus = function(s) {
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
   loadPersistedProducts();
+
+  // Restore abandoned cart from localStorage
+  (function() {
+    try {
+      var saved = storageGet('klot_cart');
+      if (!saved) return;
+      var savedCart = JSON.parse(saved);
+      if (!Array.isArray(savedCart) || !savedCart.length) return;
+      // Re-hydrate cart items against current product list so prices are fresh
+      savedCart.forEach(function(item) {
+        var p = products.find(function(x){ return x.id === item.id; });
+        if (!p) return;
+        var ex = cart.find(function(c){ return c.id===item.id && c.size===item.size; });
+        if (ex) { ex.qty += item.qty; } else { cart.push(Object.assign({}, p, {size:item.size, qty:item.qty})); }
+      });
+      if (cart.length) {
+        updateCartDisplay();
+        // Show resume banner after a short delay
+        setTimeout(function() {
+          var count = cart.reduce(function(s,i){return s+i.qty;},0);
+          showToast('You left ' + count + ' item' + (count>1?'s':'') + ' in your bag — tap Bag to resume');
+        }, 1800);
+      }
+    } catch(e) {}
+  })();
+
   showPage('home');
   // Apply auto-detected/saved currency toggle state
   (function() {
