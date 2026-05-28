@@ -2954,6 +2954,404 @@ document.addEventListener('DOMContentLoaded', function() {
   })();
 });
 
+
+// ── Storefront functions (restored) ──
+// ── Contact form submit ──
+async function cfSubmit() {
+  var fname   = (document.getElementById('cf-fname')||{}).value||'';
+  var lname   = (document.getElementById('cf-lname')||{}).value||'';
+  var email   = (document.getElementById('cf-email')||{}).value||'';
+  var subject = (document.getElementById('cf-subject')||{}).value||'General Inquiry';
+  var msg     = (document.getElementById('cf-msg')||{}).value||'';
+
+  if(!fname.trim()||!email.trim()||!msg.trim()) { showToast('Please fill in your name, email and message.'); return; }
+
+  var btn = document.getElementById('cf-submit-btn');
+  if(btn) { btn.disabled=true; btn.textContent='Sending…'; }
+
+  var html = '<div style="font-family:sans-serif;max-width:600px;padding:32px">'
+    +'<h2 style="margin:0 0 8px">New contact message — '+escHtml(subject)+'</h2>'
+    +'<p style="color:#555;margin:0 0 24px">From the KLOT website contact form</p>'
+    +'<table style="width:100%;border-collapse:collapse">'
+    +'<tr><td style="padding:8px 0;color:#888;width:100px">Name</td><td style="padding:8px 0"><strong>'+escHtml(fname+' '+lname)+'</strong></td></tr>'
+    +'<tr><td style="padding:8px 0;color:#888">Email</td><td style="padding:8px 0"><a href="mailto:'+escHtml(email)+'">'+escHtml(email)+'</a></td></tr>'
+    +'<tr><td style="padding:8px 0;color:#888">Subject</td><td style="padding:8px 0">'+escHtml(subject)+'</td></tr>'
+    +'</table>'
+    +'<hr style="margin:24px 0;border:none;border-top:1px solid #eee">'
+    +'<p style="white-space:pre-wrap;line-height:1.7">'+escHtml(msg)+'</p>'
+    +'</div>';
+
+  try {
+    var emailSubject = 'Contact: '+subject+' — '+fname+' '+lname;
+    var [sendRes, storeRes] = await Promise.all([
+      fetch('/api/send-email', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ to:'info@klotworld.com', subject:emailSubject, html:html, fromName:'KLOT Website', fromEmail:'hello@klotworld.com' })
+      }),
+      fetch('/api/store-contact', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ from:fname+' '+lname+' <'+email+'>', subject:emailSubject, html:html, text:msg })
+      })
+    ]);
+    var data = await sendRes.json();
+    if(data.id) {
+      showToast('Message sent! We\'ll be in touch within 24 hours.');
+      ['cf-fname','cf-lname','cf-email','cf-msg'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+      var sel=document.getElementById('cf-subject'); if(sel){sel.value='';sel.closest('.cf-field').classList.remove('has-val');}
+    } else {
+      showToast('Could not send — please email us directly at info@klotworld.com');
+    }
+  } catch(e) {
+    showToast('Network error — please email us at info@klotworld.com');
+  } finally {
+    if(btn) { btn.disabled=false; btn.textContent='Send Message'; }
+  }
+}
+
+
+function showToast(msg){
+  var t=document.getElementById('toast'); if(!t)return;
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+
+
+// ── CUSTOMERS DATA ──
+// Seeded with demo customers; new customers added on each Paystack payment
+var _demoCustomers = [
+  {name:'Amara Okafor',    email:'amara@example.com',   phone:'+234 802 111 2233', orders:8,  total:320000, lastOrder:'Nov 12 2025', location:'Lagos',        address:'',status:'vip'},
+  {name:'Emeka Nwosu',     email:'emeka@example.com',   phone:'+234 803 222 3344', orders:5,  total:210000, lastOrder:'Nov 12 2025', location:'Abuja',        address:'',status:'active'},
+  {name:'Fatima Al-Hassan',email:'fatima@example.com',  phone:'+234 805 333 4455', orders:12, total:580000, lastOrder:'Nov 11 2025', location:'Kano',         address:'',status:'vip'},
+  {name:'Chidera Eze',     email:'chidera@example.com', phone:'+234 806 444 5566', orders:3,  total:145000, lastOrder:'Nov 11 2025', location:'Port Harcourt',address:'',status:'active'},
+  {name:'Ngozi Williams',  email:'ngozi@example.com',   phone:'+234 807 555 6677', orders:9,  total:410000, lastOrder:'Nov 10 2025', location:'Lagos',        address:'',status:'vip'},
+  {name:'Ibrahim Musa',    email:'ibrahim@example.com', phone:'+234 809 666 7788', orders:6,  total:265000, lastOrder:'Nov 10 2025', location:'Kaduna',       address:'',status:'active'}
+];
+var customers = (function() {
+  try { var s = storageGet('klot_customers'); return s ? JSON.parse(s) : _demoCustomers; } catch(e) { return _demoCustomers; }
+})();
+function persistCustomers() { storageSet('klot_customers', JSON.stringify(customers)); }
+
+
+function addOrUpdateCustomer(customerData, orderTotal) {
+  // customerData = {firstName, lastName, email, phone, city, state}
+  var fullName = customerData.firstName + ' ' + customerData.lastName;
+  var location = [customerData.city, customerData.state].filter(Boolean).join(', ') || 'Nigeria';
+  var today    = new Date().toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'});
+
+  // Check if customer already exists by email
+  var existing = customers.find(function(c) {
+    return c.email.toLowerCase() === customerData.email.toLowerCase();
+  });
+
+  if (existing) {
+    existing.orders++;
+    existing.total    += orderTotal;
+    existing.lastOrder = today;
+    if (customerData.address) existing.address = customerData.address;
+    if (existing.location === 'Nigeria' && location !== 'Nigeria') existing.location = location;
+    if (existing.orders >= 5) existing.status = 'vip';
+  } else {
+    customers.unshift({
+      name:      fullName,
+      email:     customerData.email,
+      phone:     customerData.phone || '',
+      orders:    1,
+      total:     orderTotal,
+      lastOrder: today,
+      location:  location,
+      address:   customerData.address || '',
+      status:    'active'
+    });
+  }
+  persistCustomers();
+  populateCustomers();
+}
+
+
+
+// Replace with your actual Paystack public key
+var PAYSTACK_PUBLIC_KEY = 'pk_test_f73aa5c0e73c5f9d5fca14d88f3506036eee24a2';
+
+function openCheckout() {
+  if (!cart.length) { showToast('Your bag is empty'); return; }
+  toggleCart(); // close cart sidebar
+
+  // Populate order summary
+  var list = document.getElementById('checkout-items-list');
+  if (list) {
+    list.innerHTML = cart.map(function(item) {
+      var imgHtml = item.imageUrl
+        ? '<img src="' + item.imageUrl + '" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.style.display=\'none\'">' 
+        : '<svg viewBox="0 0 60 70" fill="none" style="width:22px;opacity:.3"><rect x="0" y="0" width="17" height="28" fill="#f5f0e8"/><rect x="0" y="32" width="17" height="38" fill="#f5f0e8"/><rect x="21.5" y="10" width="17" height="18" fill="#f5f0e8"/><rect x="21.5" y="32" width="17" height="38" fill="#f5f0e8"/><rect x="43" y="0" width="17" height="28" fill="#f5f0e8"/><rect x="43" y="32" width="17" height="38" fill="#f5f0e8"/></svg>';
+      var lineTotal = currentCurrency === 'NGN'
+        ? '₦' + (item.priceNGN * item.qty).toLocaleString()
+        : '$' + (item.priceUSD * item.qty).toFixed(2);
+      return '<div class="co-item">' +
+        '<div class="co-item-img">' + imgHtml + '</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div class="co-item-name">' + item.name + '</div>' +
+          '<div class="co-item-meta">Size: ' + item.size + ' &nbsp;&middot;&nbsp; Qty: ' + item.qty + '</div>' +
+        '</div>' +
+        '<div class="co-item-price">' + lineTotal + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Grand total
+  var totalNGN = cart.reduce(function(s,i) { return s + i.priceNGN * i.qty; }, 0);
+  var totalUSD = cart.reduce(function(s,i) { return s + i.priceUSD * i.qty; }, 0);
+  var grandEl = document.getElementById('checkout-grand-total');
+  if (grandEl) grandEl.textContent = currentCurrency === 'NGN'
+    ? '₦' + totalNGN.toLocaleString()
+    : '$' + totalUSD.toFixed(2);
+
+  // Currency note — Paystack charges in NGN, show USD equivalent info
+  var noteEl = document.getElementById('co-currency-note');
+  if (noteEl) {
+    if (currentCurrency === 'USD') {
+      noteEl.textContent = 'Payment processed in NGN (₦' + totalNGN.toLocaleString() + '). USD displayed for reference only.';
+      noteEl.classList.add('show');
+    } else {
+      noteEl.classList.remove('show');
+    }
+  }
+
+  // Update pay button label
+  updatePayLabel();
+
+  // Clear errors
+  var errEl = document.getElementById('checkout-error'); if (errEl) errEl.textContent = '';
+
+  document.getElementById('checkout-overlay').classList.add('open');
+  setTimeout(function() { var el=document.getElementById('co-firstname'); if(el)el.focus(); }, 200);
+}
+
+function closeCheckout(e) {
+  if (e && e.target !== document.getElementById('checkout-overlay')) return;
+  closeCheckoutDirect();
+}
+function closeCheckoutDirect() {
+  document.getElementById('checkout-overlay').classList.remove('open');
+}
+
+function updatePayLabel() {
+  var totalNGN = cart.reduce(function(s,i) { return s + i.priceNGN * i.qty; }, 0);
+  var el = document.getElementById('checkout-pay-label');
+  if (el) el.textContent = 'Pay ₦' + totalNGN.toLocaleString();
+}
+
+function validateCheckoutForm() {
+  var errEl = document.getElementById('checkout-error');
+  var fn = (document.getElementById('co-firstname').value || '').trim();
+  var ln = (document.getElementById('co-lastname').value  || '').trim();
+  var em = (document.getElementById('co-email').value     || '').trim();
+  var ad = (document.getElementById('co-address').value   || '').trim();
+
+  if (!fn || !ln)  { errEl.textContent = 'Please enter your full name.'; return null; }
+  if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { errEl.textContent = 'Please enter a valid email address.'; return null; }
+  if (!ad) { errEl.textContent = 'Please enter your delivery address.'; return null; }
+  errEl.textContent = '';
+
+  return {
+    firstName: fn,
+    lastName:  ln,
+    email:     em,
+    phone:     (document.getElementById('co-phone').value   || '').trim(),
+    address:   ad,
+    city:      (document.getElementById('co-city').value    || '').trim(),
+    state:     (document.getElementById('co-state').value   || '').trim()
+  };
+}
+
+function initiatePaystack() {
+  var customer = validateCheckoutForm();
+  if (!customer) return;
+
+  var totalNGN = cart.reduce(function(s,i) { return s + i.priceNGN * i.qty; }, 0);
+  // Paystack amount is in kobo (NGN x 100)
+  var amountKobo = totalNGN * 100;
+
+  // Build order reference
+  var ref = 'MN-' + Date.now() + '-' + Math.random().toString(36).substr(2,5).toUpperCase();
+
+  // Build items summary for metadata
+  var itemsSummary = cart.map(function(i) {
+    return i.name + ' (x' + i.qty + ', size ' + i.size + ')';
+  }).join('; ');
+
+  var btn = document.getElementById('checkout-pay-btn');
+  if (btn) { btn.disabled = true; document.getElementById('checkout-pay-label').textContent = 'Opening payment…'; }
+
+  // Check Paystack is loaded
+  if (typeof PaystackPop === 'undefined') {
+    var errEl = document.getElementById('checkout-error');
+    if (errEl) errEl.textContent = 'Payment gateway not loaded. Please check your internet connection and try again.';
+    if (btn) { btn.disabled = false; updatePayLabel(); }
+    return;
+  }
+
+  var handler = PaystackPop.setup({
+    key:       PAYSTACK_PUBLIC_KEY,
+    email:     customer.email,
+    amount:    amountKobo,
+    currency:  'NGN',
+    ref:       ref,
+    firstname: customer.firstName,
+    lastname:  customer.lastName,
+    phone:     customer.phone,
+    metadata: {
+      custom_fields: [
+        { display_name: 'Customer Name',     variable_name: 'customer_name',    value: customer.firstName + ' ' + customer.lastName },
+        { display_name: 'Delivery Address',  variable_name: 'delivery_address', value: customer.address + ', ' + customer.city + ', ' + customer.state },
+        { display_name: 'Items Ordered',     variable_name: 'items_ordered',    value: itemsSummary },
+        { display_name: 'Order Reference',   variable_name: 'order_reference',  value: ref }
+      ]
+    },
+    onClose: function() {
+      if (btn) { btn.disabled = false; updatePayLabel(); }
+      showToast('Payment cancelled');
+    },
+    callback: function(response) {
+      // Payment successful
+      closeCheckoutDirect();
+      // Add to orders list
+      orders.unshift({
+        id: ref,
+        customer: customer.firstName + ' ' + customer.lastName,
+        email: customer.email,
+        phone: customer.phone || '',
+        address: (customer.address || '') + (customer.city ? ', ' + customer.city : '') + (customer.state ? ', ' + customer.state : ''),
+        items: cart.reduce(function(s,i) { return s+i.qty; }, 0),
+        itemDetails: cart.map(function(i) { return { name: i.name, size: i.size, qty: i.qty, price: i.priceNGN }; }),
+        total: totalNGN,
+        status: 'processing',
+        date: new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
+      });
+      // Add/update customer record
+      addOrUpdateCustomer(customer, totalNGN);
+      // Auto-send order confirmation email
+      (function() {
+        var itemsText = cart.map(function(i){ return i.qty+'× '+i.name+' ('+i.size+')'; }).join(', ');
+        var confirmHtml = MC_TEMPLATES['order-confirmation'].render({
+          name: customer.firstName,
+          orderId: ref,
+          items: itemsText,
+          total: '₦'+totalNGN.toLocaleString(),
+          date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})
+        });
+        fetch('/api/send-email', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ to:customer.email, subject:'Your KLOT order is confirmed — '+ref, html:confirmHtml, fromName:'KLOT', fromEmail:'hello@klotworld.com' })
+        }).then(function(r){ return r.json(); }).then(function(d){
+          if(!d.id) { console.error('[KLOT] Confirmation email failed:', JSON.stringify(d)); showToast('Order confirmed! (Confirmation email could not be sent — check admin logs)'); }
+        }).catch(function(e){ console.error('[KLOT] Confirmation email error:', e); });
+      })();
+      // Clear cart
+      cart = [];
+      updateCartDisplay();
+      populateAdmin();
+      // Show success
+      var refEl = document.getElementById('order-success-ref');
+      if (refEl) refEl.textContent = 'Order Ref: ' + response.reference;
+      document.getElementById('order-success-overlay').classList.add('open');
+      if (btn) { btn.disabled = false; updatePayLabel(); }
+    }
+  });
+
+  handler.openIframe();
+}
+
+
+// ── Product Waitlist ──
+function openProductWaitlist() {
+  var nameEl = document.getElementById('wl-product-name');
+  if (nameEl && _pdpProduct) nameEl.textContent = _pdpProduct.name;
+  var emailEl = document.getElementById('wl-email'); if (emailEl) emailEl.value = '';
+  var msgEl = document.getElementById('wl-msg'); if (msgEl) msgEl.style.display = 'none';
+  document.getElementById('wl-overlay').classList.add('open');
+}
+function closeProductWaitlist() {
+  document.getElementById('wl-overlay').classList.remove('open');
+}
+function submitProductWaitlist() {
+  var email = (document.getElementById('wl-email') || {}).value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email'); return; }
+  var key = 'klot_waitlist';
+  var list = [];
+  try { list = JSON.parse(storageGet(key) || '[]'); } catch(e) {}
+  var entry = { email: email, product: _pdpProduct ? _pdpProduct.name : '', productId: _pdpProduct ? _pdpProduct.id : null, ts: new Date().toISOString() };
+  list.push(entry);
+  storageSet(key, JSON.stringify(list));
+  var msgEl = document.getElementById('wl-msg');
+  if (msgEl) { msgEl.textContent = "You're on the list! We'll email you when it's back."; msgEl.style.display = 'block'; }
+  setTimeout(closeProductWaitlist, 2200);
+}
+
+
+// ── Size Guide ──
+function openSizeGuide() {
+  document.getElementById('sg-overlay').classList.add('open');
+}
+function closeSizeGuide() {
+  document.getElementById('sg-overlay').classList.remove('open');
+}
+function sgTab(id, btn) {
+  ['tops','bottoms','kids'].forEach(function(t) {
+    var el = document.getElementById('sg-' + t);
+    if (el) el.style.display = t === id ? '' : 'none';
+  });
+  document.querySelectorAll('.sg-tab').forEach(function(b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+}
+
+function closeOrderSuccess() {
+  document.getElementById('order-success-overlay').classList.remove('open');
+  showPage(lastShopPage);
+}
+
+
+// ── EXECUTIVE PHOTO UPDATE ──
+function updateExecPhoto(slug, input) {
+  if (!input.files || !input.files[0]) return;
+  var file  = input.files[0];
+  var maxMB = 5;
+
+  if (file.size > maxMB * 1024 * 1024) {
+    showToast('Photo must be under ' + maxMB + 'MB');
+    return;
+  }
+
+  var wrap = document.getElementById('photo-wrap-' + slug);
+  if (wrap) wrap.classList.add('team-photo-uploading');
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = document.getElementById('team-photo-' + slug);
+    if (!img) return;
+
+    var newImg    = new Image();
+    newImg.onload = function() {
+      img.src = e.target.result;
+      img.style.display = 'block';
+      if (wrap) wrap.classList.remove('team-photo-uploading');
+      img.classList.add('team-photo-updated');
+      setTimeout(function() { img.classList.remove('team-photo-updated'); }, 700);
+      showToast('Photo updated successfully');
+    };
+    newImg.onerror = function() {
+      if (wrap) wrap.classList.remove('team-photo-uploading');
+      showToast('Could not load image — try a different file');
+    };
+    newImg.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  // Reset input so same file can be re-selected if needed
+  input.value = '';
+}
+
 </script>
 <!-- Klot x Bigbird Waitlist Popup -->
 <div class="kpop-overlay" id="kpop-overlay" role="dialog" aria-modal="true" aria-labelledby="kpop-heading">

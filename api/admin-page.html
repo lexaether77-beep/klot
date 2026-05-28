@@ -1170,7 +1170,7 @@ function sha256(msg) {
   });
 }
 
-function openAdminLogin() {
+function openAdminLogin() { window.location.href = "/admin"; return; /* original below */
   var now = Date.now();
   if (lockoutUntil > now) { showLockout(Math.ceil((lockoutUntil-now)/60000)); document.getElementById('admin-login-overlay').classList.add('open'); return; }
   if (adminAuth) { document.getElementById('admin-panel').classList.add('open'); populateAdmin(); return; }
