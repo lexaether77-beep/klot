@@ -3,7 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KLOT — Victory Through Harmony</title>
+<title>KLOT | Luxury Streetwear &amp; Performance Clothing | Lagos</title>
+<meta name="description" content="KLOT is a Lagos-founded luxury streetwear and performance brand. Shop unisex fashion, activewear and kids clothing crafted with athletic precision. Victory Through Harmony.">
+<link rel="canonical" href="https://www.klotworld.com">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.klotworld.com">
+<meta property="og:title" content="KLOT | Luxury Streetwear &amp; Performance Clothing | Lagos">
+<meta property="og:description" content="Lagos-founded luxury streetwear and performance brand. Unisex fashion, activewear and kids clothing crafted with athletic precision.">
+<meta property="og:image" content="https://www.klotworld.com/klot_website/klot/assets/images/hero_image.jpeg">
+<meta property="og:site_name" content="KLOT">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KLOT | Luxury Streetwear &amp; Performance Clothing">
+<meta name="twitter:description" content="Lagos-founded luxury streetwear and performance brand. Victory Through Harmony.">
+<meta name="twitter:image" content="https://www.klotworld.com/klot_website/klot/assets/images/hero_image.jpeg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 44 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='22' cy='22' rx='18' ry='20' stroke='%23FF2D2D' stroke-width='6' fill='none'/%3E%3Cline x1='4' y1='22' x2='40' y2='22' stroke='%23FF2D2D' stroke-width='6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -381,6 +395,12 @@ footer { background:var(--navy); padding:80px 40px 40px; }
 /* ── Admin Toggle ── */
 #admin-toggle { position:fixed; bottom:24px; right:24px; background:var(--navy); color:var(--green); border:1px solid var(--accent); padding:12px 20px; font-size:10px; letter-spacing:.15em; text-transform:uppercase; font-family:'Inter',sans-serif; z-index:200; transition:all .2s; }
 #admin-toggle:hover { background:var(--green); color:var(--navy); }
+
+/* ── WhatsApp Float Button ── */
+.wa-float { position:fixed; bottom:28px; right:28px; z-index:250; width:56px; height:56px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(37,211,102,.45); text-decoration:none; transition:transform .2s,box-shadow .2s; }
+.wa-float:hover { transform:scale(1.08); box-shadow:0 6px 28px rgba(37,211,102,.6); }
+.wa-float svg { width:28px; height:28px; fill:#fff; }
+@media(max-width:600px){ .wa-float { bottom:20px; right:16px; width:50px; height:50px; } .wa-float svg { width:24px; height:24px; } }
 
 /* ── Klot x Bigbird Waitlist Popup ── */
 .kpop-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:300; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .35s ease; backdrop-filter:blur(2px); }
@@ -1402,7 +1422,7 @@ input.pm-inp.pfx { padding-left:26px; }
     <div class="categories">
       <div class="cat-card" onclick="goToCategory('fashion')" role="button" aria-label="Browse Fashion">
         <div class="cat-bg cat-bg-1">
-          <img class="cat-bg-img" src="klot_website/klot/assets/images/fashion_section.jpeg" alt="KLOT Fashion" onerror="this.style.display='none'">
+          <img class="cat-bg-img" src="klot_website/klot/assets/images/fashion_section.jpeg" loading="lazy" alt="KLOT Fashion" onerror="this.style.display='none'">
         </div>
         <div class="cat-overlay"></div>
         <span class="cat-label">KLOT / Fashion</span>
@@ -1414,7 +1434,7 @@ input.pm-inp.pfx { padding-left:26px; }
       </div>
       <div class="cat-card" onclick="goToCategory('sports')" role="button" aria-label="Browse Sports">
         <div class="cat-bg cat-bg-2">
-          <img class="cat-bg-img" src="klot_website/klot/assets/images/sports_section.jpeg" alt="KLOT Sports" onerror="this.style.display='none'">
+          <img class="cat-bg-img" src="klot_website/klot/assets/images/sports_section.jpeg" loading="lazy" alt="KLOT Sports" onerror="this.style.display='none'">
         </div>
         <div class="cat-overlay"></div>
         <span class="cat-label">KLOT / Sports</span>
@@ -1426,7 +1446,7 @@ input.pm-inp.pfx { padding-left:26px; }
       </div>
       <div class="cat-card" onclick="goToCategory('kids')" role="button" aria-label="Browse Kids">
         <div class="cat-bg cat-bg-3">
-          <img class="cat-bg-img" src="klot_website/klot/assets/images/kids_section.jpeg" alt="KLOT Kids" onerror="this.style.display='none'">
+          <img class="cat-bg-img" src="klot_website/klot/assets/images/kids_section.jpeg" loading="lazy" alt="KLOT Kids" onerror="this.style.display='none'">
         </div>
         <div class="cat-overlay"></div>
         <span class="cat-label">KLOT / Kids</span>
@@ -1443,7 +1463,7 @@ input.pm-inp.pfx { padding-left:26px; }
   <div style="background:var(--cream);padding:100px 40px">
     <div class="promise-grid" style="max-width:1400px;margin:0 auto">
       <div class="promise-image">
-        <img src="klot_website/klot/assets/images/klot_promise.jpeg" alt="The KLOT Promise" onerror="this.style.display='none'">
+        <img src="klot_website/klot/assets/images/klot_promise.jpeg" alt="The KLOT Promise" loading="lazy" onerror="this.style.display='none'">
       </div>
       <div>
         <span class="section-label">The KLOT Promise</span>
@@ -1464,12 +1484,12 @@ input.pm-inp.pfx { padding-left:26px; }
     <h2 class="section-title">&#64;KLOT</h2>
     <span class="instagram-handle">on Instagram</span>
     <div class="instagram-grid">
-      <div class="insta-item" style="background:linear-gradient(135deg,#1a2d42,#0d1b2a)">&#127939;<div class="insta-overlay">View</div></div>
-      <div class="insta-item" style="background:linear-gradient(135deg,#2a1a0d,#1a2d42)">&#128251;<div class="insta-overlay">View</div></div>
-      <div class="insta-item" style="background:linear-gradient(135deg,#0d2a1a,#1a2d42)">&#128118;<div class="insta-overlay">View</div></div>
-      <div class="insta-item" style="background:linear-gradient(135deg,#1a0d2a,#1a2d42)">&#10024;<div class="insta-overlay">View</div></div>
-      <div class="insta-item" style="background:linear-gradient(135deg,#2a0d0d,#1a2d42)">&#129488;<div class="insta-overlay">View</div></div>
-      <div class="insta-item" style="background:linear-gradient(135deg,#0d1a2a,#2a1a0d)">&#127919;<div class="insta-overlay">View</div></div>
+      <a href="https://instagram.com/klotworld" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#1a2d42,#0d1b2a);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotworld</span><div class="insta-overlay">View on Instagram</div></a>
+      <a href="https://instagram.com/klotworld" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#2a1a0d,#1a2d42);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotworld</span><div class="insta-overlay">View on Instagram</div></a>
+      <a href="https://instagram.com/klotworld" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#0d2a1a,#1a2d42);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotworld</span><div class="insta-overlay">View on Instagram</div></a>
+      <a href="https://instagram.com/klotworld" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#1a0d2a,#1a2d42);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotworld</span><div class="insta-overlay">View on Instagram</div></a>
+      <a href="https://instagram.com/klotworld" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#2a0d0d,#1a2d42);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotworld</span><div class="insta-overlay">View on Instagram</div></a>
+      <a href="https://instagram.com/klotworld" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#0d1a2a,#2a1a0d);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotworld</span><div class="insta-overlay">View on Instagram</div></a>
     </div>
   </div>
 
@@ -1577,42 +1597,42 @@ input.pm-inp.pfx { padding-left:26px; }
   </div>
   <div style="padding:60px 40px;max-width:1400px;margin:0 auto">
     <div class="collections-grid" style="margin:0">
-      <div class="collection-card" onclick="showPage('shop')">
+      <div class="collection-card" onclick="goToCategory('fashion')" role="button" aria-label="Shop Fashion — Ivory &amp; Indigo">
         <div class="collection-bg coll-1"></div>
         <div class="coll-icon"><svg viewBox="0 0 60 70" fill="none" style="width:100px;opacity:.08"><rect x="0" y="0" width="17" height="28" fill="#2a6b2a"/><rect x="0" y="32" width="17" height="38" fill="#2a6b2a"/><rect x="21.5" y="10" width="17" height="18" fill="#2a6b2a"/><rect x="21.5" y="32" width="17" height="38" fill="#2a6b2a"/><rect x="43" y="0" width="17" height="28" fill="#2a6b2a"/><rect x="43" y="32" width="17" height="38" fill="#2a6b2a"/></svg></div>
         <div class="collection-info">
           <p class="collection-season">SS 2025 &middot; Flagship</p>
           <h3>Ivory &amp; Indigo</h3>
           <p>Crisp whites against deep navy, structure meeting softness.</p>
-          <span class="collection-link">Explore &#8594;</span>
+          <span class="collection-link">Shop Fashion &#8594;</span>
         </div>
       </div>
-      <div class="collection-card tall" onclick="showPage('shop')">
+      <div class="collection-card tall" onclick="goToCategory('sports')" role="button" aria-label="Shop Sports — Motion Study">
         <div class="collection-bg coll-2"></div>
         <div class="coll-icon"><svg viewBox="0 0 60 70" fill="none" style="width:80px;opacity:.08"><rect x="0" y="0" width="17" height="28" fill="#2a6b2a"/><rect x="0" y="32" width="17" height="38" fill="#2a6b2a"/><rect x="21.5" y="10" width="17" height="18" fill="#2a6b2a"/><rect x="21.5" y="32" width="17" height="38" fill="#2a6b2a"/><rect x="43" y="0" width="17" height="28" fill="#2a6b2a"/><rect x="43" y="32" width="17" height="38" fill="#2a6b2a"/></svg></div>
         <div class="collection-info">
           <p class="collection-season">AW 2025 &middot; Active</p>
           <h3>Motion Study</h3>
           <p>Performance refined to its purest form.</p>
-          <span class="collection-link">Explore &#8594;</span>
+          <span class="collection-link">Shop Sports &#8594;</span>
         </div>
       </div>
-      <div class="collection-card" onclick="showPage('shop')">
+      <div class="collection-card" onclick="goToCategory('kids')" role="button" aria-label="Shop Kids — Golden Hours">
         <div class="collection-bg coll-3"></div>
         <div class="collection-info">
           <p class="collection-season">SS 2025 &middot; Kids</p>
           <h3>Golden Hours</h3>
           <p>Little ones deserve extraordinary things.</p>
-          <span class="collection-link">Explore &#8594;</span>
+          <span class="collection-link">Shop Kids &#8594;</span>
         </div>
       </div>
-      <div class="collection-card" onclick="showPage('shop')">
+      <div class="collection-card" onclick="goToCategory('new arrivals')" role="button" aria-label="Shop New Arrivals — Nocturne">
         <div class="collection-bg coll-4"></div>
         <div class="collection-info">
           <p class="collection-season">Limited Edition</p>
           <h3>Nocturne</h3>
           <p>After dark &mdash; the luxury of darkness made wearable.</p>
-          <span class="collection-link">Explore &#8594;</span>
+          <span class="collection-link">Shop New Arrivals &#8594;</span>
         </div>
       </div>
     </div>
@@ -1625,7 +1645,7 @@ input.pm-inp.pfx { padding-left:26px; }
 <div class="page" id="page-about">
   <div class="about-layout">
     <div class="about-img">
-      <img src="klot_website/klot/assets/images/ourstorypic.png" alt="KLOT — Born From Intention" onerror="this.style.display='none'">
+      <img src="klot_website/klot/assets/images/ourstorypic.png" alt="KLOT — Born From Intention" loading="lazy" onerror="this.style.display='none'">
       <div class="about-img-overlay"></div>
       <div class="about-img-accent"></div>
       <span class="about-img-tag">Born From Intention</span>
@@ -1658,6 +1678,7 @@ input.pm-inp.pfx { padding-left:26px; }
                id="team-photo-adaeze"
                class="team-photo"
                alt="Phillip Nwankwo — Founder &amp; Creative Director"
+               loading="lazy"
                style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .6s ease"
                onerror="this.style.display='none'">
           <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(13,13,13,.7) 0%,rgba(13,13,13,.15) 40%,transparent 70%);pointer-events:none"></div>
@@ -1683,6 +1704,7 @@ input.pm-inp.pfx { padding-left:26px; }
           <img src="klot_website/klot/assets/images/exec_phoenix.jpeg"
                id="team-photo-kofi"
                class="team-photo"
+               loading="lazy"
                alt="Phoenix Nwankwo — Head of Design"
                style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .6s ease"
                onerror="this.style.display='none'">
@@ -1711,6 +1733,7 @@ input.pm-inp.pfx { padding-left:26px; }
           <img src="klot_website/klot/assets/images/exec_anthony%20nabena.jpeg"
                id="team-photo-anthony"
                class="team-photo"
+               loading="lazy"
                alt="Anthony Nabena — Head of Marketing &amp; Operations"
                onerror="this.style.display='none'">
         </div>
@@ -1726,6 +1749,7 @@ input.pm-inp.pfx { padding-left:26px; }
           <img src="klot_website/klot/assets/images/exec_jerome.jpeg"
                id="team-photo-jerome"
                class="team-photo"
+               loading="lazy"
                alt="Jerome Ebella — Commercial Director"
                onerror="this.style.display='none'">
           <label class="team-photo-upload-btn" for="upload-jerome" title="Update photo">&#128247;</label>
@@ -1751,7 +1775,7 @@ input.pm-inp.pfx { padding-left:26px; }
     <!-- ── Visual / Info Panel ── -->
     <div class="contact-visual">
       <div class="contact-visual-bg">
-        <img src="klot_website/klot/assets/images/klot-contactpage.jpeg" alt="" role="presentation" onerror="this.parentElement.style.background='#0D0D0D'">
+        <img src="klot_website/klot/assets/images/klot-contactpage.jpeg" alt="" role="presentation" loading="lazy" onerror="this.parentElement.style.background='#0D0D0D'">
       </div>
       <div class="contact-visual-overlay"></div>
       <div class="contact-visual-accent"></div>
@@ -1766,7 +1790,7 @@ input.pm-inp.pfx { padding-left:26px; }
             </div>
             <div>
               <div class="cd-label">Email</div>
-              <div class="cd-val">hello&#64;klot.com<br>press&#64;klot.com</div>
+              <div class="cd-val">hello&#64;klotworld.com<br>press&#64;klotworld.com</div>
             </div>
             <div>
               <div class="cd-label">Phone</div>
@@ -1937,8 +1961,7 @@ input.pm-inp.pfx { padding-left:26px; }
       </div>
       <button class="admin-login-btn" onclick="verifyMFA()">Verify Code</button>
       <p style="text-align:center;font-size:11px;color:rgba(245,240,232,.25);margin-top:12px;letter-spacing:.06em">
-        Demo: use code <strong style="color:rgba(184,151,74,.6)">123456</strong> &nbsp;|&nbsp;
-        Production: configure TOTP (Google Authenticator / Authy)
+        Enter your authenticator code to continue
       </p>
     </div>
 
@@ -5040,7 +5063,7 @@ function syncExecPreviews() {
 var SESSION_TIMEOUT_MS  = 30 * 60 * 1000;   // 30 minutes
 var SESSION_WARN_MS     = 5  * 60 * 1000;   // warn at 5 min remaining
 var SESSION_CHECK_MS    = 10 * 1000;         // check every 10s
-var MFA_DEMO_CODE       = '123456';          // replace with TOTP in production
+var MFA_DEMO_CODE       = '';
 var ADMIN_ROLE          = 'super_admin';     // roles: super_admin | editor | viewer
 var footerClickCount    = 0;
 var footerClickTimer    = null;
@@ -5911,5 +5934,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 <script src="https://js.paystack.co/v1/inline.js" defer></script>
+
+<!-- WhatsApp Support Button -->
+<a class="wa-float" href="https://wa.me/2348000000000?text=Hi%2C%20I%E2%80%99d%20like%20help%20with%20my%20KLOT%20order" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp" title="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 </body>
 </html>
