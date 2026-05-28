@@ -2090,7 +2090,7 @@ input.pm-inp.pfx { padding-left:26px; }
         </div>
         <h3 class="admin-section-title">Recent Orders</h3>
         <table class="admin-table">
-          <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+          <thead><tr><th>Order ID</th><th>Customer / Delivery</th><th>Items Ordered</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
           <tbody id="recent-orders-body"></tbody>
         </table>
       </div>
@@ -2118,7 +2118,7 @@ input.pm-inp.pfx { padding-left:26px; }
           </div>
         </div>
         <table class="admin-table">
-          <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total (&#8358;)</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+          <thead><tr><th>Order ID</th><th>Customer / Delivery</th><th>Items Ordered</th><th>Total (&#8358;)</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
           <tbody id="all-orders-body"></tbody>
         </table>
       </div>
@@ -4109,6 +4109,26 @@ function populateAdmin() {
   pmRender();
 }
 
+function renderOrderItems(o) {
+  if (o.itemDetails && o.itemDetails.length) {
+    return o.itemDetails.map(function(i) {
+      return '<div style="font-size:12px;line-height:1.5;white-space:nowrap">' +
+        '<span style="font-weight:600">'+i.qty+'\u00D7</span> ' + i.name +
+        ' <span style="color:var(--gold);font-size:10px">(' + i.size + ')</span>' +
+        '</div>';
+    }).join('');
+  }
+  return '<span style="color:rgba(245,240,232,.4);font-size:12px">' + o.items + ' item' + (o.items !== 1 ? 's' : '') + '</span>';
+}
+
+function renderOrderCustomer(o) {
+  var html = '<div style="font-weight:500;font-size:13px">' + o.customer + '</div>';
+  if (o.email) html += '<div style="font-size:10px;color:var(--gold);letter-spacing:.03em">' + o.email + '</div>';
+  if (o.phone) html += '<div style="font-size:10px;color:rgba(245,240,232,.4)">' + o.phone + '</div>';
+  if (o.address) html += '<div style="font-size:10px;color:rgba(245,240,232,.35);margin-top:2px;max-width:180px;white-space:normal;line-height:1.3">' + o.address + '</div>';
+  return html;
+}
+
 function populateOrders() {
   var q    = (document.getElementById('orders-search')||{value:''}).value.toLowerCase();
   var stat = (document.getElementById('orders-filter')||{value:''}).value;
@@ -4118,12 +4138,22 @@ function populateOrders() {
   });
   var rob=document.getElementById('recent-orders-body');
   if(rob) rob.innerHTML=filtered.slice(0,5).map(function(o){
-    return '<tr><td>'+o.id+'</td><td>'+o.customer+'</td><td>'+o.items+'</td><td>\u20A6'+o.total.toLocaleString()+'</td><td>'+statusBadge(o.status)+'</td><td>'+o.date+'</td></tr>';
+    return '<tr><td style="font-size:12px;color:var(--gold)">' + o.id + '</td>' +
+      '<td>' + renderOrderCustomer(o) + '</td>' +
+      '<td>' + renderOrderItems(o) + '</td>' +
+      '<td style="font-family:\'Inter\',sans-serif">\u20A6' + o.total.toLocaleString() + '</td>' +
+      '<td>' + statusBadge(o.status) + '</td>' +
+      '<td style="font-size:11px;color:rgba(245,240,232,.45)">' + o.date + '</td></tr>';
   }).join('');
   var aob=document.getElementById('all-orders-body');
   if(aob) aob.innerHTML=filtered.map(function(o){
-    return '<tr><td>'+o.id+'</td><td>'+o.customer+'</td><td>'+o.items+'</td><td>\u20A6'+o.total.toLocaleString()+'</td><td>'+statusBadge(o.status)+'</td><td>'+o.date+'</td>' +
-      '<td><button class="pm-act-btn" onclick="editOrder(\''+o.id+'\')">Edit</button></td></tr>';
+    return '<tr><td style="font-size:12px;color:var(--gold)">' + o.id + '</td>' +
+      '<td>' + renderOrderCustomer(o) + '</td>' +
+      '<td>' + renderOrderItems(o) + '</td>' +
+      '<td style="font-family:\'Inter\',sans-serif">\u20A6' + o.total.toLocaleString() + '</td>' +
+      '<td>' + statusBadge(o.status) + '</td>' +
+      '<td style="font-size:11px;color:rgba(245,240,232,.45)">' + o.date + '</td>' +
+      '<td><button class="pm-act-btn" onclick="editOrder(\'' + o.id + '\')">Edit</button></td></tr>';
   }).join('');
 }
 
@@ -5009,7 +5039,11 @@ function initiatePaystack() {
       orders.unshift({
         id: ref,
         customer: customer.firstName + ' ' + customer.lastName,
+        email: customer.email,
+        phone: customer.phone || '',
+        address: (customer.address || '') + (customer.city ? ', ' + customer.city : '') + (customer.state ? ', ' + customer.state : ''),
         items: cart.reduce(function(s,i) { return s+i.qty; }, 0),
+        itemDetails: cart.map(function(i) { return { name: i.name, size: i.size, qty: i.qty, price: i.priceNGN }; }),
         total: totalNGN,
         status: 'processing',
         date: new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
