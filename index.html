@@ -5036,17 +5036,17 @@ function showToast(msg){
 
 
 // ── CUSTOMERS DATA ──
-// Seeded with demo customers; new customers added on each Paystack payment
-var _demoCustomers = [
-  {name:'Amara Okafor',    email:'amara@example.com',   phone:'+234 802 111 2233', orders:8,  total:320000, lastOrder:'Nov 12 2025', location:'Lagos',        address:'',status:'vip'},
-  {name:'Emeka Nwosu',     email:'emeka@example.com',   phone:'+234 803 222 3344', orders:5,  total:210000, lastOrder:'Nov 12 2025', location:'Abuja',        address:'',status:'active'},
-  {name:'Fatima Al-Hassan',email:'fatima@example.com',  phone:'+234 805 333 4455', orders:12, total:580000, lastOrder:'Nov 11 2025', location:'Kano',         address:'',status:'vip'},
-  {name:'Chidera Eze',     email:'chidera@example.com', phone:'+234 806 444 5566', orders:3,  total:145000, lastOrder:'Nov 11 2025', location:'Port Harcourt',address:'',status:'active'},
-  {name:'Ngozi Williams',  email:'ngozi@example.com',   phone:'+234 807 555 6677', orders:9,  total:410000, lastOrder:'Nov 10 2025', location:'Lagos',        address:'',status:'vip'},
-  {name:'Ibrahim Musa',    email:'ibrahim@example.com', phone:'+234 809 666 7788', orders:6,  total:265000, lastOrder:'Nov 10 2025', location:'Kaduna',       address:'',status:'active'}
-];
+var _DEMO_CUSTOMER_EMAILS = ['amara@example.com','emeka@example.com','fatima@example.com','chidera@example.com','ngozi@example.com','ibrahim@example.com'];
 var customers = (function() {
-  try { var s = storageGet('klot_customers'); return s ? JSON.parse(s) : _demoCustomers; } catch(e) { return _demoCustomers; }
+  try {
+    var s = storageGet('klot_customers');
+    if (!s) return [];
+    var saved = JSON.parse(s);
+    // Strip any previously persisted demo seed customers
+    var real = saved.filter(function(c){ return _DEMO_CUSTOMER_EMAILS.indexOf(c.email) === -1; });
+    if (real.length !== saved.length) storageSet('klot_customers', JSON.stringify(real));
+    return real;
+  } catch(e) { return []; }
 })();
 function persistCustomers() { storageSet('klot_customers', JSON.stringify(customers)); }
 
