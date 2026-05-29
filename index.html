@@ -3953,7 +3953,7 @@ var MC_TEMPLATES = {
   'shipping-update': {
     label:'Shipping Update', type:'transactional',
     subject:'Your KLOT order is on the way — {{orderId}}',
-    vars:'{"name":"Alex","orderId":"KW-0042","tracking":"NGS123456789","carrier":"DHL Express","eta":"28 May 2026"}',
+    vars:'{"name":"Alex","orderId":"KW-0042","tracking":"NGS123456789","carrier":"KLOT Logistics","eta":"28 May 2026"}',
     render: function(v) {
       return mcBaseTemplate('On Its Way 🚚','#0D0D0D',
         '<h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#0D0D0D;margin:0 0 8px">Your order is on the way, '+v.name+'.</h1>'+
@@ -4429,7 +4429,37 @@ function populateOrders() {
 function editOrder(oid, newStatus) {
   var o=orders.find(function(x){return x.id===oid;}); if(!o)return;
   if(newStatus && ['processing','shipped','delivered','cancelled'].indexOf(newStatus)>-1) {
+    var prevStatus = o.status;
     o.status=newStatus; persistOrders(); populateOrders(); showToast(oid+' → '+newStatus);
+    // Auto-send shipping update email when marked as shipped
+    if(newStatus === 'shipped' && prevStatus !== 'shipped' && o.email) {
+      var firstName = (o.customer || '').split(' ')[0] || 'Customer';
+      var eta = (function() {
+        var d = new Date(); d.setDate(d.getDate() + 5);
+        return d.toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'});
+      })();
+      var shipHtml = MC_TEMPLATES['shipping-update'].render({
+        name: firstName,
+        orderId: o.id,
+        tracking: o.id.replace(/[^A-Z0-9]/g,'') + 'KL',
+        carrier: 'KLOT Logistics',
+        eta: eta
+      });
+      fetch('/api/send-email', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          to: o.email,
+          subject: 'Your KLOT order is on the way — ' + o.id,
+          html: shipHtml,
+          fromName: 'KLOT',
+          fromEmail: 'hello@klotworld.com'
+        })
+      }).then(function(r){ return r.json(); }).then(function(d){
+        if(d.id) { showToast('Shipping email sent to ' + o.email); logAdminAction('EMAIL','Shipping update sent for '+oid+' to '+o.email); }
+        else { console.warn('[KLOT] Shipping email failed:', d); }
+      }).catch(function(e){ console.error('[KLOT] Shipping email error:', e); });
+    }
   }
 }
 
