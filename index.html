@@ -4417,7 +4417,9 @@ function populateOrders() {
       '<td>' +
         '<select class="admin-filter-select" style="font-size:10px;padding:6px 8px" onchange="editOrder(\'' + o.id + '\',this.value)">' +
           ['processing','shipped','delivered','cancelled'].map(function(s){
-            return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';
+            var isDelivered = o.status === 'delivered';
+            var disabled = (s === 'cancelled' && isDelivered) ? ' disabled title="Cannot cancel a delivered order"' : '';
+            return '<option value="'+s+'"'+(o.status===s?' selected':'')+disabled+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';
           }).join('') +
         '</select>' +
       '</td></tr>';
@@ -5790,12 +5792,12 @@ adjustStock = function(pid) {
 
 // Patch editOrder
 var _origEditOrder = editOrder;
-editOrder = function(oid) {
+editOrder = function(oid, newStatus) {
   var o = orders.find(function(x){return x.id===oid;});
   var oldStatus = o ? o.status : '?';
-  _origEditOrder(oid);
-  var newStatus = o ? o.status : '?';
-  if (o && oldStatus !== newStatus) logAdminAction('ORDER', 'Order ' + oid + ' status: ' + oldStatus + ' -> ' + newStatus);
+  _origEditOrder(oid, newStatus);
+  var updatedStatus = o ? o.status : '?';
+  if (o && oldStatus !== updatedStatus) logAdminAction('ORDER', 'Order ' + oid + ' status: ' + oldStatus + ' -> ' + updatedStatus);
 };
 
 // Patch confirmImport
