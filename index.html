@@ -575,6 +575,7 @@ footer { background:var(--navy); padding:80px 40px 40px; }
 .status-processing { background:rgba(251,191,36,.15); color:#fbbf24; }
 .status-shipped { background:rgba(59,130,246,.15); color:#60a5fa; }
 .status-delivered { background:rgba(74,222,128,.15); color:#4ade80; }
+.status-cancelled { background:rgba(248,113,113,.15); color:#f87171; }
 .stock-low { color:#f87171; }
 .stock-ok { color:#4ade80; }
 
@@ -2115,6 +2116,7 @@ input.pm-inp.pfx { padding-left:26px; }
               <option value="processing">Processing</option>
               <option value="shipped">Shipped</option>
               <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
             </select>
             <button class="abtn abtn-gold" onclick="exportOrders('xlsx')">&#11015; Excel</button>
             <button class="abtn abtn-outline" onclick="exportOrders('csv')">&#11015; CSV</button>
@@ -4412,15 +4414,20 @@ function populateOrders() {
       '<td style="font-family:\'Inter\',sans-serif">\u20A6' + o.total.toLocaleString() + '</td>' +
       '<td>' + statusBadge(o.status) + '</td>' +
       '<td style="font-size:11px;color:rgba(245,240,232,.45)">' + o.date + '</td>' +
-      '<td><button class="pm-act-btn" onclick="editOrder(\'' + o.id + '\')">Edit</button></td></tr>';
+      '<td>' +
+        '<select class="admin-filter-select" style="font-size:10px;padding:6px 8px" onchange="editOrder(\'' + o.id + '\',this.value)">' +
+          ['processing','shipped','delivered','cancelled'].map(function(s){
+            return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';
+          }).join('') +
+        '</select>' +
+      '</td></tr>';
   }).join('');
 }
 
-function editOrder(oid) {
+function editOrder(oid, newStatus) {
   var o=orders.find(function(x){return x.id===oid;}); if(!o)return;
-  var ns=prompt('New status for '+oid+' (processing/shipped/delivered):',o.status);
-  if(ns && ['processing','shipped','delivered'].indexOf(ns)>-1) {
-    o.status=ns; persistOrders(); populateOrders(); showToast(oid+' updated to '+ns);
+  if(newStatus && ['processing','shipped','delivered','cancelled'].indexOf(newStatus)>-1) {
+    o.status=newStatus; persistOrders(); populateOrders(); showToast(oid+' → '+newStatus);
   }
 }
 
