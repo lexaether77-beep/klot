@@ -2702,6 +2702,7 @@ input.pm-inp.pfx { padding-left:26px; }
                   <optgroup label="─ Transactional">
                     <option value="order-confirmation">Order Confirmation</option>
                     <option value="shipping-update">Shipping Update</option>
+                    <option value="order-cancelled">Order Cancelled</option>
                     <option value="password-reset">Password Reset</option>
                   </optgroup>
                   <optgroup label="─ Marketing">
@@ -4051,6 +4052,30 @@ var MC_TEMPLATES = {
         '</div>'
       );
     }
+  },
+  'order-cancelled': {
+    label:'Order Cancelled', type:'transactional',
+    subject:'Your KLOT order has been cancelled — {{orderId}}',
+    vars:'{"name":"Alex","orderId":"KW-0042","total":"₦85,000","reason":"Customer request"}',
+    render: function(v) {
+      return mcBaseTemplate('Order Cancelled','#0D0D0D',
+        '<h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#0D0D0D;margin:0 0 8px">Your order has been cancelled.</h1>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#555;margin:0 0 28px;line-height:1.6">Hi '+v.name+', we\'re sorry to let you know that order <strong style="color:#0D0D0D">'+v.orderId+'</strong> has been cancelled.</p>'+
+        '<div style="background:#f9f9f9;border:1px solid #eee;padding:24px;margin-bottom:28px">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#999;margin:0 0 10px">Cancellation Details</p>'+
+          '<table style="width:100%;border-collapse:collapse">'+
+            '<tr><td style="font-family:Arial,sans-serif;font-size:14px;color:#555;padding:6px 0">Order Reference</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#0D0D0D;font-weight:600;text-align:right">'+v.orderId+'</td></tr>'+
+            '<tr><td style="font-family:Arial,sans-serif;font-size:14px;color:#555;padding:6px 0">Order Total</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#0D0D0D;font-weight:600;text-align:right">'+v.total+'</td></tr>'+
+            '<tr><td style="font-family:Arial,sans-serif;font-size:14px;color:#555;padding:6px 0">Reason</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#0D0D0D;text-align:right">'+v.reason+'</td></tr>'+
+          '</table>'+
+        '</div>'+
+        '<p style="font-family:Arial,sans-serif;font-size:14px;color:#555;margin:0 0 24px;line-height:1.7">If a payment was made, a full refund will be processed within <strong>5–7 business days</strong> to your original payment method.</p>'+
+        '<p style="font-family:Arial,sans-serif;font-size:14px;color:#555;margin:0 0 28px;line-height:1.7">If you have any questions or believe this was an error, please contact us at <a href="mailto:hello@klotworld.com" style="color:#FF2D2D">hello@klotworld.com</a>.</p>'+
+        '<div style="text-align:center">'+
+          '<a href="https://klotworld.com" style="display:inline-block;background:#0D0D0D;color:#fff;padding:14px 36px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none">Shop Again</a>'+
+        '</div>'
+      );
+    }
   }
 };
 
@@ -4430,6 +4455,30 @@ function editOrder(oid, newStatus) {
   if(newStatus && ['processing','shipped','delivered','cancelled'].indexOf(newStatus)>-1) {
     var prevStatus = o.status;
     o.status=newStatus; persistOrders(); populateOrders(); showToast(oid+' → '+newStatus);
+    // Auto-send cancellation email when marked as cancelled
+    if(newStatus === 'cancelled' && prevStatus !== 'cancelled' && o.email) {
+      var firstName = (o.customer || '').split(' ')[0] || 'Customer';
+      var cancelHtml = MC_TEMPLATES['order-cancelled'].render({
+        name: firstName,
+        orderId: o.id,
+        total: '₦' + o.total.toLocaleString(),
+        reason: 'Customer request'
+      });
+      fetch('/api/send-email', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          to: o.email,
+          subject: 'Your KLOT order has been cancelled — ' + o.id,
+          html: cancelHtml,
+          fromName: 'KLOT',
+          fromEmail: 'hello@klotworld.com'
+        })
+      }).then(function(r){ return r.json(); }).then(function(d){
+        if(d.id) { showToast('Cancellation email sent to ' + o.email); logAdminAction('EMAIL','Cancellation email sent for '+oid+' to '+o.email); }
+        else { console.warn('[KLOT] Cancellation email failed:', d); }
+      }).catch(function(e){ console.error('[KLOT] Cancellation email error:', e); });
+    }
     // Auto-send shipping update email when marked as shipped
     if(newStatus === 'shipped' && prevStatus !== 'shipped' && o.email) {
       var firstName = (o.customer || '').split(' ')[0] || 'Customer';
