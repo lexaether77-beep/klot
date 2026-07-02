@@ -9,7 +9,22 @@
       "Bash(NODE_OPTIONS=--use-system-ca vercel --prod)",
       "Bash(curl -s \"https://klot-worx.vercel.app/api/test-connection\")",
       "Bash(python3 -m json.tool)",
-      "Bash(NODE_OPTIONS=--use-system-ca node -e ' *)"
+      "Bash(NODE_OPTIONS=--use-system-ca node -e ' *)",
+      "Bash(git rm *)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel env ls)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel env rm RESEND_API_KEY production --yes)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel env add RESEND_API_KEY preview)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel env add RESEND_API_KEY development)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel env add RESEND_API_KEY preview --value \"re_EnH1ryDz_H6CCRoaDvkhGjkmbprjPN5SB\" --yes)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel --prod --force)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel domains ls)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel project add klotworld.com)",
+      "Bash(NODE_OPTIONS=--use-system-ca vercel project remove klotworld.com --yes)",
+      "Bash(python -c ' *)",
+      "Bash(rm -f api/_restore.tmp)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(python)"
     ]
   }
 }
