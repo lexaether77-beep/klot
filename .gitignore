@@ -4,3 +4,4 @@
 .env*
 klot.txt
 glue.bat
+.env*.local
