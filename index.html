@@ -6021,7 +6021,7 @@ function storageRemove(key) {
 function _normImgPaths(p) {
   ['imageUrl','image2','image3','image4'].forEach(function(k){
     if (p[k] && typeof p[k] === 'string' && !p[k].startsWith('data:')) {
-      p[k] = p[k].replace(/\\/g, '/');
+      p[k] = p[k].replace(/\\/g, '/').replace(/['"]+$/g, '').trim();
     }
   });
   return p;
