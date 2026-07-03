@@ -5,6 +5,20 @@
       "includeFiles": "api/admin-page.html"
     }
   },
+  "headers": [
+    {
+      "source": "/klot_website/klot/assets/images/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/klot_website/klot/assets/(.*\\.svg)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/admin", "dest": "/api/admin" },
