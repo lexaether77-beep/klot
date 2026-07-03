@@ -3499,7 +3499,7 @@ function openPDP(pid) {
 }
 
 function pdpSetImage(url, thumbEl) {
-  document.getElementById('pdp-main-img').src = url;
+  document.getElementById('pdp-main-img').src = (url || '').replace(/\\/g, '/');
   document.getElementById('pdp-main-img').style.transform = '';
   document.querySelectorAll('.pdp-thumb').forEach(function(t){t.classList.remove('active');});
   if (thumbEl) thumbEl.classList.add('active');
@@ -6018,7 +6018,17 @@ function storageSet(key, val) {
 function storageRemove(key) {
   try { localStorage.removeItem(key); } catch(e) {}
 }
+function _normImgPaths(p) {
+  ['imageUrl','image2','image3','image4'].forEach(function(k){
+    if (p[k] && typeof p[k] === 'string' && !p[k].startsWith('data:')) {
+      p[k] = p[k].replace(/\\/g, '/');
+    }
+  });
+  return p;
+}
+
 function persistProducts() {
+  products.forEach(_normImgPaths);
   storageSet('klot_products', JSON.stringify(products));
   if (_adminToken) {
     fetch('/api/products', {
@@ -6045,8 +6055,17 @@ function loadServerProducts() {
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(data){
       if (!data || !Array.isArray(data.products) || !data.products.length) return;
+      // Normalize backslash paths from Windows admin saves
+      data.products.forEach(_normImgPaths);
+      // Merge: Redis overrides hardcoded by id, but hardcoded-only products survive
+      var serverById = {};
+      data.products.forEach(function(p){ serverById[p.id] = p; });
+      var merged = products.map(function(p){ return serverById[p.id] || p; });
+      data.products.forEach(function(p){
+        if (!merged.find(function(m){ return m.id === p.id; })) merged.push(p);
+      });
       products.splice(0, products.length);
-      data.products.forEach(function(p){ products.push(p); });
+      merged.forEach(function(p){ products.push(p); });
       storageSet('klot_products', JSON.stringify(products));
       renderAllGrids();
     })
