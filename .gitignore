@@ -2,3 +2,5 @@
 .claude
 *.env
 .env*
+klot.txt
+glue.bat
