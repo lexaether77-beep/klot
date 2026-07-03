@@ -3697,6 +3697,7 @@ function toggleCart() {
 
 // ── ADMIN AUTH ──
 var adminAuth = false, loginAttempts = 0, lockoutUntil = 0, sessionTimer = null, sessionStart = null;
+var _adminToken = null;
 var MAX_ATT = 5, LOCKOUT_MIN = 10;
 
 function sha256(msg) {
@@ -3758,6 +3759,7 @@ async function attemptLogin() {
     var data = await res.json();
     if(data.ok) {
       loginAttempts=0;
+      _adminToken = data.token || null;
       logAdminAction('AUTH', 'Password verified - awaiting MFA');
       btn.disabled=false; btn.style.display='none';
       var mfaPanel=document.getElementById('admin-mfa-panel');
@@ -3804,7 +3806,7 @@ function updateSessionBar() {
 }
 function adminLogout() {
   logAdminAction('SESSION', 'Admin logged out manually');
-  adminAuth=false; mfaPassed=false; pendingLoginUser=null;
+  adminAuth=false; mfaPassed=false; pendingLoginUser=null; _adminToken=null;
   clearInterval(sessionTimer); sessionTimer=null; sessionStart=null;
   if(sessionCheckInterval) clearInterval(sessionCheckInterval); sessionCheckInterval=null;
   sessionExpiry=null;
@@ -5952,6 +5954,7 @@ pmBulkStatus = function(s) {
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
   loadPersistedProducts();
+  loadServerProducts();
 
   // Restore abandoned cart from localStorage
   (function() {
@@ -6017,6 +6020,13 @@ function storageRemove(key) {
 }
 function persistProducts() {
   storageSet('klot_products', JSON.stringify(products));
+  if (_adminToken) {
+    fetch('/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-klot-token': _adminToken },
+      body: JSON.stringify({ products: products })
+    }).catch(function() {});
+  }
 }
 function loadPersistedProducts() {
   var raw = storageGet('klot_products');
@@ -6028,6 +6038,19 @@ function loadPersistedProducts() {
       saved.forEach(function(p){ products.push(p); });
     }
   } catch(e) {}
+}
+
+function loadServerProducts() {
+  fetch('/api/products')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(data){
+      if (!data || !Array.isArray(data.products) || !data.products.length) return;
+      products.splice(0, products.length);
+      data.products.forEach(function(p){ products.push(p); });
+      storageSet('klot_products', JSON.stringify(products));
+      renderAllGrids();
+    })
+    .catch(function(){});
 }
 
 // ── Password hashing (PBKDF2 via SubtleCrypto) ──

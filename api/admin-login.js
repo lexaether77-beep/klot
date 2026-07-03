@@ -17,5 +17,5 @@ module.exports = function handler(req, res) {
     return res.status(200).json({ ok: false, error: 'Invalid credentials' });
   }
 
-  return res.status(200).json({ ok: true });
+  return res.status(200).json({ ok: true, token: process.env.KLOT_ADMIN_SECRET || '' });
 };
