@@ -3468,6 +3468,24 @@ var MC_TEMPLATES = {
         '</div>'
       );
     }
+  },
+  'waitlist-welcome': {
+    label:'Waitlist Welcome', type:'transactional',
+    subject:'You\'re on the waitlist — {{product}}',
+    vars:'{"name":"","product":"KLOT x Bigbird Slide"}',
+    render: function(v) {
+      var greeting = v.name ? v.name : '';
+      return mcBaseTemplate('You\'re on the list','#0D0D0D',
+        '<h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#0D0D0D;margin:0 0 8px">'+(greeting?'Thanks, '+greeting+'.':'You\'re on the list.')+'</h1>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#555;margin:0 0 24px;line-height:1.6">You\'re first in line for <strong style="color:#0D0D0D">'+v.product+'</strong>. The moment it\'s available, you\'ll be the first to know.</p>'+
+        '<div style="background:#0D0D0D;padding:24px 28px;margin-bottom:28px">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 6px">You\'re waiting for</p>'+
+          '<p style="font-family:Georgia,serif;font-size:20px;color:#FF2D2D;margin:0;letter-spacing:.04em">'+v.product+'</p>'+
+        '</div>'+
+        '<p style="font-family:Arial,sans-serif;font-size:13px;color:#888;margin:0 0 28px;line-height:1.7">We\'ll email you as soon as it\'s ready. In the meantime, explore what\'s live now.</p>'+
+        '<a href="https://klotworld.com" style="display:inline-block;background:#0D0D0D;color:#fff;padding:14px 36px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none">Explore KLOT &rarr;</a>'
+      );
+    }
   }
 };
 
@@ -4857,6 +4875,23 @@ function submitProductWaitlist() {
   list.push(entry);
   storageSet(key, JSON.stringify(list));
   fetch('/api/waitlist', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(entry) }).catch(function(){});
+  // Waitlist welcome email
+  (function() {
+    var productName = (_pdpProduct && _pdpProduct.name) ? _pdpProduct.name : 'this product';
+    var subject = 'You\'re on the waitlist — ' + productName;
+    var html = MC_TEMPLATES['waitlist-welcome'].render({ name: '', product: productName });
+    fetch('/api/send-email', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ to:email, subject:subject, html:html, fromName:'KLOT', fromEmail:'hello@klotworld.com' })
+    }).then(function(r){ return r.json(); }).then(function(d){
+      if(d.id) {
+        try {
+          var logs = JSON.parse(localStorage.getItem('klot_mc_logs')||'[]');
+          logs.unshift({id:d.id, to:email, subject:subject, template:'Waitlist Welcome', type:'transactional', status:'pending', sentAt:new Date().toISOString()});
+          localStorage.setItem('klot_mc_logs', JSON.stringify(logs));
+        } catch(e){}
+      }
+    }).catch(function(){});
+  })();
   var msgEl = document.getElementById('wl-msg');
   if (msgEl) { msgEl.textContent = "You're on the list! We'll email you when it's back."; msgEl.style.display = 'block'; }
   setTimeout(closeProductWaitlist, 2200);
@@ -6018,6 +6053,23 @@ function stabSubmitWaitlist() {
   list.push(wlEntry);
   storageSet('klot_waitlist', JSON.stringify(list));
   fetch('/api/waitlist', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(wlEntry) }).catch(function(){});
+  // Waitlist welcome email
+  (function() {
+    var productName = product || 'General waitlist';
+    var subject = 'You\'re on the waitlist — ' + productName;
+    var html = MC_TEMPLATES['waitlist-welcome'].render({ name: '', product: productName });
+    fetch('/api/send-email', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ to:email, subject:subject, html:html, fromName:'KLOT', fromEmail:'hello@klotworld.com' })
+    }).then(function(r){ return r.json(); }).then(function(d){
+      if(d.id) {
+        try {
+          var logs = JSON.parse(localStorage.getItem('klot_mc_logs')||'[]');
+          logs.unshift({id:d.id, to:email, subject:subject, template:'Waitlist Welcome', type:'transactional', status:'pending', sentAt:new Date().toISOString()});
+          localStorage.setItem('klot_mc_logs', JSON.stringify(logs));
+        } catch(e){}
+      }
+    }).catch(function(){});
+  })();
   document.getElementById('stab-wl-wrap').style.display = 'none';
   document.getElementById('stab-wl-success').classList.add('show');
 }

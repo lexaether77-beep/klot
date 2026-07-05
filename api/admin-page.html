@@ -392,6 +392,7 @@ input.pm-inp.pfx { padding-left:26px; }
       <div class="admin-nav-item" onclick="showAdminTab('import',this)">&#128229; Import</div>
       <div class="admin-nav-item" onclick="showAdminTab('team',this)">&#128100; Team Photos</div>
       <div class="admin-nav-item" onclick="showAdminTab('audit',this)">&#128196; Audit Log</div>
+      <div class="admin-nav-item" onclick="showAdminTab('subscribers',this)">&#128231; Subscribers</div>
       <div class="admin-nav-item" onclick="showAdminTab('messages',this)">&#9993; Message Center</div>
     </div>
 
@@ -980,6 +981,7 @@ input.pm-inp.pfx { padding-left:26px; }
                   <optgroup label="─ Transactional">
                     <option value="order-confirmation">Order Confirmation</option>
                     <option value="shipping-update">Shipping Update</option>
+                    <option value="waitlist-welcome">Waitlist Welcome</option>
                     <option value="password-reset">Password Reset</option>
                   </optgroup>
                   <optgroup label="─ Marketing">
@@ -1057,6 +1059,53 @@ input.pm-inp.pfx { padding-left:26px; }
           </div>
         </div>
       </div><!-- /admin-messages -->
+
+      <!-- SUBSCRIBERS TAB -->
+      <div class="admin-tab" id="admin-subscribers">
+        <div class="admin-toolbar">
+          <div style="display:flex;align-items:baseline;gap:14px">
+            <h3 class="admin-section-title" style="margin:0">Subscribers</h3>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="abtn abtn-gold" onclick="exportSubscribers('newsletter')">&#11015; Newsletter CSV</button>
+            <button class="abtn abtn-gold" onclick="exportSubscribers('waitlist')">&#11015; Waitlist CSV</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:0;margin-bottom:24px;border:1px solid rgba(184,151,74,.2);width:fit-content;border-radius:1px">
+          <button id="sub-tab-nl" class="abtn" onclick="subPanel('newsletter')" style="border:none;border-right:1px solid rgba(184,151,74,.2);background:rgba(184,151,74,.12);border-radius:0">&#128231; Newsletter</button>
+          <button id="sub-tab-wl" class="abtn abtn-outline" onclick="subPanel('waitlist')" style="border:none;border-radius:0">&#9201; Waitlist</button>
+        </div>
+
+        <!-- Newsletter panel -->
+        <div id="sub-panel-newsletter">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,240,232,.6)">Newsletter Subscribers</span>
+            <span id="nl-count" style="font-size:11px;color:rgba(245,240,232,.3);font-family:'Inter',sans-serif"></span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Source</th><th>Date</th></tr></thead>
+              <tbody id="nl-body"></tbody>
+            </table>
+          </div>
+          <div id="nl-empty" style="display:none;text-align:center;padding:48px;font-family:'Inter',sans-serif;font-size:15px;color:rgba(245,240,232,.25);font-style:italic">No newsletter subscribers yet.</div>
+        </div>
+
+        <!-- Waitlist panel -->
+        <div id="sub-panel-waitlist" style="display:none">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,240,232,.6)">Product Waitlist</span>
+            <span id="wl-count" style="font-size:11px;color:rgba(245,240,232,.3);font-family:'Inter',sans-serif"></span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Email</th><th>Product</th><th>Source</th><th>Date</th></tr></thead>
+              <tbody id="wl-body"></tbody>
+            </table>
+          </div>
+          <div id="wl-empty" style="display:none;text-align:center;padding:48px;font-family:'Inter',sans-serif;font-size:15px;color:rgba(245,240,232,.25);font-style:italic">No waitlist entries yet.</div>
+        </div>
+      </div><!-- /admin-subscribers -->
 
     </div><!-- /admin-content -->
   </div><!-- /admin-body -->
@@ -1300,6 +1349,7 @@ function showAdminTab(tab, el) {
   if(tab==='audit')      renderAuditLog();
   if(tab==='team')       syncExecPreviews();
   if(tab==='messages')   mcInit();
+  if(tab==='subscribers') populateSubscribers();
 }
 
 // ════════════════════════════════════════════════════
@@ -1468,6 +1518,24 @@ var MC_TEMPLATES = {
         '<div style="text-align:center">'+
           '<a href="https://klotworld.com" style="display:inline-block;background:#FF2D2D;color:#fff;padding:16px 40px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none">Redeem Offer</a>'+
         '</div>'
+      );
+    }
+  },
+  'waitlist-welcome': {
+    label:'Waitlist Welcome', type:'transactional',
+    subject:'You\'re on the waitlist — {{product}}',
+    vars:'{"name":"","product":"KLOT x Bigbird Slide"}',
+    render: function(v) {
+      var greeting = v.name ? v.name : '';
+      return mcBaseTemplate('You\'re on the list','#0D0D0D',
+        '<h1 style="font-family:Georgia,serif;font-size:28px;font-weight:400;color:#0D0D0D;margin:0 0 8px">'+(greeting?'Thanks, '+greeting+'.':'You\'re on the list.')+'</h1>'+
+        '<p style="font-family:Arial,sans-serif;font-size:15px;color:#555;margin:0 0 24px;line-height:1.6">You\'re first in line for <strong style="color:#0D0D0D">'+v.product+'</strong>. The moment it\'s available, you\'ll be the first to know.</p>'+
+        '<div style="background:#0D0D0D;padding:24px 28px;margin-bottom:28px">'+
+          '<p style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 6px">You\'re waiting for</p>'+
+          '<p style="font-family:Georgia,serif;font-size:20px;color:#FF2D2D;margin:0;letter-spacing:.04em">'+v.product+'</p>'+
+        '</div>'+
+        '<p style="font-family:Arial,sans-serif;font-size:13px;color:#888;margin:0 0 28px;line-height:1.7">We\'ll email you as soon as it\'s ready. In the meantime, explore what\'s live now.</p>'+
+        '<a href="https://klotworld.com" style="display:inline-block;background:#0D0D0D;color:#fff;padding:14px 36px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none">Explore KLOT &rarr;</a>'
       );
     }
   }
@@ -1768,6 +1836,77 @@ function mcExportLogs() {
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 // ── END MESSAGE CENTER ──
+
+// ════════════════════════════════════════════════════
+//  SUBSCRIBERS (Newsletter + Waitlist)
+// ════════════════════════════════════════════════════
+function populateSubscribers() {
+  renderNewsletterList();
+  renderWaitlistList();
+}
+
+function subPanel(name) {
+  document.getElementById('sub-panel-newsletter').style.display = name==='newsletter' ? '' : 'none';
+  document.getElementById('sub-panel-waitlist').style.display   = name==='waitlist'   ? '' : 'none';
+  var nlBtn = document.getElementById('sub-tab-nl');
+  var wlBtn = document.getElementById('sub-tab-wl');
+  if(nlBtn) nlBtn.style.background = name==='newsletter' ? 'rgba(184,151,74,.15)' : '';
+  if(wlBtn) wlBtn.style.background = name==='waitlist'   ? 'rgba(184,151,74,.15)' : '';
+}
+
+function renderNewsletterList() {
+  var subs = [];
+  try { subs = JSON.parse(localStorage.getItem('klot_subscribers')||'[]'); } catch(e){}
+  var cntEl = document.getElementById('nl-count');
+  var body  = document.getElementById('nl-body');
+  var empty = document.getElementById('nl-empty');
+  if(!body) return;
+  if(cntEl) cntEl.textContent = subs.length + ' subscriber' + (subs.length!==1?'s':'');
+  if(!subs.length) { body.innerHTML=''; if(empty)empty.style.display='block'; return; }
+  if(empty) empty.style.display='none';
+  body.innerHTML = subs.slice().reverse().map(function(s) {
+    var d = s.ts ? new Date(s.ts).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    return '<tr><td>'+escHtml(s.name||'—')+'</td><td style="color:var(--gold)">'+escHtml(s.email)+
+      '</td><td style="font-size:11px;color:rgba(245,240,232,.45)">'+escHtml(s.source||'—')+
+      '</td><td style="font-size:11px;color:rgba(245,240,232,.45)">'+d+'</td></tr>';
+  }).join('');
+}
+
+function renderWaitlistList() {
+  var entries = [];
+  try { entries = JSON.parse(localStorage.getItem('klot_waitlist')||'[]'); } catch(e){}
+  var cntEl = document.getElementById('wl-count');
+  var body  = document.getElementById('wl-body');
+  var empty = document.getElementById('wl-empty');
+  if(!body) return;
+  if(cntEl) cntEl.textContent = entries.length + ' entr' + (entries.length!==1?'ies':'y');
+  if(!entries.length) { body.innerHTML=''; if(empty)empty.style.display='block'; return; }
+  if(empty) empty.style.display='none';
+  body.innerHTML = entries.slice().reverse().map(function(e) {
+    var d = e.ts ? new Date(e.ts).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    return '<tr><td style="color:var(--gold)">'+escHtml(e.email)+
+      '</td><td>'+escHtml(e.product||'General')+
+      '</td><td style="font-size:11px;color:rgba(245,240,232,.45)">'+escHtml(e.source||'PDP')+
+      '</td><td style="font-size:11px;color:rgba(245,240,232,.45)">'+d+'</td></tr>';
+  }).join('');
+}
+
+function exportSubscribers(type) {
+  var data=[], headers, filename, rows;
+  if(type==='newsletter') {
+    try { data = JSON.parse(localStorage.getItem('klot_subscribers')||'[]'); } catch(e){}
+    headers = 'Name,Email,Source,Date';
+    filename = 'klot_newsletter_'+today()+'.csv';
+    rows = data.map(function(s){ return [s.name||'',s.email,s.source||'',s.ts||''].map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(','); });
+  } else {
+    try { data = JSON.parse(localStorage.getItem('klot_waitlist')||'[]'); } catch(e){}
+    headers = 'Email,Product,Source,Date';
+    filename = 'klot_waitlist_'+today()+'.csv';
+    rows = data.map(function(e){ return [e.email,e.product||'',e.source||'',e.ts||''].map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(','); });
+  }
+  dlFile([headers].concat(rows).join('\n'),'text/csv',filename);
+  showToast('Exported '+data.length+' '+type+' entries');
+}
 
 function statusBadge(s) { return '<span class="status-badge status-'+s+'">'+s+'</span>'; }
 
