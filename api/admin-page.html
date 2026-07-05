@@ -443,6 +443,7 @@ input.pm-inp.pfx { padding-left:26px; }
               <option value="shipped">Shipped</option>
               <option value="delivered">Delivered</option>
             </select>
+            <button class="abtn abtn-outline" onclick="loadRedisOrders();showToast('Refreshing orders…')">&#8635; Refresh</button>
             <button class="abtn abtn-gold" onclick="exportOrders('xlsx')">&#11015; Excel</button>
             <button class="abtn abtn-outline" onclick="exportOrders('csv')">&#11015; CSV</button>
             <label class="abtn abtn-outline" style="cursor:pointer">
@@ -1967,9 +1968,13 @@ function populateOrders() {
 function editOrder(oid) {
   var o=orders.find(function(x){return x.id===oid;}); if(!o)return;
   var ns=prompt('New status for '+oid+' (processing/shipped/delivered):',o.status);
-  if(!ns || ['processing','shipped','delivered'].indexOf(ns)<0) return;
+  if(!ns || ['processing','shipped','delivered','cancelled'].indexOf(ns)<0) return;
   o.status=ns;
   try { localStorage.setItem('klot_orders', JSON.stringify(orders)); } catch(e){}
+  // Sync status to Redis
+  fetch('/api/orders', { method:'PATCH', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ id:oid, status:ns })
+  }).catch(function(){});
   populateOrders(); showToast(oid+' updated to '+ns);
 
   if(ns==='shipped' && o.email) {
@@ -3384,7 +3389,31 @@ document.addEventListener('DOMContentLoaded', function() {
   sessionTimer = setInterval(updateSessionBar, 30000);
   enforceRBAC();
   logAdminAction('AUTH', 'Admin session started');
+  loadRedisOrders();
 });
+
+// Fetch real orders from Redis and merge them at the top of the orders array
+function loadRedisOrders() {
+  fetch('/api/orders')
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(data) {
+      if (!data || !data.orders || !data.orders.length) return;
+      var existingIds = orders.map(function(o) { return o.id; });
+      var added = 0;
+      for (var i = data.orders.length - 1; i >= 0; i--) {
+        var o = data.orders[i];
+        if (existingIds.indexOf(o.id) < 0) { orders.unshift(o); added++; }
+        else {
+          // sync status from Redis (source of truth)
+          var local = orders.find(function(x) { return x.id === o.id; });
+          if (local) local.status = o.status;
+        }
+      }
+      if (added) { populateAdmin(); populateOrders(); }
+      else populateOrders();
+    })
+    .catch(function() {});
+}
 </script>
 </body>
 </html>

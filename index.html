@@ -4809,6 +4809,22 @@ function initiatePaystack() {
       });
       // Persist orders to localStorage
       persistOrders();
+      // Persist order to Redis so admin dashboard can see it from any device
+      fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id:          ref,
+          customer:    customer.firstName + ' ' + customer.lastName,
+          email:       customer.email,
+          phone:       customer.phone || '',
+          address:     (customer.address || '') + (customer.city ? ', ' + customer.city : '') + (customer.state ? ', ' + customer.state : ''),
+          items:       cart.reduce(function(s, i) { return s + i.qty; }, 0),
+          itemDetails: cart.map(function(i) { return { name: i.name, size: i.size, qty: i.qty, price: i.priceNGN }; }),
+          total:       totalNGN,
+          date:        new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+        })
+      }).catch(function() {});
       // Add/update customer record
       addOrUpdateCustomer(customer, totalNGN);
       // Auto-send order confirmation email
