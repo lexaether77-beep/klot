@@ -1839,10 +1839,32 @@ function populateOrders() {
 function editOrder(oid) {
   var o=orders.find(function(x){return x.id===oid;}); if(!o)return;
   var ns=prompt('New status for '+oid+' (processing/shipped/delivered):',o.status);
-  if(ns && ['processing','shipped','delivered'].indexOf(ns)>-1) {
-    o.status=ns;
-    try { localStorage.setItem('klot_orders', JSON.stringify(orders)); } catch(e){}
-    populateOrders(); showToast(oid+' updated to '+ns);
+  if(!ns || ['processing','shipped','delivered'].indexOf(ns)<0) return;
+  o.status=ns;
+  try { localStorage.setItem('klot_orders', JSON.stringify(orders)); } catch(e){}
+  populateOrders(); showToast(oid+' updated to '+ns);
+
+  if(ns==='shipped' && o.email) {
+    var tracking = prompt('Tracking number (Enter to skip):', '') || 'Pending';
+    var carrier  = prompt('Carrier (Enter for default):', '') || 'our delivery partner';
+    var etaDate  = new Date(); etaDate.setDate(etaDate.getDate()+5);
+    var eta      = etaDate.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    var firstName = (o.customer||'Customer').split(' ')[0];
+    var t = MC_TEMPLATES['shipping-update'];
+    var subject = t.subject.replace('{{orderId}}', oid);
+    var html = t.render({name:firstName, orderId:oid, tracking:tracking, carrier:carrier, eta:eta});
+    var fromName  = storageGet('mc_from_name')||'KLOT';
+    var fromEmail = storageGet('mc_from_email')||'hello@klotworld.com';
+    fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({to:o.email, subject:subject, html:html, fromName:fromName, fromEmail:fromEmail})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.id){
+        mcAddLog({id:d.id,to:o.email,subject:subject,template:t.label,type:t.type,status:'pending',sentAt:new Date().toISOString()});
+        showToast('Shipping update sent to '+o.email);
+      } else {
+        showToast('Status updated — shipping email failed: '+(d.message||d.error||'unknown'));
+      }
+    }).catch(function(){ showToast('Status updated — could not send shipping email'); });
   }
 }
 
