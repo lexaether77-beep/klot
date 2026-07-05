@@ -1330,6 +1330,18 @@ input.pm-inp.pfx { padding-left:26px; }
 <!-- Product schema — updated dynamically when a product page is opened -->
 <script type="application/ld+json" id="pdp-schema-ld"></script>
 
+<!-- GA4 — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+  function _ga4(event, params) {
+    if (typeof gtag !== 'undefined') gtag('event', event, params || {});
+  }
+</script>
+
 </head>
 <body>
 
@@ -2068,769 +2080,7 @@ input.pm-inp.pfx { padding-left:26px; }
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
-<div class="admin-panel" id="admin-panel">
-
-  <!-- Session timeout warning -->
-  <div id="admin-timeout-warning" style="display:none;background:rgba(248,113,113,.12);border-bottom:1px solid rgba(248,113,113,.3);padding:8px 40px;text-align:center;font-size:11px;letter-spacing:.1em;color:#fca5a5">
-    &#9888; Session expiring in <strong id="admin-timeout-countdown"></strong> &mdash;
-    <button onclick="extendAdminSession()" style="background:none;border:1px solid rgba(248,113,113,.4);color:#fca5a5;padding:2px 12px;font-size:10px;letter-spacing:.1em;cursor:pointer;margin-left:8px">Extend Session</button>
-  </div>
-  <div class="admin-session-bar" id="admin-session-bar">
-    <div style="display:flex;align-items:center;gap:16px">
-      <span>&#9679; Logged in as <strong>admin</strong></span>
-      <span id="admin-role-badge" style="padding:2px 10px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:rgba(42,107,42,.2);color:#4ade80;border:1px solid rgba(42,107,42,.3)">Super Admin</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:16px">
-      <span id="admin-session-time" style="opacity:.6;font-size:10px"></span>
-      <span id="admin-session-expiry" style="opacity:.4;font-size:10px"></span>
-      <button class="admin-logout-btn" onclick="adminLogout()">Log Out</button>
-    </div>
-  </div>
-
-  <div class="admin-header">
-    <h2>
-      <svg viewBox="0 0 60 70" fill="none" style="height:30px;width:auto;flex-shrink:0">
-        <rect x="0"    y="0"  width="17" height="28" fill="#f5f0e8"/>
-        <rect x="0"    y="32" width="17" height="38" fill="#f5f0e8"/>
-        <rect x="21.5" y="10" width="17" height="18" fill="#f5f0e8"/>
-        <rect x="21.5" y="32" width="17" height="38" fill="#f5f0e8"/>
-        <rect x="43"   y="0"  width="17" height="28" fill="#f5f0e8"/>
-        <rect x="43"   y="32" width="17" height="38" fill="#f5f0e8"/>
-      </svg>
-      KLOT <span>&mdash; Admin Dashboard</span>
-    </h2>
-    <button class="admin-close" onclick="closeAdminPanel()">&#10005; Close</button>
-  </div>
-
-  <div class="admin-body">
-    <div class="admin-sidebar">
-      <div class="admin-nav-item active" onclick="showAdminTab('overview',this)">&#128202; Overview</div>
-      <div class="admin-nav-item" onclick="showAdminTab('orders',this)">&#128230; Orders</div>
-      <div class="admin-nav-item" onclick="showAdminTab('inventory',this)">&#128202; Inventory</div>
-      <div class="admin-nav-item" onclick="showAdminTab('products',this)">&#128247; Products</div>
-      <div class="admin-nav-item" onclick="showAdminTab('customers',this)">&#128100; Customers</div>
-      <div class="admin-nav-item" onclick="showAdminTab('import',this)">&#128229; Import</div>
-      <div class="admin-nav-item" onclick="showAdminTab('team',this)">&#128100; Team Photos</div>
-      <div class="admin-nav-item" onclick="showAdminTab('leads',this)">&#128205; Waitlist &amp; Subscribers</div>
-      <div class="admin-nav-item" onclick="showAdminTab('audit',this)">&#128196; Audit Log</div>
-      <div class="admin-nav-item" onclick="showAdminTab('messages',this)">&#9993; Message Center</div>
-    </div>
-
-    <div class="admin-content">
-
-      <!-- OVERVIEW TAB -->
-      <div class="admin-tab active" id="admin-overview">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">Total Revenue</div>
-            <div class="stat-value" id="stat-revenue">&#8358;0</div>
-            <div class="stat-change">&#8593; +18.4% this month</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Total Orders</div>
-            <div class="stat-value" id="stat-orders">0</div>
-            <div class="stat-change">&#8593; +7 from yesterday</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Active Products</div>
-            <div class="stat-value" id="stat-active-products">20</div>
-            <div class="stat-change" id="stat-low-stock">3 low stock alerts</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Customers</div>
-            <div class="stat-value">1,284</div>
-            <div class="stat-change">&#8593; +42 this week</div>
-          </div>
-        </div>
-        <h3 class="admin-section-title">Recent Orders</h3>
-        <table class="admin-table">
-          <thead><tr><th>Order ID</th><th>Customer / Delivery</th><th>Items Ordered</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
-          <tbody id="recent-orders-body"></tbody>
-        </table>
-      </div>
-
-      <!-- ORDERS TAB -->
-      <div class="admin-tab" id="admin-orders">
-        <div class="admin-toolbar">
-          <div style="display:flex;align-items:baseline;gap:14px">
-            <h3 class="admin-section-title" style="margin:0">Order Management</h3>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <input type="text" class="admin-search" id="orders-search" placeholder="Search order, customer..." oninput="populateOrders()">
-            <select class="admin-filter-select" id="orders-filter" onchange="populateOrders()">
-              <option value="">All Statuses</option>
-              <option value="processing">Processing</option>
-              <option value="shipped">Shipped</option>
-              <option value="delivered">Delivered</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-            <button class="abtn abtn-gold" onclick="exportOrders('xlsx')">&#11015; Excel</button>
-            <button class="abtn abtn-outline" onclick="exportOrders('csv')">&#11015; CSV</button>
-            <label class="abtn abtn-outline" style="cursor:pointer">
-              &#11014; Import
-              <input type="file" accept=".xlsx,.xls,.csv" style="display:none" onchange="importOrders(event)">
-            </label>
-          </div>
-        </div>
-        <table class="admin-table">
-          <thead><tr><th>Order ID</th><th>Customer / Delivery</th><th>Items Ordered</th><th>Total (&#8358;)</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
-          <tbody id="all-orders-body"></tbody>
-        </table>
-      </div>
-
-      <!-- INVENTORY TAB -->
-      <div class="admin-tab" id="admin-inventory">
-        <div class="admin-toolbar">
-          <div style="display:flex;align-items:baseline;gap:14px">
-            <h3 class="admin-section-title" style="margin:0">Inventory Tracker</h3>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <input type="text" class="admin-search" id="inv-search" placeholder="Search SKU, name..." oninput="populateInventory()">
-            <select class="admin-filter-select" id="inv-filter" onchange="populateInventory()">
-              <option value="">All Categories</option>
-              <option value="fashion">Fashion</option>
-              <option value="sports">Sports</option>
-              <option value="kids">Kids</option>
-            </select>
-            <button class="abtn abtn-gold" onclick="exportInventory('xlsx')">&#11015; Excel</button>
-            <button class="abtn abtn-outline" onclick="exportInventory('csv')">&#11015; CSV</button>
-            <label class="abtn abtn-outline" style="cursor:pointer">
-              &#11014; Import Stock
-              <input type="file" accept=".xlsx,.xls,.csv" style="display:none" onchange="importInventory(event)">
-            </label>
-          </div>
-        </div>
-        <table class="admin-table">
-          <thead><tr><th>Product</th><th>Category</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
-          <tbody id="inventory-body"></tbody>
-        </table>
-      </div>
-
-      <!-- PRODUCTS TAB -->
-      <div class="admin-tab" id="admin-products">
-        <div class="admin-toolbar">
-          <div style="display:flex;align-items:baseline;gap:14px">
-            <h3 class="admin-section-title" style="margin:0">Product Management</h3>
-            <span style="font-size:11px;color:rgba(245,240,232,.35);letter-spacing:.1em" id="pm-count">20 products</span>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <input type="text" class="admin-search" id="pm-search" placeholder="Search SKU, name..." oninput="pmFilter()">
-            <select class="admin-filter-select" id="pm-filter-cat" onchange="pmFilter()">
-              <option value="">All Categories</option>
-              <option value="fashion">Fashion</option>
-              <option value="sports">Sports</option>
-              <option value="kids">Kids</option>
-            </select>
-            <select class="admin-filter-select" id="pm-filter-status" onchange="pmFilter()">
-              <option value="">All Statuses</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-            <button class="abtn abtn-gold" onclick="pmExportExcel()">&#11015; Excel</button>
-            <button class="abtn abtn-outline" onclick="pmExportCSV()">&#11015; CSV</button>
-          </div>
-        </div>
-
-        <!-- Bulk bar -->
-        <div class="pm-bulk-bar" id="pm-bulk-bar">
-          <span id="pm-bulk-count">0 selected</span>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="abtn abtn-outline" onclick="pmBulkStatus('active')">&#10003; Set Active</button>
-            <button class="abtn abtn-outline" onclick="pmBulkStatus('inactive')">&#9632; Set Inactive</button>
-            <button class="abtn abtn-danger" onclick="pmBulkDelete()">&#128465; Delete</button>
-            <button class="abtn abtn-outline" onclick="pmClearSel()">&#10005; Clear</button>
-          </div>
-        </div>
-
-        <div class="pm-table-wrap">
-          <table class="pm-table" id="pm-table">
-            <thead>
-              <tr>
-                <th style="width:36px"><input type="checkbox" id="pm-check-all" class="pm-checkbox" onchange="pmToggleAll(this)"></th>
-                <th class="pm-th-sort" onclick="pmSort('sku')">SKU <span class="sort-icon" id="sort-sku">&#8645;</span></th>
-                <th class="pm-th-sort" onclick="pmSort('name')">Product <span class="sort-icon" id="sort-name">&#8645;</span></th>
-                <th class="pm-th-sort" onclick="pmSort('category')">Category <span class="sort-icon" id="sort-category">&#8645;</span></th>
-                <th class="pm-th-sort" onclick="pmSort('priceNGN')">Price &#8358; <span class="sort-icon" id="sort-priceNGN">&#8645;</span></th>
-                <th class="pm-th-sort" onclick="pmSort('priceUSD')">Price $ <span class="sort-icon" id="sort-priceUSD">&#8645;</span></th>
-                <th class="pm-th-sort" onclick="pmSort('stock')">Stock <span class="sort-icon" id="sort-stock">&#8645;</span></th>
-                <th>Status</th>
-                <th>Image</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="pm-tbody"></tbody>
-          </table>
-        </div>
-        <div class="pm-pagination" id="pm-pagination"></div>
-
-        <!-- Edit Modal -->
-        <div class="pm-modal-overlay" id="pm-modal-overlay" onclick="pmCloseModal(event)">
-          <div class="pm-modal">
-            <div class="pm-modal-hdr">
-              <div>
-                <div class="pm-modal-title" id="pm-modal-title">Edit Product</div>
-                <div class="pm-modal-sku" id="pm-modal-sku"></div>
-              </div>
-              <button class="pm-modal-x" onclick="pmCloseModal()">&#10005;</button>
-            </div>
-            <div class="pm-modal-body">
-              <input type="hidden" id="edit-index">
-              <div class="pm-field-row">
-                <div class="pm-field">
-                  <label class="pm-lbl">SKU <span class="pm-lbl-lock">&#128274; Immutable</span></label>
-                  <input type="text" class="pm-inp pm-inp-lock" id="edit-sku" readonly>
-                </div>
-                <div class="pm-field">
-                  <label class="pm-lbl">Product ID <span class="pm-lbl-lock">&#128274; Read-only</span></label>
-                  <input type="text" class="pm-inp pm-inp-lock" id="edit-id" readonly>
-                </div>
-              </div>
-              <div class="pm-field-row">
-                <div class="pm-field" style="flex:2">
-                  <label class="pm-lbl">Product Name <span class="pm-lbl-req">&#9733;</span></label>
-                  <input type="text" class="pm-inp" id="edit-name" maxlength="120">
-                </div>
-                <div class="pm-field">
-                  <label class="pm-lbl">Category <span class="pm-lbl-req">&#9733;</span></label>
-                  <select class="pm-inp" id="edit-category">
-                    <option value="fashion">Fashion</option>
-                    <option value="sports">Sports</option>
-                    <option value="kids">Kids</option>
-                  </select>
-                </div>
-              </div>
-              <div class="pm-field-row">
-                <div class="pm-field">
-                  <label class="pm-lbl">Price (&#8358; NGN) <span class="pm-lbl-req">&#9733;</span></label>
-                  <div class="pm-pfx-wrap"><span class="pm-pfx">&#8358;</span><input type="number" class="pm-inp pfx" id="edit-priceNGN" min="0" step="100"></div>
-                </div>
-                <div class="pm-field">
-                  <label class="pm-lbl">Price ($ USD) <span class="pm-lbl-req">&#9733;</span></label>
-                  <div class="pm-pfx-wrap"><span class="pm-pfx">$</span><input type="number" class="pm-inp pfx" id="edit-priceUSD" min="0" step="0.01"></div>
-                </div>
-                <div class="pm-field">
-                  <label class="pm-lbl">Stock Qty <span class="pm-lbl-req">&#9733;</span></label>
-                  <input type="number" class="pm-inp" id="edit-stock" min="0" step="1">
-                </div>
-              </div>
-              <div class="pm-field-row">
-                <div class="pm-field">
-                  <label class="pm-lbl">Status</label>
-                  <div class="pm-status-toggle" onclick="pmToggleStatus()">
-                    <div class="pm-pill active" id="pm-status-pill"></div>
-                    <span class="pm-status-lbl active" id="pm-status-lbl">ACTIVE</span>
-                  </div>
-                  <input type="hidden" id="edit-status" value="active">
-                </div>
-                <div class="pm-field">
-                  <label class="pm-lbl">Tag</label>
-                  <select class="pm-inp" id="edit-tag"><option value="">None</option><option value="new">New</option><option value="limited">Limited</option><option value="sale">Sale</option></select>
-                </div>
-                <div class="pm-field">
-                  <label class="pm-lbl">Style</label>
-                  <select class="pm-inp" id="edit-style"><option value="unisex">Unisex</option><option value="men">Men</option><option value="women">Women</option></select>
-                </div>
-              </div>
-              <div class="pm-field" style="margin-bottom:12px">
-                <label class="pm-lbl">Image 1 — Main (Hero)</label>
-                <div style="display:flex;gap:8px;align-items:center">
-                  <input type="text" class="pm-inp" id="edit-imageUrl" placeholder="https://example.com/image.jpg or klot_website/..." oninput="pmPreviewImg(this.value)" style="flex:1">
-                  <div class="pm-img-preview" id="pm-img-preview"><span style="font-size:18px;opacity:.3">&#128444;</span></div>
-                </div>
-                <div class="pm-img-status" id="pm-img-status"></div>
-              </div>
-              <div class="pm-field" style="margin-bottom:12px">
-                <label class="pm-lbl">Image 2 — Front View</label>
-                <input type="text" class="pm-inp" id="edit-image2" placeholder="https://example.com/front.jpg or klot_website/...">
-              </div>
-              <div class="pm-field" style="margin-bottom:12px">
-                <label class="pm-lbl">Image 3 — Rear View</label>
-                <input type="text" class="pm-inp" id="edit-image3" placeholder="https://example.com/rear.jpg or klot_website/...">
-              </div>
-              <div class="pm-field" style="margin-bottom:18px">
-                <label class="pm-lbl">Image 4 — Detail Shot</label>
-                <input type="text" class="pm-inp" id="edit-image4" placeholder="https://example.com/detail.jpg or klot_website/...">
-              </div>
-              <div class="pm-field-row">
-                <div class="pm-field">
-                  <label class="pm-lbl">Sizes</label>
-                  <input type="text" class="pm-inp" id="edit-sizes" placeholder="XS-XL">
-                </div>
-                <div class="pm-field">
-                  <label class="pm-lbl">Hex Colour</label>
-                  <div style="display:flex;gap:8px;align-items:center">
-                    <input type="text" class="pm-inp" id="edit-color" placeholder="#1a2d42" oninput="pmSyncColor()" style="flex:1">
-                    <input type="color" id="edit-color-picker" value="#1a2d42" oninput="pmPickColor()" style="width:36px;height:36px;border:none;background:none;padding:0">
-                  </div>
-                </div>
-                <div class="pm-field">
-                  <label class="pm-lbl">Activity</label>
-                  <select class="pm-inp" id="edit-activity"><option value="training">Training</option><option value="running">Running</option><option value="yoga">Yoga</option></select>
-                </div>
-              </div>
-              <div class="pm-field">
-                <label class="pm-lbl">Description</label>
-                <textarea class="pm-inp pm-textarea" id="edit-description" maxlength="500"></textarea>
-                <div class="pm-char-count" id="pm-char-count">0 / 500</div>
-              </div>
-            </div>
-            <div class="pm-modal-ftr">
-              <div class="pm-val-msg" id="pm-val-msg"></div>
-              <div style="display:flex;gap:10px">
-                <button class="abtn abtn-outline" onclick="pmCloseModal()">Cancel</button>
-                <button class="abtn abtn-gold" onclick="pmSave()">&#10003; Save Changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div><!-- /products tab -->
-
-      <!-- CUSTOMERS TAB -->
-      <div class="admin-tab" id="admin-customers">
-        <div class="admin-toolbar">
-          <div style="display:flex;align-items:baseline;gap:14px">
-            <h3 class="admin-section-title" style="margin:0">Customers</h3>
-            <span style="font-size:11px;color:rgba(245,240,232,.35);letter-spacing:.1em" id="cust-count"></span>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <input type="text" class="admin-search" id="cust-search" placeholder="Search name or email..." oninput="populateCustomers()">
-            <button class="abtn abtn-outline" id="cust-tab-list" onclick="custSubTab('list')" style="background:rgba(255,45,45,.12);border-color:var(--green);color:var(--green)">List</button>
-            <button class="abtn abtn-outline" id="cust-tab-addr" onclick="custSubTab('addresses')">Addresses</button>
-            <button class="abtn abtn-gold" onclick="exportCustomers('xlsx')">&#11015; Excel</button>
-            <button class="abtn abtn-outline" onclick="exportCustomers('csv')">&#11015; CSV</button>
-          </div>
-        </div>
-        <!-- List view -->
-        <div id="cust-view-list">
-          <table class="admin-table">
-            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Orders</th><th>Total Spent</th><th>Last Order</th><th>Location</th><th>Status</th></tr></thead>
-            <tbody id="customers-body"></tbody>
-          </table>
-          <div id="cust-empty" style="display:none;text-align:center;padding:40px;font-family:'Inter',sans-serif;font-size:18px;color:rgba(245,240,232,.3);font-style:italic">No customers yet. Orders will appear here after checkout.</div>
-        </div>
-        <!-- Addresses view -->
-        <div id="cust-view-addresses" style="display:none">
-          <table class="admin-table">
-            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Delivery Address</th><th>City / State</th><th>Last Order</th></tr></thead>
-            <tbody id="addresses-body"></tbody>
-          </table>
-          <div id="addr-empty" style="display:none;text-align:center;padding:40px;font-family:'Inter',sans-serif;font-size:18px;color:rgba(245,240,232,.3);font-style:italic">No address data yet.</div>
-        </div>
-      </div>
-
-      <!-- IMPORT TAB -->
-      <div class="admin-tab" id="admin-import">
-        <h3 class="admin-section-title" style="margin-bottom:4px">Product Import Engine</h3>
-        <p style="font-family:'Inter',sans-serif;font-size:16px;color:rgba(245,240,232,.4);margin-bottom:28px">Synchronise your catalogue from Excel (.xlsx) or CSV &mdash; SKU-based upsert with full validation</p>
-
-        <div class="import-card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px">
-            <div>
-              <div class="import-card-title">Step 1 &mdash; Upload File</div>
-              <div class="import-card-sub">Drag &amp; drop or click to select your spreadsheet</div>
-            </div>
-            <button class="abtn abtn-outline" onclick="downloadTemplate()">&#11015; Download Template</button>
-          </div>
-          <div class="drop-zone" id="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave()" ondrop="handleDrop(event)">
-            <input type="file" id="file-input" accept=".xlsx,.xls,.csv" onchange="handleFileSelect(event)">
-            <div class="drop-icon">&#128194;</div>
-            <div class="drop-text"><strong>Drop your file here</strong><br>or click to browse</div>
-            <div class="drop-formats">Supported: .xlsx &nbsp;&middot;&nbsp; .xls &nbsp;&middot;&nbsp; .csv</div>
-          </div>
-          <div class="file-selected" id="file-selected">
-            <span>&#128196;</span>
-            <span id="file-selected-name"></span>
-            <span id="file-selected-size" style="color:rgba(245,240,232,.35);margin-left:auto"></span>
-          </div>
-        </div>
-
-        <div class="import-card" id="mapping-card" style="display:none">
-          <div class="import-card-title">Step 2 &mdash; Map Columns</div>
-          <div class="import-card-sub">Match columns to KLOT fields &nbsp;&bull;&nbsp; <span style="color:#f87171">* = Required</span></div>
-          <div class="mapping-grid" id="mapping-grid"></div>
-          <button class="abtn abtn-gold" onclick="runValidation()">Validate &amp; Preview &#8594;</button>
-        </div>
-
-        <div class="tpl-guide" id="template-guide">
-          <div class="tpl-guide-title">Expected Column Structure</div>
-          <div class="tpl-cols">
-            <div class="tpl-col"><div class="tpl-col-name">sku</div><div class="tpl-col-req">* Required</div><div class="tpl-col-desc">e.g. MN-001</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">name</div><div class="tpl-col-req">* Required</div><div class="tpl-col-desc">Product name</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">category</div><div class="tpl-col-req">* Required</div><div class="tpl-col-desc">fashion|sports|kids</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">priceNGN</div><div class="tpl-col-req">* Required</div><div class="tpl-col-desc">Naira price</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">priceUSD</div><div class="tpl-col-req">* Required</div><div class="tpl-col-desc">USD price</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">style</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">unisex|men|women</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">sizes</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">e.g. XS-XL</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">tag</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">new|limited|sale</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">imageUrl</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">Main image URL</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">image2</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">2nd image (front)</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">image3</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">3rd image (rear)</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">image4</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">4th image (detail)</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">stock</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">Quantity number</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">status</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">active|inactive</div></div>
-            <div class="tpl-col"><div class="tpl-col-name">description</div><div class="tpl-col-opt">Optional</div><div class="tpl-col-desc">Product description</div></div>
-          </div>
-        </div>
-
-        <div class="validation-panel" id="validation-panel">
-          <div class="import-card">
-            <div class="import-card-title" style="margin-bottom:14px">Step 3 &mdash; Validation Report</div>
-            <div class="import-stats">
-              <div class="import-stat"><div class="import-stat-val" id="stat-total">0</div><div class="import-stat-lbl">Total Rows</div></div>
-              <div class="import-stat"><div class="import-stat-val green" id="stat-new">0</div><div class="import-stat-lbl">New Products</div></div>
-              <div class="import-stat"><div class="import-stat-val blue" id="stat-update">0</div><div class="import-stat-lbl">Updates</div></div>
-              <div class="import-stat"><div class="import-stat-val yellow" id="stat-skip">0</div><div class="import-stat-lbl">Skipped</div></div>
-              <div class="import-stat"><div class="import-stat-val red" id="stat-error">0</div><div class="import-stat-lbl">Errors</div></div>
-            </div>
-            <div id="val-errors-section" style="display:none">
-              <div class="val-title-errors">&#10006; Errors &mdash; fix before importing</div>
-              <div id="val-errors-list"></div>
-            </div>
-            <div id="val-warnings-section" style="display:none">
-              <div class="val-title-warnings">&#9888; Warnings &mdash; will use defaults</div>
-              <div id="val-warnings-list"></div>
-            </div>
-            <div id="val-ok-section" style="display:none">
-              <div class="val-title-ok">&#10004; Ready to import</div>
-              <div id="val-ok-list"></div>
-            </div>
-          </div>
-          <div class="import-card">
-            <div class="import-card-title" style="margin-bottom:12px">Step 4 &mdash; Data Preview (first 50 rows)</div>
-            <div class="preview-wrap">
-              <table class="preview-table">
-                <thead id="preview-thead"></thead>
-                <tbody id="preview-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-          <div class="import-actions">
-            <button class="abtn abtn-gold" id="btn-confirm-import" onclick="confirmImport()">&#11014; Confirm &amp; Import</button>
-            <button class="abtn abtn-outline" onclick="resetImport()">&#10005; Cancel</button>
-            <button class="abtn abtn-outline" onclick="exportErrorLog()" id="btn-export-errors" style="display:none">&#11015; Export Errors</button>
-          </div>
-        </div>
-
-        <div class="import-progress-wrap" id="import-progress-wrap">
-          <div class="import-progress-label">
-            <span id="progress-label-text">Importing&hellip;</span>
-            <span id="progress-pct">0%</span>
-          </div>
-          <div class="import-progress-bar"><div class="import-progress-fill" id="progress-fill"></div></div>
-        </div>
-
-        <div id="post-error-section" style="display:none;margin-top:20px">
-          <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#fca5a5;margin-bottom:10px">Post-Import Errors</div>
-          <div class="error-log" id="error-log"></div>
-        </div>
-
-        <div class="import-success" id="import-success">
-          <div class="import-success-icon">&#10003;</div>
-          <h3>Import Complete</h3>
-          <p id="import-success-msg"></p>
-        </div>
-      </div><!-- /import tab -->
-
-
-      <!-- TEAM PHOTOS TAB -->
-      <div class="admin-tab" id="admin-team">
-        <h3 class="admin-section-title">Team Photo Manager</h3>
-        <p class="team-upload-hint">Upload profile photos and edit bios for the Our Story page. Click any photo to select a new image — changes apply immediately. Only accessible from this admin panel.</p>
-        <div class="team-upload-grid">
-
-          <!-- Adaeze -->
-          <div class="team-upload-card">
-            <div class="team-upload-preview" onclick="document.getElementById('admin-file-adaeze').click()" title="Click to upload photo">
-              <img id="admin-preview-adaeze" src="" alt="Phillip Nwankwo" onerror="this.style.opacity='.15'">
-              <div class="team-upload-preview-overlay">
-                <span class="team-upload-preview-icon">&#128247;</span>
-                <span class="team-upload-preview-label">Change Photo</span>
-              </div>
-              <input type="file" id="admin-file-adaeze" class="team-upload-input" accept="image/png,image/jpeg,image/webp" onchange="adminExecUpload('adaeze',this)">
-            </div>
-            <div class="team-upload-body">
-              <div class="team-upload-name">Phillip Nwankwo</div>
-              <div class="team-upload-role">Founder &amp; Creative Director</div>
-              <div class="team-upload-bio-label">Bio</div>
-              <textarea class="team-upload-bio" id="admin-bio-adaeze">Phillip founded KLOT with a singular vision — to build a brand that moves as fast as its wearers. With a background in design and a relentless pursuit of excellence, he leads KLOT with purpose and edge.</textarea>
-              <button class="team-upload-save" onclick="adminSaveBio('adaeze')">Save Bio</button>
-              <div class="team-upload-status" id="admin-status-adaeze"></div>
-            </div>
-          </div>
-
-          <!-- Kofi -->
-          <div class="team-upload-card">
-            <div class="team-upload-preview" onclick="document.getElementById('admin-file-kofi').click()" title="Click to upload photo">
-              <img id="admin-preview-kofi" src="" alt="Phoenix Nwankwo" onerror="this.style.opacity='.15'">
-              <div class="team-upload-preview-overlay">
-                <span class="team-upload-preview-icon">&#128247;</span>
-                <span class="team-upload-preview-label">Change Photo</span>
-              </div>
-              <input type="file" id="admin-file-kofi" class="team-upload-input" accept="image/png,image/jpeg,image/webp" onchange="adminExecUpload('kofi',this)">
-            </div>
-            <div class="team-upload-body">
-              <div class="team-upload-name">Phoenix Nwankwo</div>
-              <div class="team-upload-role">Head of Design</div>
-              <div class="team-upload-bio-label">Bio</div>
-              <textarea class="team-upload-bio" id="admin-bio-kofi">At a young age, Phoenix has already taken on the role of Head of Design at Klot Worx. With a natural eye for detail and a fearless imagination, Phoenix leads with originality and joy, shaping designs that are both playful and inspiring.</textarea>
-              <button class="team-upload-save" onclick="adminSaveBio('kofi')">Save Bio</button>
-              <div class="team-upload-status" id="admin-status-kofi"></div>
-            </div>
-          </div>
-
-          <!-- Anthony Nabena -->
-          <div class="team-upload-card">
-            <div class="team-upload-preview" onclick="document.getElementById('admin-file-anthony').click()" title="Click to upload photo">
-              <img id="admin-preview-anthony" src="klot_website/klot/assets/images/exec_anthony%20nabena.jpeg" alt="Anthony Nabena" onerror="this.style.opacity='.15'">
-              <div class="team-upload-preview-overlay">
-                <span class="team-upload-preview-icon">&#128247;</span>
-                <span class="team-upload-preview-label">Change Photo</span>
-              </div>
-              <input type="file" id="admin-file-anthony" class="team-upload-input" accept="image/png,image/jpeg,image/webp" onchange="adminExecUpload('anthony',this)">
-            </div>
-            <div class="team-upload-body">
-              <div class="team-upload-name">Anthony Nabena</div>
-              <div class="team-upload-role">Head of Marketing &amp; Operations</div>
-              <div class="team-upload-bio-label">Bio</div>
-              <textarea class="team-upload-bio" id="admin-bio-anthony">A dynamic leader with proven expertise in streamlining operations and driving impactful marketing strategies. Skilled at aligning business processes with brand vision, optimizing efficiency, and delivering measurable growth.</textarea>
-              <button class="team-upload-save" onclick="adminSaveBio('anthony')">Save Bio</button>
-              <div class="team-upload-status" id="admin-status-anthony"></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- AUDIT LOG TAB -->
-      <div class="admin-tab" id="admin-audit">
-        <div class="admin-toolbar">
-          <div style="display:flex;align-items:baseline;gap:14px">
-            <h3 class="admin-section-title" style="margin:0">Audit Log</h3>
-            <span style="font-size:11px;color:rgba(245,240,232,.35);letter-spacing:.1em" id="audit-count"></span>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <select class="admin-filter-select" id="audit-filter-type" onchange="renderAuditLog()">
-              <option value="">All Actions</option>
-              <option value="AUTH">Auth</option>
-              <option value="PRODUCT">Products</option>
-              <option value="ORDER">Orders</option>
-              <option value="INVENTORY">Inventory</option>
-              <option value="IMPORT">Import</option>
-              <option value="SESSION">Session</option>
-            </select>
-            <button class="abtn abtn-outline" onclick="clearAuditLog()">&#128465; Clear Log</button>
-            <button class="abtn abtn-gold" onclick="exportAuditLog()">&#11015; Export</button>
-          </div>
-        </div>
-        <div id="audit-log-list" style="max-height:520px;overflow-y:auto;border:1px solid rgba(184,151,74,.1)"></div>
-        <div id="audit-empty" style="display:none;text-align:center;padding:40px;font-family:'Inter',sans-serif;font-size:18px;color:rgba(245,240,232,.3);font-style:italic">No admin actions logged yet.</div>
-      </div>
-
-      <!-- WAITLIST & SUBSCRIBERS TAB -->
-      <div class="admin-tab" id="admin-leads">
-        <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px">
-          <h3 class="admin-section-title" style="margin:0">Waitlist &amp; Subscribers</h3>
-          <span style="font-size:11px;color:rgba(245,240,232,.35);letter-spacing:.1em;font-family:'Inter',sans-serif">Saved locally in browser</span>
-        </div>
-
-        <!-- Sub-tabs -->
-        <div style="display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid rgba(184,151,74,.15)">
-          <button id="leads-tab-waitlist" class="mc-nav-btn active" onclick="leadsSubTab('waitlist',this)" style="border-bottom:2px solid var(--green);color:var(--green)">&#128683; Product Waitlist</button>
-          <button id="leads-tab-subscribers" class="mc-nav-btn" onclick="leadsSubTab('subscribers',this)">&#128235; Subscribers</button>
-        </div>
-
-        <!-- Product Waitlist panel -->
-        <div id="leads-panel-waitlist">
-          <div class="admin-toolbar">
-            <span style="font-size:11px;color:rgba(245,240,232,.4);font-family:'Inter',sans-serif">Customers who requested back-in-stock notifications</span>
-            <div style="display:flex;gap:8px">
-              <button class="abtn abtn-gold" onclick="exportLeads('waitlist')">&#11015; Export CSV</button>
-              <button class="abtn abtn-danger" onclick="clearLeads('waitlist')">&#128465; Clear All</button>
-            </div>
-          </div>
-          <div id="leads-waitlist-empty" style="text-align:center;padding:60px 20px;font-family:'Inter',sans-serif;font-size:16px;color:rgba(245,240,232,.25);font-style:italic">No waitlist entries yet. They appear here when customers tap "Notify Me" on a sold-out product.</div>
-          <table class="admin-table" id="leads-waitlist-table" style="display:none">
-            <thead><tr><th>Email</th><th>Product</th><th>Date</th><th>Action</th></tr></thead>
-            <tbody id="leads-waitlist-body"></tbody>
-          </table>
-        </div>
-
-        <!-- Subscribers panel -->
-        <div id="leads-panel-subscribers" style="display:none">
-          <div class="admin-toolbar">
-            <span style="font-size:11px;color:rgba(245,240,232,.4);font-family:'Inter',sans-serif">Emails collected from the KLOT x Bigbird waitlist popup</span>
-            <div style="display:flex;gap:8px">
-              <button class="abtn abtn-gold" onclick="exportLeads('subscribers')">&#11015; Export CSV</button>
-              <button class="abtn abtn-danger" onclick="clearLeads('subscribers')">&#128465; Clear All</button>
-            </div>
-          </div>
-          <div id="leads-subs-empty" style="text-align:center;padding:60px 20px;font-family:'Inter',sans-serif;font-size:16px;color:rgba(245,240,232,.25);font-style:italic">No subscribers yet. They appear here when someone signs up via the popup.</div>
-          <table class="admin-table" id="leads-subs-table" style="display:none">
-            <thead><tr><th>Email</th><th>Source</th><th>Date</th><th>Action</th></tr></thead>
-            <tbody id="leads-subs-body"></tbody>
-          </table>
-        </div>
-      </div><!-- /admin-leads -->
-
-      <!-- MESSAGE CENTER TAB -->
-      <div class="admin-tab" id="admin-messages">
-        <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:24px">
-          <h3 class="admin-section-title" style="margin:0">Message Center</h3>
-          <span style="font-size:10px;color:rgba(245,240,232,.3);letter-spacing:.12em;font-family:'Inter',sans-serif">Powered by Resend</span>
-        </div>
-
-        <div class="mc-nav">
-          <button class="mc-nav-btn active" onclick="mcPanel('inbox',this)">&#128235; Sent</button>
-          <button class="mc-nav-btn" onclick="mcPanel('received',this)">&#128229; Received</button>
-          <button class="mc-nav-btn" onclick="mcPanel('compose',this)">&#9997; Compose</button>
-          <button class="mc-nav-btn" onclick="mcPanel('settings',this)">&#9881; Settings</button>
-        </div>
-
-        <!-- SENT INBOX -->
-        <div class="mc-panel active" id="mc-inbox">
-          <div class="mc-metrics" id="mc-metrics"></div>
-          <div class="mc-filter-bar">
-            <button class="mc-filter-btn active" onclick="mcFilter('all',this)">All</button>
-            <button class="mc-filter-btn" onclick="mcFilter('transactional',this)">Transactional</button>
-            <button class="mc-filter-btn" onclick="mcFilter('marketing',this)">Marketing</button>
-            <button class="mc-filter-btn" onclick="mcFilter('bounced',this)">Bounced</button>
-            <button class="abtn abtn-outline" style="margin-left:auto;font-size:9px" onclick="mcRefreshStatuses()">&#8635; Refresh</button>
-            <input class="mc-search" id="mc-search" placeholder="Search by recipient or subject…" oninput="mcRenderInbox()">
-          </div>
-          <div class="mc-table-wrap">
-            <div class="mc-row hdr">
-              <div class="mc-col-h"></div>
-              <div class="mc-col-h">Recipient &amp; Subject</div>
-              <div class="mc-col-h">Template</div>
-              <div class="mc-col-h">Type</div>
-              <div class="mc-col-h">Status</div>
-              <div class="mc-col-h">Sent</div>
-            </div>
-            <div id="mc-inbox-list"></div>
-          </div>
-          <div id="mc-inbox-empty" style="display:none;text-align:center;padding:60px 20px;font-family:'Inter',sans-serif;font-size:17px;color:rgba(245,240,232,.22);font-style:italic">No emails sent yet. Use Compose to send your first email.</div>
-        </div>
-
-        <!-- RECEIVED INBOX -->
-        <div class="mc-panel" id="mc-received">
-          <div class="mc-filter-bar" style="justify-content:space-between">
-            <span style="font-family:'Inter',sans-serif;font-size:12px;color:rgba(245,240,232,.4)">Emails received at klotworld.com</span>
-            <button class="abtn abtn-outline" style="font-size:9px" onclick="mcLoadReceived()">&#8635; Refresh</button>
-          </div>
-          <div class="mc-table-wrap">
-            <div class="mc-row hdr">
-              <div class="mc-col-h"></div>
-              <div class="mc-col-h">From &amp; Subject</div>
-              <div class="mc-col-h">To</div>
-              <div class="mc-col-h">Received</div>
-            </div>
-            <div id="mc-received-list"></div>
-          </div>
-          <div id="mc-received-empty" style="display:none;text-align:center;padding:60px 20px;font-family:'Inter',sans-serif;font-size:17px;color:rgba(245,240,232,.22);font-style:italic">No received emails yet. Messages sent to @klotlife.com will appear here.</div>
-          <div id="mc-received-setup" style="display:none;text-align:center;padding:40px 20px">
-            <div style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(245,240,232,.5);line-height:1.8">
-              &#9888; Inbox storage not configured.<br>Add <strong>UPSTASH_REDIS_REST_URL</strong> and <strong>UPSTASH_REDIS_REST_TOKEN</strong> to your Vercel environment variables.
-            </div>
-          </div>
-        </div>
-
-        <!-- COMPOSE -->
-        <div class="mc-panel" id="mc-compose">
-          <div class="mc-compose-grid">
-            <div class="mc-compose-form">
-              <div class="mc-field">
-                <label class="mc-label" for="mc-to">To</label>
-                <input class="mc-input" id="mc-to" type="email" placeholder="customer@email.com">
-              </div>
-              <div class="mc-field">
-                <label class="mc-label" for="mc-template">Template</label>
-                <select class="mc-select" id="mc-template" onchange="mcLoadTemplate()">
-                  <optgroup label="─ Transactional">
-                    <option value="order-confirmation">Order Confirmation</option>
-                    <option value="shipping-update">Shipping Update</option>
-                    <option value="order-cancelled">Order Cancelled</option>
-                    <option value="password-reset">Password Reset</option>
-                  </optgroup>
-                  <optgroup label="─ Marketing">
-                    <option value="newsletter-welcome">Newsletter Welcome</option>
-                    <option value="product-launch">Product Launch</option>
-                    <option value="promotion">Promotion / Offer</option>
-                  </optgroup>
-                </select>
-              </div>
-              <div class="mc-field">
-                <label class="mc-label" for="mc-subject">Subject Line</label>
-                <input class="mc-input" id="mc-subject" type="text" placeholder="Your order is confirmed — KLOT">
-              </div>
-              <div class="mc-field">
-                <label class="mc-label" for="mc-vars">Variables (JSON)</label>
-                <textarea class="mc-textarea" id="mc-vars" oninput="mcRefreshPreview()" placeholder='{"name":"Alex","orderId":"KW-0042","total":"₦85,000"}'></textarea>
-              </div>
-              <div style="display:flex;gap:10px;margin-top:4px">
-                <button class="abtn abtn-outline" onclick="mcRefreshPreview()" style="flex:1">&#128065; Preview</button>
-                <button class="abtn abtn-gold" onclick="mcSend()" style="flex:2" id="mc-send-btn">&#9993; Send Email</button>
-              </div>
-              <p style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(245,240,232,.25);margin-top:14px;line-height:1.6">Emails are sent via the Resend REST API. Configure your API key in Settings before sending.</p>
-            </div>
-            <div class="mc-preview-pane">
-              <div class="mc-preview-header">
-                <span class="mc-preview-title">Live Preview</span>
-                <span style="font-size:10px;color:rgba(245,240,232,.25);font-family:'Inter',sans-serif">Updates as you edit</span>
-              </div>
-              <iframe class="mc-preview-frame" id="mc-preview-frame" title="Email preview" sandbox="allow-same-origin"></iframe>
-            </div>
-          </div>
-        </div>
-
-        <!-- SETTINGS -->
-        <div class="mc-panel" id="mc-settings">
-          <div class="mc-settings-grid">
-            <div class="mc-settings-card">
-              <div class="mc-settings-title">Resend Configuration</div>
-              <div style="background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);padding:14px 16px;margin-bottom:20px;font-family:'Inter',sans-serif;font-size:12px;color:#fbbf24;line-height:1.6">
-                &#128274; API key is stored securely in Vercel environment variables — never exposed to the browser.
-              </div>
-              <div class="mc-field">
-                <label class="mc-label">From Name</label>
-                <input class="mc-input" id="mc-from-name" type="text" placeholder="KLOT">
-              </div>
-              <div class="mc-field">
-                <label class="mc-label">From Email (must be verified in Resend)</label>
-                <input class="mc-input" id="mc-from-email" type="email" placeholder="hello@klotlife.com">
-              </div>
-              <div style="display:flex;gap:10px;margin-top:4px">
-                <button class="abtn abtn-gold" onclick="mcSaveSettings()">Save</button>
-                <button class="abtn abtn-outline" onclick="mcTestConnection()">Test Connection</button>
-              </div>
-              <div id="mc-api-status" style="margin-top:14px"></div>
-            </div>
-            <div class="mc-settings-card">
-              <div class="mc-settings-title">Delivery Statistics</div>
-              <div id="mc-stats-detail"></div>
-              <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
-                <button class="abtn abtn-outline" onclick="mcClearLogs()">&#128465; Clear Logs</button>
-                <button class="abtn abtn-gold" onclick="mcExportLogs()">&#11015; Export CSV</button>
-              </div>
-            </div>
-          </div>
-          <div class="mc-settings-card" style="margin-top:16px">
-            <div class="mc-settings-title">Setup Guide</div>
-            <ol style="font-family:'Inter',sans-serif;font-size:13px;color:rgba(245,240,232,.45);line-height:2.4;padding-left:18px;margin:0">
-              <li>Sign up at <strong style="color:var(--cream)">resend.com</strong> and add your domain</li>
-              <li>Verify the domain's DNS records (SPF, DKIM, DMARC)</li>
-              <li>Go to <strong style="color:var(--cream)">API Keys</strong> → create key with <em>Sending access</em></li>
-              <li>Paste the key above, set your From email, and save</li>
-              <li>Use <em>Test Connection</em> to verify everything works</li>
-              <li><strong style="color:#fbbf24">Production note:</strong> proxy API calls through a serverless function to keep your key off the client</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /admin-messages -->
-
-    </div><!-- /admin-content -->
-  </div><!-- /admin-body -->
-</div><!-- /admin-panel -->
+<!-- Admin panel served at /admin (auth-gated server-side) -->
 
 
 
@@ -3475,25 +2725,29 @@ function openPDP(pid) {
   // Product schema (JSON-LD) for Google rich results
   var schemaEl = document.getElementById('pdp-schema-ld');
   if (schemaEl) {
+    var _base = 'https://www.klotworld.com/';
+    var _imgs = [p.imageUrl, p.image2, p.image3, p.image4].filter(Boolean).map(function(u){ return _base + u; });
     schemaEl.textContent = JSON.stringify({
       '@context': 'https://schema.org/',
       '@type': 'Product',
       name: p.name,
       description: p.description || p.tagline || 'Luxury streetwear from KLOT — Lagos.',
-      image: p.imageUrl ? ['https://www.klotworld.com/' + p.imageUrl] : [],
+      image: _imgs,
       sku: p.sku || ('KL-' + p.id),
       brand: { '@type': 'Brand', name: 'KLOT' },
       offers: {
         '@type': 'Offer',
-        url: 'https://www.klotworld.com',
+        url: _base + '?product=' + encodeURIComponent(p.id),
         priceCurrency: 'NGN',
         price: p.priceNGN,
+        priceCurrency_USD: 'USD',
         availability: (p.stock === 0) ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
         seller: { '@type': 'Organization', name: 'KLOT' }
       }
     });
   }
 
+  _ga4('view_item', { currency:'NGN', value: p.priceNGN, items:[{ item_id: p.sku||('KL-'+p.id), item_name: p.name, price: p.priceNGN, quantity: 1 }] });
   showPage('pdp');
   window.scrollTo({top:0,behavior:'instant'});
 }
@@ -3616,6 +2870,7 @@ function addToCart(pid, size) {
   if (ex) { ex.qty++; } else { cart.push(Object.assign({}, p, {size:size, qty:1})); }
   persistCart();
   updateCartDisplay();
+  _ga4('add_to_cart', { currency:'NGN', value: p.priceNGN, items:[{ item_id: p.sku||('KL-'+p.id), item_name: p.name, price: p.priceNGN, quantity: 1 }] });
   showToast(p.name + ' added to bag');
 }
 
@@ -3710,7 +2965,7 @@ function sha256(msg) {
 function openAdminLogin() {
   var now = Date.now();
   if (lockoutUntil > now) { showLockout(Math.ceil((lockoutUntil-now)/60000)); document.getElementById('admin-login-overlay').classList.add('open'); return; }
-  if (adminAuth) { document.getElementById('admin-panel').classList.add('open'); populateAdmin(); return; }
+  if (adminAuth) { window.open('/admin', '_blank'); return; }
   document.getElementById('admin-login-overlay').classList.add('open');
   document.getElementById('admin-error').classList.remove('show');
   document.getElementById('admin-lockout').classList.remove('show');
@@ -3723,7 +2978,7 @@ function closeAdminLogin() {
   var p=document.getElementById('admin-password'); if(p)p.value='';
   document.getElementById('admin-error').classList.remove('show');
 }
-function closeAdminPanel() { document.getElementById('admin-panel').classList.remove('open'); }
+function closeAdminPanel() { /* panel lives at /admin */ }
 
 function showLockout(min) {
   var el=document.getElementById('admin-lockout');
@@ -3790,14 +3045,9 @@ async function attemptLogin() {
   }
 }
 function openDashboard() {
-  document.getElementById('admin-panel').classList.add('open');
-  sessionStart=new Date(); updateSessionBar();
-  if(sessionTimer)clearInterval(sessionTimer);
-  sessionTimer=setInterval(updateSessionBar,30000);
-  startSessionExpiry();
-  enforceRBAC();
-  populateAdmin();
-  logAdminAction('SESSION', 'Admin dashboard opened — role: ' + ADMIN_ROLE);
+  closeAdminLogin();
+  logAdminAction('SESSION', 'Admin redirected to /admin dashboard');
+  window.open('/admin', '_blank');
 }
 function updateSessionBar() {
   var el=document.getElementById('admin-session-time'); if(!el||!sessionStart)return;
@@ -3810,7 +3060,6 @@ function adminLogout() {
   clearInterval(sessionTimer); sessionTimer=null; sessionStart=null;
   if(sessionCheckInterval) clearInterval(sessionCheckInterval); sessionCheckInterval=null;
   sessionExpiry=null;
-  document.getElementById('admin-panel').classList.remove('open');
   var u=document.getElementById('admin-username'); if(u)u.value='';
   var p=document.getElementById('admin-password'); if(p)p.value='';
   var err=document.getElementById('admin-error'); if(err)err.classList.remove('show');
@@ -5298,6 +4547,7 @@ var PAYSTACK_PUBLIC_KEY = 'pk_test_f73aa5c0e73c5f9d5fca14d88f3506036eee24a2';
 function openCheckout() {
   if (!cart.length) { showToast('Your bag is empty'); return; }
   toggleCart(); // close cart sidebar
+  _ga4('begin_checkout', { currency:'NGN', value: cart.reduce(function(s,i){return s+i.priceNGN*i.qty;},0), items: cart.map(function(i){return{item_id:i.sku||('KL-'+i.id),item_name:i.name,price:i.priceNGN,quantity:i.qty};}) });
 
   // Populate order summary
   var list = document.getElementById('checkout-items-list');
@@ -5391,6 +4641,8 @@ function initiatePaystack() {
   if (!customer) return;
 
   var totalNGN = cart.reduce(function(s,i) { return s + i.priceNGN * i.qty; }, 0);
+  var _purchaseTotal = totalNGN;
+  var _purchaseItems = cart.map(function(i){return{item_id:i.sku||('KL-'+i.id),item_name:i.name,price:i.priceNGN,quantity:i.qty};});
   // Paystack amount is in kobo (NGN x 100)
   var amountKobo = totalNGN * 100;
 
@@ -5473,10 +4725,10 @@ function initiatePaystack() {
         }).catch(function(e){ console.error('[KLOT] Confirmation email error:', e); });
       })();
       // Clear cart
+      _ga4('purchase', { transaction_id: response.reference, currency: 'NGN', value: _purchaseTotal, items: _purchaseItems });
       cart = [];
       persistCart();
       updateCartDisplay();
-      populateAdmin();
       // Show success
       var refEl = document.getElementById('order-success-ref');
       if (refEl) refEl.textContent = 'Order Ref: ' + response.reference;
@@ -5508,6 +4760,7 @@ function submitProductWaitlist() {
   var entry = { email: email, product: _pdpProduct ? _pdpProduct.name : '', productId: _pdpProduct ? _pdpProduct.id : null, ts: new Date().toISOString() };
   list.push(entry);
   storageSet(key, JSON.stringify(list));
+  fetch('/api/waitlist', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(entry) }).catch(function(){});
   var msgEl = document.getElementById('wl-msg');
   if (msgEl) { msgEl.textContent = "You're on the list! We'll email you when it's back."; msgEl.style.display = 'block'; }
   setTimeout(closeProductWaitlist, 2200);
@@ -5833,7 +5086,6 @@ function checkSessionExpiry() {
     clearInterval(sessionCheckInterval);
     logAdminAction('SESSION', 'Admin session expired — auto logged out');
     adminAuth = false; sessionExpiry = null; mfaPassed = false;
-    document.getElementById('admin-panel').classList.remove('open');
     showToast('Session expired. Please sign in again.');
     setTimeout(function() { openAdminLogin(); }, 800);
     return;
@@ -6658,11 +5910,12 @@ function stabSubmitWaitlist() {
   }
   var list = [];
   try { list = JSON.parse(storageGet('klot_waitlist') || '[]'); } catch(e) {}
-  list.push({ email:email, product:product || 'General waitlist', productId:null, source:'Subscribe Tab', ts:new Date().toISOString() });
+  var wlEntry = { email:email, product:product || 'General waitlist', productId:null, source:'Subscribe Tab', ts:new Date().toISOString() };
+  list.push(wlEntry);
   storageSet('klot_waitlist', JSON.stringify(list));
+  fetch('/api/waitlist', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(wlEntry) }).catch(function(){});
   document.getElementById('stab-wl-wrap').style.display = 'none';
   document.getElementById('stab-wl-success').classList.add('show');
-  try { if (document.getElementById('admin-leads')) populateLeads(); } catch(e) {}
 }
 
 </script>
