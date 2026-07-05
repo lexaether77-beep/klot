@@ -1321,19 +1321,8 @@ function updateSessionBar() {
 }
 function adminLogout() {
   logAdminAction('SESSION', 'Admin logged out manually');
-  adminAuth=false; mfaPassed=false; pendingLoginUser=null;
-  clearInterval(sessionTimer); sessionTimer=null; sessionStart=null;
-  if(sessionCheckInterval) clearInterval(sessionCheckInterval); sessionCheckInterval=null;
-  sessionExpiry=null;
-  document.getElementById('admin-panel').classList.remove('open');
-  var u=document.getElementById('admin-username'); if(u)u.value='';
-  var p=document.getElementById('admin-password'); if(p)p.value='';
-  var err=document.getElementById('admin-error'); if(err)err.classList.remove('show');
-  var btn=document.getElementById('admin-login-btn'); if(btn){btn.style.display='';btn.textContent='Sign In to Dashboard';}
-  // Reset MFA panel
-  var mfaPanel=document.getElementById('admin-mfa-panel'); if(mfaPanel)mfaPanel.style.display='none';
-  var mfaInp=document.getElementById('admin-mfa-code'); if(mfaInp)mfaInp.value='';
-  showToast('Logged out');
+  showToast('Logging out…');
+  setTimeout(function() { window.location.href = '/admin/logout'; }, 500);
 }
 
 // ── ADMIN TABS ──
@@ -3266,12 +3255,9 @@ function checkSessionExpiry() {
   var remaining = sessionExpiry - Date.now();
 
   if (remaining <= 0) {
-    // Session expired — force logout
     clearInterval(sessionCheckInterval);
     logAdminAction('SESSION', 'Admin session expired — auto logged out');
-    adminAuth = false; sessionExpiry = null; mfaPassed = false;
-    window.location.href = '/admin';
-    return;
+    window.location.href = '/admin/logout';
     return;
   }
 
