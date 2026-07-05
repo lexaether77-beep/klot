@@ -3052,7 +3052,7 @@ function sha256(msg) {
 function openAdminLogin() {
   var now = Date.now();
   if (lockoutUntil > now) { showLockout(Math.ceil((lockoutUntil-now)/60000)); document.getElementById('admin-login-overlay').classList.add('open'); return; }
-  if (adminAuth) { window.open('/admin', '_blank'); return; }
+  if (adminAuth) { window.location.href = '/admin'; return; }
   document.getElementById('admin-login-overlay').classList.add('open');
   document.getElementById('admin-error').classList.remove('show');
   document.getElementById('admin-lockout').classList.remove('show');
@@ -3134,7 +3134,7 @@ async function attemptLogin() {
 function openDashboard() {
   closeAdminLogin();
   logAdminAction('SESSION', 'Admin redirected to /admin dashboard');
-  window.open('/admin', '_blank');
+  window.location.href = '/admin';
 }
 function updateSessionBar() {
   var el=document.getElementById('admin-session-time'); if(!el||!sessionStart)return;
