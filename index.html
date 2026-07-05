@@ -3462,7 +3462,7 @@ var MC_TEMPLATES = {
           '</table>'+
         '</div>'+
         '<p style="font-family:Arial,sans-serif;font-size:14px;color:#555;margin:0 0 24px;line-height:1.7">If a payment was made, a full refund will be processed within <strong>5–7 business days</strong> to your original payment method.</p>'+
-        '<p style="font-family:Arial,sans-serif;font-size:14px;color:#555;margin:0 0 28px;line-height:1.7">If you have any questions or believe this was an error, please contact us at <a href="mailto:hello@klotlife.com" style="color:#FF2D2D">hello@klotlife.com</a>.</p>'+
+        '<p style="font-family:Arial,sans-serif;font-size:14px;color:#555;margin:0 0 28px;line-height:1.7">If you have any questions or believe this was an error, please contact us at <a href="mailto:hello@klotworld.com" style="color:#FF2D2D">hello@klotworld.com</a>.</p>'+
         '<div style="text-align:center">'+
           '<a href="https://klotworld.com" style="display:inline-block;background:#0D0D0D;color:#fff;padding:14px 36px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none">Shop Again</a>'+
         '</div>'
@@ -3864,7 +3864,7 @@ function editOrder(oid, newStatus) {
           subject: 'Your KLOT order has been cancelled — ' + o.id,
           html: cancelHtml,
           fromName: 'KLOT',
-          fromEmail: 'hello@klotlife.com'
+          fromEmail: 'hello@klotworld.com'
         })
       }).then(function(r){ return r.json(); }).then(function(d){
         if(d.id) { showToast('Cancellation email sent to ' + o.email); logAdminAction('EMAIL','Cancellation email sent for '+oid+' to '+o.email); }
@@ -3893,7 +3893,7 @@ function editOrder(oid, newStatus) {
           subject: 'Your KLOT order is on the way — ' + o.id,
           html: shipHtml,
           fromName: 'KLOT',
-          fromEmail: 'hello@klotlife.com'
+          fromEmail: 'hello@klotworld.com'
         })
       }).then(function(r){ return r.json(); }).then(function(d){
         if(d.id) { showToast('Shipping email sent to ' + o.email); logAdminAction('EMAIL','Shipping update sent for '+oid+' to '+o.email); }
@@ -4444,7 +4444,7 @@ async function cfSubmit() {
       fetch('/api/send-email', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ to:'info@klotlife.com', subject:emailSubject, html:html, fromName:'KLOT Website', fromEmail:'hello@klotlife.com' })
+        body: JSON.stringify({ to:'info@klotworld.com', subject:emailSubject, html:html, fromName:'KLOT Website', fromEmail:'hello@klotworld.com' })
       }),
       fetch('/api/store-contact', {
         method:'POST',
@@ -4458,10 +4458,10 @@ async function cfSubmit() {
       ['cf-fname','cf-lname','cf-email','cf-msg'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
       var sel=document.getElementById('cf-subject'); if(sel){sel.value='';sel.closest('.cf-field').classList.remove('has-val');}
     } else {
-      showToast('Could not send — please email us directly at info@klotlife.com');
+      showToast('Could not send — please email us directly at info@klotworld.com');
     }
   } catch(e) {
-    showToast('Network error — please email us at info@klotlife.com');
+    showToast('Network error — please email us at info@klotworld.com');
   } finally {
     if(btn) { btn.disabled=false; btn.textContent='Send Message'; }
   }
@@ -4806,9 +4806,18 @@ function initiatePaystack() {
         fetch('/api/send-email', {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ to:customer.email, subject:'Your KLOT order is confirmed — '+ref, html:confirmHtml, fromName:'KLOT', fromEmail:'hello@klotlife.com' })
+          body: JSON.stringify({ to:customer.email, subject:'Your KLOT order is confirmed — '+ref, html:confirmHtml, fromName:'KLOT', fromEmail:'hello@klotworld.com' })
         }).then(function(r){ return r.json(); }).then(function(d){
-          if(!d.id) { console.error('[KLOT] Confirmation email failed:', JSON.stringify(d)); showToast('Order confirmed! (Confirmation email could not be sent — check admin logs)'); }
+          if(d.id) {
+            try {
+              var logs = JSON.parse(localStorage.getItem('klot_mc_logs')||'[]');
+              logs.unshift({id:d.id, to:customer.email, subject:'Your KLOT order is confirmed — '+ref, template:'Order Confirmation', type:'transactional', status:'pending', sentAt:new Date().toISOString()});
+              localStorage.setItem('klot_mc_logs', JSON.stringify(logs));
+            } catch(e){}
+          } else {
+            console.error('[KLOT] Confirmation email failed:', JSON.stringify(d));
+            showToast('Order confirmed! (Confirmation email could not be sent — check admin logs)');
+          }
         }).catch(function(e){ console.error('[KLOT] Confirmation email error:', e); });
       })();
       // Clear cart
@@ -5979,7 +5988,15 @@ function stabSubmitNewsletter() {
     + '</div>';
   fetch('/api/send-email', {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ to:email, subject:'Welcome to KLOT — You\'re in.', html:welcomeHtml, fromName:'KLOT', fromEmail:'hello@klotlife.com' })
+    body: JSON.stringify({ to:email, subject:'Welcome to KLOT — You\'re in.', html:welcomeHtml, fromName:'KLOT', fromEmail:'hello@klotworld.com' })
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(d.id) {
+      try {
+        var logs = JSON.parse(localStorage.getItem('klot_mc_logs')||'[]');
+        logs.unshift({id:d.id, to:email, subject:'Welcome to KLOT — You\'re in.', template:'Welcome Email', type:'marketing', status:'pending', sentAt:new Date().toISOString()});
+        localStorage.setItem('klot_mc_logs', JSON.stringify(logs));
+      } catch(e){}
+    }
   }).catch(function(){});
   document.getElementById('stab-nl-wrap').style.display = 'none';
   document.getElementById('stab-nl-success').classList.add('show');

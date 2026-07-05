@@ -1141,6 +1141,17 @@ var orders = [
   {id:'#MN-2835', customer:'Adesola Bello',    items:1, total:48000,  status:'delivered',  date:'Nov 9 2025'},
   {id:'#MN-2834', customer:'Oluseun Adeyemi',  items:3, total:287000, status:'shipped',    date:'Nov 9 2025'}
 ];
+// Prepend real orders placed on the storefront (same domain, shared localStorage)
+(function() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('klot_orders') || '[]');
+    if (!saved.length) return;
+    var ids = orders.map(function(o) { return o.id; });
+    for (var i = saved.length - 1; i >= 0; i--) {
+      if (ids.indexOf(saved[i].id) < 0) orders.unshift(saved[i]);
+    }
+  } catch(e) {}
+})();
 
 // Customers
 // ── CUSTOMERS DATA ──
@@ -1829,7 +1840,9 @@ function editOrder(oid) {
   var o=orders.find(function(x){return x.id===oid;}); if(!o)return;
   var ns=prompt('New status for '+oid+' (processing/shipped/delivered):',o.status);
   if(ns && ['processing','shipped','delivered'].indexOf(ns)>-1) {
-    o.status=ns; populateOrders(); showToast(oid+' updated to '+ns);
+    o.status=ns;
+    try { localStorage.setItem('klot_orders', JSON.stringify(orders)); } catch(e){}
+    populateOrders(); showToast(oid+' updated to '+ns);
   }
 }
 
