@@ -21,7 +21,7 @@ function validateSession(cookie, secret) {
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', 'same-origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,x-klot-session');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const redisUrl   = process.env.UPSTASH_REDIS_REST_URL;
@@ -58,9 +58,9 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  // GET and PATCH require a valid admin session cookie
-  const cookie = parseCookie(req.headers.cookie);
-  if (!validateSession(cookie, secret)) return res.status(401).json({ error: 'Unauthorized' });
+  // GET and PATCH require a valid admin session (x-klot-session header preferred; cookie fallback)
+  const sessionToken = req.headers['x-klot-session'] || parseCookie(req.headers.cookie);
+  if (!validateSession(sessionToken, secret)) return res.status(401).json({ error: 'Unauthorized' });
 
   // GET — return all orders newest-first
   if (req.method === 'GET') {

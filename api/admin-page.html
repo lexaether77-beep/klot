@@ -1117,6 +1117,7 @@ input.pm-inp.pfx { padding-left:26px; }
 <script>
 // ── Data ──
 var adminAuth = true;
+var _sessionToken = '__SESSION_TOKEN__';
 var ADMIN_ROLE = 'super_admin';
 
 function storageGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
@@ -1972,7 +1973,7 @@ function editOrder(oid) {
   o.status=ns;
   try { localStorage.setItem('klot_orders', JSON.stringify(orders)); } catch(e){}
   // Sync status to Redis
-  fetch('/api/orders', { method:'PATCH', headers:{'Content-Type':'application/json'},
+  fetch('/api/orders', { method:'PATCH', headers:{'Content-Type':'application/json','x-klot-session':_sessionToken},
     body: JSON.stringify({ id:oid, status:ns })
   }).catch(function(){});
   populateOrders(); showToast(oid+' updated to '+ns);
@@ -3394,7 +3395,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Fetch real orders from Redis and merge them at the top of the orders array
 function loadRedisOrders() {
-  fetch('/api/orders')
+  fetch('/api/orders', { headers: {'x-klot-session': _sessionToken} })
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(data) {
       if (!data || !data.orders || !data.orders.length) return;
