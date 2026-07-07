@@ -74,7 +74,10 @@ module.exports = function handler(req, res) {
       '  .catch(function() { showToast(\'⚠ Could not sync to server\'); });\n' +
       '}\n' +
       '</script>';
-    html = html.replace('</body>', inject + '\n</body>');
+    var bodyIdx = html.lastIndexOf('</body>');
+    if (bodyIdx !== -1) {
+      html = html.slice(0, bodyIdx) + inject + '\n' + html.slice(bodyIdx);
+    }
     return res.status(200).send(html);
   }
 
