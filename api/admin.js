@@ -51,6 +51,30 @@ module.exports = function handler(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-store');
     var html = ADMIN_HTML.replace("var _sessionToken = '__SESSION_TOKEN__';", "var _sessionToken = '" + cookie + "';");
+    // Inject admin token and Redis-syncing persistProducts so product saves reach all devices
+    var safeSecret = (secret || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    var inject = '<script>\n' +
+      'var _adminToken = \'' + safeSecret + '\';\n' +
+      'function persistProducts() {\n' +
+      '  products.forEach(function(p) {\n' +
+      '    [\'imageUrl\',\'image2\',\'image3\',\'image4\'].forEach(function(k) {\n' +
+      '      if (p[k]) p[k] = p[k].replace(/\\\\/g, \'/\');\n' +
+      '    });\n' +
+      '  });\n' +
+      '  var ts = Date.now();\n' +
+      '  storageSet(\'klot_products\', JSON.stringify(products));\n' +
+      '  storageSet(\'klot_products_ts\', String(ts));\n' +
+      '  fetch(\'/api/products\', {\n' +
+      '    method: \'POST\',\n' +
+      '    headers: { \'Content-Type\': \'application/json\', \'x-klot-token\': _adminToken },\n' +
+      '    body: JSON.stringify({ products: products, version: \'2\', savedAt: ts })\n' +
+      '  })\n' +
+      '  .then(function(r) { return r.json(); })\n' +
+      '  .then(function(d) { if (!d.ok) showToast(\'⚠ Saved locally but not synced to server\'); })\n' +
+      '  .catch(function() { showToast(\'⚠ Could not sync to server\'); });\n' +
+      '}\n' +
+      '</script>';
+    html = html.replace('</body>', inject + '\n</body>');
     return res.status(200).send(html);
   }
 
