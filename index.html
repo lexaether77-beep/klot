@@ -5488,30 +5488,11 @@ function loadServerProducts() {
     .then(function(data){
       if (!data || !Array.isArray(data.products) || !data.products.length) return;
       data.products.forEach(_normImgPaths);
-      var localTs  = parseInt(storageGet('klot_products_ts') || '0', 10);
-      var remoteTs = data.savedAt || 0;
-      var serverById = {};
-      data.products.forEach(function(p){ serverById[p.id] = p; });
-      var merged;
-      if (remoteTs > localTs) {
-        // Redis is strictly newer — full merge, Redis wins on matching ids
-        merged = products.map(function(p){ return serverById[p.id] || p; });
-        data.products.forEach(function(p){
-          if (!merged.find(function(m){ return m.id === p.id; })) merged.push(p);
-        });
-      } else {
-        // Local is newer — keep local products, only append Redis-only ids
-        merged = products.slice();
-        var localIds = {};
-        products.forEach(function(p){ localIds[p.id] = true; });
-        data.products.forEach(function(p){
-          if (!localIds[p.id]) merged.push(p);
-        });
-      }
+      // Redis is always authoritative — replace local cache entirely
       products.splice(0, products.length);
-      merged.forEach(function(p){ products.push(p); });
+      data.products.forEach(function(p){ products.push(p); });
       storageSet('klot_products',    JSON.stringify(products));
-      storageSet('klot_products_ts', String(Math.max(localTs, remoteTs)));
+      storageSet('klot_products_ts', String(data.savedAt || 0));
       renderAllGrids();
     })
     .catch(function(){});

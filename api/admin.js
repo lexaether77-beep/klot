@@ -73,6 +73,20 @@ module.exports = function handler(req, res) {
       '  .then(function(d) { if (!d.ok) showToast(\'⚠ Saved locally but not synced to server\'); })\n' +
       '  .catch(function() { showToast(\'⚠ Could not sync to server\'); });\n' +
       '}\n' +
+      'function loadAndRefreshAdmin() {\n' +
+      '  fetch(\'/api/products\')\n' +
+      '    .then(function(r) { return r.ok ? r.json() : null; })\n' +
+      '    .then(function(data) {\n' +
+      '      if (!data || !Array.isArray(data.products) || !data.products.length) return;\n' +
+      '      products.splice(0, products.length);\n' +
+      '      data.products.forEach(function(p) { products.push(p); });\n' +
+      '      storageSet(\'klot_products\', JSON.stringify(products));\n' +
+      '      if (typeof populateAdmin === \'function\') populateAdmin();\n' +
+      '      if (typeof pmRender === \'function\') pmRender();\n' +
+      '    })\n' +
+      '    .catch(function() {});\n' +
+      '}\n' +
+      'document.addEventListener(\'DOMContentLoaded\', function() { loadAndRefreshAdmin(); });\n' +
       '</script>';
     var bodyIdx = html.lastIndexOf('</body>');
     if (bodyIdx !== -1) {
