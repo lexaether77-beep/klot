@@ -5476,7 +5476,6 @@ function loadServerProducts() {
       var serverById = {};
       data.products.forEach(function(p){ serverById[p.id] = p; });
       var merged = products.map(function(p){ return serverById[p.id] || p; });
-      });
       data.products.forEach(function(p){
         if (!merged.find(function(m){ return m.id === p.id; })) merged.push(p);
       });
