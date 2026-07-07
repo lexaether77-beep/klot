@@ -5476,6 +5476,8 @@ function loadPersistedProducts() {
     if (Array.isArray(saved) && saved.length) {
       products.splice(0, products.length);
       saved.forEach(function(p){ products.push(p); });
+      // Guarantee local timestamp is non-zero so stale Redis (savedAt=0) never overwrites
+      if (!storageGet('klot_products_ts')) storageSet('klot_products_ts', '1');
     }
   } catch(e) {}
 }
@@ -5491,8 +5493,8 @@ function loadServerProducts() {
       var serverById = {};
       data.products.forEach(function(p){ serverById[p.id] = p; });
       var merged;
-      if (remoteTs >= localTs) {
-        // Redis is same age or newer — full merge, Redis wins on matching ids
+      if (remoteTs > localTs) {
+        // Redis is strictly newer — full merge, Redis wins on matching ids
         merged = products.map(function(p){ return serverById[p.id] || p; });
         data.products.forEach(function(p){
           if (!merged.find(function(m){ return m.id === p.id; })) merged.push(p);
