@@ -5448,19 +5448,25 @@ function _normImgPaths(p) {
 
 function persistProducts() {
   products.forEach(_normImgPaths);
-  storageSet('klot_products', JSON.stringify(products));
+  var ts = Date.now();
+  storageSet('klot_products',    JSON.stringify(products));
+  storageSet('klot_products_ts', String(ts));
   if (_adminToken) {
     fetch('/api/products', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-klot-token': _adminToken },
-      body: JSON.stringify({ products: products, version: PRODUCTS_VERSION })
-    }).catch(function() {});
+      body: JSON.stringify({ products: products, version: PRODUCTS_VERSION, savedAt: ts })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if (!d.ok) showToast('⚠ Products saved locally but not synced to server'); })
+    .catch(function(){ showToast('⚠ Products saved locally but not synced to server'); });
   }
 }
 function loadPersistedProducts() {
   if (storageGet('klot_products_ver') !== PRODUCTS_VERSION) {
     storageSet('klot_products_ver', PRODUCTS_VERSION);
-    storageSet('klot_products', '');
+    storageSet('klot_products',     '');
+    storageSet('klot_products_ts',  '0');
     return;
   }
   var raw = storageGet('klot_products');
@@ -5479,18 +5485,31 @@ function loadServerProducts() {
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(data){
       if (!data || !Array.isArray(data.products) || !data.products.length) return;
-      // Normalize backslash paths from Windows admin saves
       data.products.forEach(_normImgPaths);
-      // Merge: Redis overrides by id; hardcoded-only products survive
+      var localTs  = parseInt(storageGet('klot_products_ts') || '0', 10);
+      var remoteTs = data.savedAt || 0;
       var serverById = {};
       data.products.forEach(function(p){ serverById[p.id] = p; });
-      var merged = products.map(function(p){ return serverById[p.id] || p; });
-      data.products.forEach(function(p){
-        if (!merged.find(function(m){ return m.id === p.id; })) merged.push(p);
-      });
+      var merged;
+      if (remoteTs >= localTs) {
+        // Redis is same age or newer — full merge, Redis wins on matching ids
+        merged = products.map(function(p){ return serverById[p.id] || p; });
+        data.products.forEach(function(p){
+          if (!merged.find(function(m){ return m.id === p.id; })) merged.push(p);
+        });
+      } else {
+        // Local is newer — keep local products, only append Redis-only ids
+        merged = products.slice();
+        var localIds = {};
+        products.forEach(function(p){ localIds[p.id] = true; });
+        data.products.forEach(function(p){
+          if (!localIds[p.id]) merged.push(p);
+        });
+      }
       products.splice(0, products.length);
       merged.forEach(function(p){ products.push(p); });
-      storageSet('klot_products', JSON.stringify(products));
+      storageSet('klot_products',    JSON.stringify(products));
+      storageSet('klot_products_ts', String(Math.max(localTs, remoteTs)));
       renderAllGrids();
     })
     .catch(function(){});
