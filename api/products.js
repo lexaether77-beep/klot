@@ -19,10 +19,13 @@ export default async function handler(req, res) {
       });
       const data = await r.json();
       if (!data.result) return res.status(200).json({ products: null });
-      const products = typeof data.result === 'string'
+      const stored = typeof data.result === 'string'
         ? JSON.parse(data.result)
         : data.result;
-      return res.status(200).json({ products });
+      const products = Array.isArray(stored) ? stored : (stored && stored.products) || null;
+      const version  = (stored && stored.version) || null;
+      if (!products) return res.status(200).json({ products: null });
+      return res.status(200).json({ products, version });
     } catch (e) {
       return res.status(200).json({ products: null });
     }
@@ -34,7 +37,7 @@ export default async function handler(req, res) {
     if (!adminSecret || !token || token !== adminSecret) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
-    const { products } = req.body || {};
+    const { products, version } = req.body || {};
     if (!Array.isArray(products) || !products.length) {
       return res.status(400).json({ error: 'products must be a non-empty array' });
     }
@@ -43,7 +46,7 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: { Authorization: `Bearer ${redisToken}`, 'Content-Type': 'application/json' },
         body: JSON.stringify([
-          ['SET', 'klot:products', JSON.stringify(products)],
+          ['SET', 'klot:products', JSON.stringify({ products, version: version || null })],
         ]),
       });
       return res.status(200).json({ ok: true, count: products.length });
