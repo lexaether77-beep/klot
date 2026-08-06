@@ -1377,16 +1377,46 @@ input.pm-inp.pfx { padding-left:26px; }
 <!-- Product schema — updated dynamically when a product page is opened -->
 <script type="application/ld+json" id="pdp-schema-ld"></script>
 
-<!-- GA4 — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GNE61V1WVR"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
+  gtag('config', 'G-GNE61V1WVR');
   function _ga4(event, params) {
     if (typeof gtag !== 'undefined') gtag('event', event, params || {});
   }
+</script>
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1538014857430041');
+fbq('track', 'PageView');
+function _fbq(event, params) {
+  if (typeof fbq !== 'undefined') fbq('track', event, params || {});
+}
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+<!-- Microsoft Clarity — session recordings & heatmaps -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "xy7xcue4sy");
 </script>
 
 </head>
@@ -2810,6 +2840,7 @@ function openPDP(pid) {
   }
 
   _ga4('view_item', { currency:'NGN', value: p.priceNGN, items:[{ item_id: p.sku||('KL-'+p.id), item_name: p.name, price: p.priceNGN, quantity: 1 }] });
+  _fbq('ViewContent', { content_ids:[p.sku||('KL-'+p.id)], content_type:'product', content_name:p.name, value:p.priceNGN, currency:'NGN' });
   loadPDPReviews(p.id);
   showPage('pdp');
   window.scrollTo({top:0,behavior:'instant'});
@@ -2934,6 +2965,7 @@ function addToCart(pid, size) {
   persistCart();
   updateCartDisplay();
   _ga4('add_to_cart', { currency:'NGN', value: p.priceNGN, items:[{ item_id: p.sku||('KL-'+p.id), item_name: p.name, price: p.priceNGN, quantity: 1 }] });
+  _fbq('AddToCart', { content_ids:[p.sku||('KL-'+p.id)], content_type:'product', content_name:p.name, value:p.priceNGN, currency:'NGN' });
   showToast(p.name + ' added to bag');
 }
 
@@ -4633,6 +4665,7 @@ function openCheckout() {
   if (!cart.length) { showToast('Your bag is empty'); return; }
   toggleCart(); // close cart sidebar
   _ga4('begin_checkout', { currency:'NGN', value: cart.reduce(function(s,i){return s+i.priceNGN*i.qty;},0), items: cart.map(function(i){return{item_id:i.sku||('KL-'+i.id),item_name:i.name,price:i.priceNGN,quantity:i.qty};}) });
+  _fbq('InitiateCheckout', { content_ids: cart.map(function(i){return i.sku||('KL-'+i.id);}), content_type:'product', value: cart.reduce(function(s,i){return s+i.priceNGN*i.qty;},0), currency:'NGN', num_items: cart.reduce(function(s,i){return s+i.qty;},0) });
 
   // Populate order summary
   var list = document.getElementById('checkout-items-list');
@@ -4836,6 +4869,7 @@ function initiatePaystack() {
       })();
       // Clear cart
       _ga4('purchase', { transaction_id: response.reference, currency: 'NGN', value: _purchaseTotal, items: _purchaseItems });
+      _fbq('Purchase', { content_ids: _purchaseItems.map(function(i){return i.item_id;}), content_type:'product', value: _purchaseTotal, currency:'NGN' });
       cart = [];
       persistCart();
       updateCartDisplay();
@@ -6018,6 +6052,8 @@ function stabSubmitNewsletter() {
   if (btn) { btn.disabled = true; btn.textContent = 'Subscribing…'; }
   subs.push({ name:name, email:email, source:'Newsletter Tab', ts:new Date().toISOString() });
   storageSet('klot_subscribers', JSON.stringify(subs));
+  // Persist server-side (Redis + Mailchimp) so subscribers aren't lost to one device's localStorage
+  fetch('/api/waitlist', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email:email, name:name, source:'newsletter' }) }).catch(function(){});
   // Welcome email
   var greeting = name ? ', ' + name : '';
   var welcomeHtml = '<div style="font-family:Inter,sans-serif;background:#0D0D0D;padding:48px 40px;max-width:560px;margin:0 auto">'
