@@ -18,6 +18,30 @@
 <meta name="twitter:title" content="KLOT | Luxury Streetwear &amp; Performance Clothing">
 <meta name="twitter:description" content="Lagos-founded luxury streetwear and performance brand. Victory Through Harmony.">
 <meta name="twitter:image" content="https://www.klotworld.com/klot_website/klot/assets/images/hero_image.jpeg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Organization",
+  "name": "KLOT",
+  "legalName": "The Klot Worx Company",
+  "url": "https://www.klotworld.com/",
+  "logo": "https://www.klotworld.com/klot_website/klot/assets/images/klot-logo.png.jpeg",
+  "email": "hello@klotworld.com",
+  "telephone": "+2347018412281",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "15 Victoria Island Blvd",
+    "addressLocality": "Lagos",
+    "addressCountry": "NG"
+  },
+  "sameAs": [
+    "https://instagram.com/klotlife",
+    "https://twitter.com/klot",
+    "https://facebook.com/klot",
+    "https://tiktok.com/@klot"
+  ]
+}
+</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 44 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='22' cy='22' rx='18' ry='20' stroke='%23FF2D2D' stroke-width='6' fill='none'/%3E%3Cline x1='4' y1='22' x2='40' y2='22' stroke='%23FF2D2D' stroke-width='6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -1376,6 +1400,7 @@ input.pm-inp.pfx { padding-left:26px; }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <!-- Product schema — updated dynamically when a product page is opened -->
 <script type="application/ld+json" id="pdp-schema-ld"></script>
+<script type="application/ld+json" id="pdp-breadcrumb-ld"></script>
 
 <!-- GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GNE61V1WVR"></script>
@@ -1405,7 +1430,7 @@ function _fbq(event, params) {
   if (typeof fbq !== 'undefined') fbq('track', event, params || {});
 }
 </script>
-<noscript><img height="1" width="1" style="display:none"
+<noscript><img height="1" width="1" style="display:none" alt=""
 src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
@@ -2614,6 +2639,8 @@ function isFootwearProduct(p) {
 
 // ── NAVIGATION ──
 function showPage(page) {
+  var pdpEl = document.getElementById('page-pdp');
+  var wasOnPdp = !!(pdpEl && pdpEl.classList.contains('active'));
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   var el = document.getElementById('page-' + page);
   if (el) el.classList.add('active');
@@ -2626,6 +2653,13 @@ function showPage(page) {
   if (page === 'sports')  renderGrid('sports-grid',  products.filter(function(p) { return p.category === 'sports'; }));
   // Track last shop-type page so order success can return here
   if (['shop','fashion','sports','collections'].indexOf(page) > -1) lastShopPage = page;
+  // Leaving a product page — restore the site's default URL/title/meta
+  if (wasOnPdp && page !== 'pdp') {
+    resetPageMeta();
+    if (!_restoringFromPopstate && location.pathname.indexOf('/products/') === 0) {
+      history.pushState(null, '', '/');
+    }
+  }
 }
 
 // ── PRODUCT RENDERING ──
@@ -2704,7 +2738,35 @@ function filterSports(act, btn) {
 var _pdpProduct = null;
 var _pdpZoomed = false;
 
-function openPDP(pid) {
+// ── PRODUCT URL ROUTING (pushState so products get real, crawlable URLs) ──
+var _defaultTitle = document.title;
+var _defaultDescription = (document.querySelector('meta[name="description"]') || {}).content || '';
+var _defaultCanonical = 'https://www.klotworld.com/';
+var _restoringFromPopstate = false;
+
+function slugify(str) {
+  return (str || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+function findProductBySlug(slug) {
+  return products.find(function(p) { return slugify(p.name) === slug; });
+}
+function setProductMeta(p) {
+  var desc = (p.description || p.tagline || 'Luxury streetwear from KLOT — Lagos.').toString().slice(0, 160);
+  document.title = p.name + ' | KLOT';
+  var descEl = document.querySelector('meta[name="description"]');
+  if (descEl) descEl.setAttribute('content', desc);
+  var canEl = document.querySelector('link[rel="canonical"]');
+  if (canEl) canEl.setAttribute('href', 'https://www.klotworld.com/products/' + slugify(p.name));
+}
+function resetPageMeta() {
+  document.title = _defaultTitle;
+  var descEl = document.querySelector('meta[name="description"]');
+  if (descEl) descEl.setAttribute('content', _defaultDescription);
+  var canEl = document.querySelector('link[rel="canonical"]');
+  if (canEl) canEl.setAttribute('href', _defaultCanonical);
+}
+
+function openPDP(pid, skipPush) {
   var p = products.find(function(x){ return x.id === pid; });
   if (!p) return;
   _pdpProduct = p;
@@ -2829,7 +2891,7 @@ function openPDP(pid) {
       brand: { '@type': 'Brand', name: 'KLOT' },
       offers: {
         '@type': 'Offer',
-        url: _base + '?product=' + encodeURIComponent(p.id),
+        url: _base + 'products/' + slugify(p.name),
         priceCurrency: 'NGN',
         price: p.priceNGN,
         priceCurrency_USD: 'USD',
@@ -2838,6 +2900,24 @@ function openPDP(pid) {
       }
     });
   }
+
+  // Breadcrumb schema — Home > Category > Product
+  var crumbEl = document.getElementById('pdp-breadcrumb-ld');
+  if (crumbEl) {
+    var _cat = p.category ? (p.category.charAt(0).toUpperCase() + p.category.slice(1)) : 'Shop';
+    crumbEl.textContent = JSON.stringify({
+      '@context': 'https://schema.org/',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home',  item: 'https://www.klotworld.com/' },
+        { '@type': 'ListItem', position: 2, name: _cat,    item: 'https://www.klotworld.com/#' + (p.category || 'shop') },
+        { '@type': 'ListItem', position: 3, name: p.name,  item: 'https://www.klotworld.com/products/' + slugify(p.name) }
+      ]
+    });
+  }
+
+  setProductMeta(p);
+  if (!skipPush) history.pushState({ pdpSlug: slugify(p.name) }, '', '/products/' + slugify(p.name));
 
   _ga4('view_item', { currency:'NGN', value: p.priceNGN, items:[{ item_id: p.sku||('KL-'+p.id), item_name: p.name, price: p.priceNGN, quantity: 1 }] });
   _fbq('ViewContent', { content_ids:[p.sku||('KL-'+p.id)], content_type:'product', content_name:p.name, value:p.priceNGN, currency:'NGN' });
@@ -2985,7 +3065,7 @@ function updateCartDisplay() {
     return '<div class="cart-item">' +
       '<div class="cart-item-img">' +
         (item.imageUrl
-          ? '<img src="' + item.imageUrl + '" style="width:100%;height:100%;object-fit:cover;object-position:top center" onerror="this.style.display=\'none\'">'
+          ? '<img src="' + item.imageUrl + '" alt="' + item.name + '" style="width:100%;height:100%;object-fit:cover;object-position:top center" onerror="this.style.display=\'none\'">'
           : LOGO_SVG('#0e1c38', 28)) +
       '</div>' +
       '<div class="cart-item-info">' +
@@ -3016,7 +3096,7 @@ function updateCartDisplay() {
         suggestions.map(function(p) {
           return '<div style="flex:0 0 90px;cursor:pointer" onclick="toggleCart();openPDP(' + p.id + ')">' +
             '<div style="width:90px;height:110px;background:' + (p.imageUrl ? '#f5f0e8' : 'linear-gradient(135deg,' + p.color + '88,' + p.color + ')') + ';overflow:hidden;margin-bottom:6px">' +
-            (p.imageUrl ? '<img src="' + p.imageUrl + '" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'">' : '') +
+            (p.imageUrl ? '<img src="' + p.imageUrl + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'">' : '') +
             '</div>' +
             '<div style="font-size:11px;font-family:\'Barlow Condensed\',sans-serif;font-weight:600;color:var(--navy);line-height:1.2;margin-bottom:2px">' + p.name + '</div>' +
             '<div style="font-size:11px;font-family:\'Inter\',sans-serif;color:var(--muted)">' + fmtPrice(p) + '</div>' +
@@ -4128,7 +4208,7 @@ function pmRender() {
     var st=p.status||'active', stk=p.stock!==undefined?p.stock:'';
     var stkCls=stk===''?'':stk<=5?'pm-stock-critical':stk<=15?'pm-stock-low':'pm-stock-ok';
     var tagHtml=p.tag?'<span class="pm-tag pm-tag-'+p.tag+'">'+p.tag+'</span>':'';
-    var imgHtml=p.imageUrl?'<img src="'+p.imageUrl+'" class="pm-img-thumb" onerror="this.style.display=\'none\'">':'<div class="pm-img-none">\uD83D\uDDBC</div>';
+    var imgHtml=p.imageUrl?'<img src="'+p.imageUrl+'" alt="'+p.name+'" class="pm-img-thumb" onerror="this.style.display=\'none\'">':'<div class="pm-img-none">\uD83D\uDDBC</div>';
     return '<tr class="'+(sel?'pm-sel':'')+'">' +
       '<td><input type="checkbox" class="pm-checkbox" onchange="pmToggleRow('+ri+',this)" '+(sel?'checked':'')+'/></td>' +
       '<td><span class="pm-sku">'+(p.sku||'ID-'+p.id)+'</span></td>' +
@@ -4200,7 +4280,7 @@ function pmPreviewImg(url){
   if(!wrap)return;
   if(!url){wrap.innerHTML='<span style="font-size:18px;opacity:.3">\uD83D\uDDBC</span>';if(stat)stat.textContent='';return;}
   var img=new Image();
-  img.onload=function(){wrap.innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:cover">';if(stat)stat.innerHTML='<span class="pm-img-ok">\u2713 Loaded</span>';};
+  img.onload=function(){wrap.innerHTML='<img src="'+url+'" alt="Preview" style="width:100%;height:100%;object-fit:cover">';if(stat)stat.innerHTML='<span class="pm-img-ok">\u2713 Loaded</span>';};
   img.onerror=function(){wrap.innerHTML='<span style="font-size:18px;color:#f87171;opacity:.6">\uD83D\uDDBC</span>';if(stat)stat.innerHTML='<span class="pm-img-err">\u2717 Cannot load</span>';};
   img.src=url;
 }
@@ -4672,7 +4752,7 @@ function openCheckout() {
   if (list) {
     list.innerHTML = cart.map(function(item) {
       var imgHtml = item.imageUrl
-        ? '<img src="' + item.imageUrl + '" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.style.display=\'none\'">' 
+        ? '<img src="' + item.imageUrl + '" alt="' + item.name + '" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.style.display=\'none\'">' 
         : '<svg viewBox="0 0 60 70" fill="none" style="width:22px;opacity:.3"><rect x="0" y="0" width="17" height="28" fill="#f5f0e8"/><rect x="0" y="32" width="17" height="38" fill="#f5f0e8"/><rect x="21.5" y="10" width="17" height="18" fill="#f5f0e8"/><rect x="21.5" y="32" width="17" height="38" fill="#f5f0e8"/><rect x="43" y="0" width="17" height="28" fill="#f5f0e8"/><rect x="43" y="32" width="17" height="38" fill="#f5f0e8"/></svg>';
       var lineTotal = currentCurrency === 'NGN'
         ? '₦' + (item.priceNGN * item.qty).toLocaleString()
@@ -5414,6 +5494,27 @@ document.addEventListener('DOMContentLoaded', function() {
   })();
   // Pre-render shop grid so it loads instantly on navigation
   renderGrid('shop-grid', products);
+
+  // Deep link into a product page if the URL points at one (e.g. /products/klot-jersey)
+  (function routeInitialLoad() {
+    var m = location.pathname.match(/^\/products\/([^\/]+)\/?$/);
+    if (!m) return;
+    var p = findProductBySlug(decodeURIComponent(m[1]));
+    if (p) openPDP(p.id, true);
+  })();
+});
+
+// Back/forward navigation — sync the PDP open/closed state to the URL
+window.addEventListener('popstate', function() {
+  _restoringFromPopstate = true;
+  var m = location.pathname.match(/^\/products\/([^\/]+)\/?$/);
+  if (m) {
+    var p = findProductBySlug(decodeURIComponent(m[1]));
+    if (p) openPDP(p.id, true); else showPage(window._pdpReturn || 'shop');
+  } else {
+    showPage(window._pdpReturn || 'shop');
+  }
+  _restoringFromPopstate = false;
 });
 
 // ══════════════════════════════════════════════
