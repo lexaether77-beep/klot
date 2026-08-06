@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Relative asset paths (images, etc.) must resolve from site root even when the page
+     loads fresh at a nested path like /products/<slug> — without this, the browser
+     resolves them relative to the current path instead and every image 404s. -->
+<base href="/">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KLOT | Luxury Streetwear &amp; Performance Clothing | Lagos</title>
 <meta name="description" content="KLOT is a Lagos-founded luxury streetwear and performance brand. Shop unisex fashion, activewear and kids clothing crafted with athletic precision. Victory Through Harmony.">
@@ -6428,7 +6432,7 @@ function submitReview() {
         </tbody>
       </table>
     </div>
-    <p style="margin-top:20px;font-size:11px;color:#aaa;font-family:'Inter',sans-serif">If you are between sizes, size up for a relaxed fit or size down for a more fitted look. For further help <a href="#" onclick="closeSizeGuide();showPage('contact')" style="color:#FF2D2D">contact us</a>.</p>
+    <p style="margin-top:20px;font-size:11px;color:#aaa;font-family:'Inter',sans-serif">If you are between sizes, size up for a relaxed fit or size down for a more fitted look. For further help <a href="javascript:void(0)" onclick="closeSizeGuide();showPage('contact')" style="color:#FF2D2D">contact us</a>.</p>
   </div>
 </div>
 
