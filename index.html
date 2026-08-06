@@ -48,6 +48,7 @@
 </script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 44 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='22' cy='22' rx='18' ry='20' stroke='%23FF2D2D' stroke-width='6' fill='none'/%3E%3Cline x1='4' y1='22' x2='40' y2='22' stroke='%23FF2D2D' stroke-width='6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
@@ -1545,7 +1546,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
     </div>
     <div class="hero-image">
       <div class="hero-image-inner">
-        <img src="klot_website/klot/assets/images/klot-logo.png.jpeg" alt="The Klot Worx Company" class="hero-logo-img">
+        <img src="klot_website/klot/assets/images/klot-logo.png.jpeg" alt="The Klot Worx Company" class="hero-logo-img" width="1254" height="1254" loading="eager" fetchpriority="high">
       </div>
       <div class="hero-badge">&#9733; In Gods Time &#9733;</div>
     </div>
@@ -2667,13 +2668,23 @@ function showPage(page) {
 }
 
 // ── PRODUCT RENDERING ──
+
+// Routes site-local images through Vercel's edge Image Optimization (auto WebP,
+// resized, cached) — external/data URIs pass through untouched.
+function optImg(url, width) {
+  if (!url) return url;
+  if (/^(https?:|data:)/i.test(url)) return url;
+  var path = url.charAt(0) === '/' ? url : '/' + url;
+  return '/_vercel/image?url=' + encodeURIComponent(path) + '&w=' + width + '&q=75';
+}
+
 function productCard(p) {
   var tagHtml = p.tag ? '<div class="product-badge">' + (p.tag === 'new' ? 'New' : p.tag === 'limited' ? 'Limited' : p.tag) + '</div>' : '';
   var stockBadge = (p.stock !== undefined && p.stock > 0 && p.stock <= 10)
     ? '<div style="position:absolute;bottom:8px;left:8px;z-index:3;background:rgba(248,113,113,.92);color:#fff;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;font-family:\'Inter\',sans-serif">Only ' + p.stock + ' left</div>'
     : (p.stock === 0 ? '<div style="position:absolute;bottom:8px;left:8px;z-index:3;background:rgba(0,0,0,.7);color:rgba(255,255,255,.6);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;font-family:\'Inter\',sans-serif">Sold Out</div>' : '');
   var imgContent = p.imageUrl
-    ? '<img src="' + p.imageUrl + '" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px" onerror="this.style.display=\'none\'" alt="' + p.name + '">'
+    ? '<img src="' + optImg(p.imageUrl, 640) + '" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px" onerror="this.style.display=\'none\'" alt="' + p.name + '">'
     : '<span class="product-img-icon">' + LOGO_SVG('#0e1c38', 48) + '</span>';
   var _cardSizes = parseSizes(p);
   var sizeOpts = _cardSizes.map(function(s){ return '<option value="' + s + '">' + s + '</option>'; }).join('');
@@ -2792,7 +2803,7 @@ function openPDP(pid, skipPush) {
   if (!imgs.length) imgs = [{url: p.imageUrl||'', label:'Main'}];
 
   var mainImg = document.getElementById('pdp-main-img');
-  mainImg.src = (imgs[0].url || '').replace(/\\/g, '/');
+  mainImg.src = optImg((imgs[0].url || '').replace(/\\/g, '/'), 1080);
   mainImg.alt = p.name;
   mainImg.style.transform = '';
   var viewer = document.getElementById('pdp-viewer');
@@ -2804,7 +2815,7 @@ function openPDP(pid, skipPush) {
     var safeUrl = (img.url||'').replace(/\\/g,'/').replace(/'/g,"\\'");
     return '<div class="pdp-thumb-wrap">' +
       '<div class="pdp-thumb' + (i===0?' active':'') + '" onclick="pdpSetImage(\'' + safeUrl + '\',this)">' +
-        '<img src="' + (img.url||'').replace(/\\/g,'/') + '" alt="' + img.label + '" onerror="this.parentElement.style.background=\'#e8e8e8\'">' +
+        '<img src="' + optImg((img.url||'').replace(/\\/g,'/'), 160) + '" alt="' + img.label + '" onerror="this.parentElement.style.background=\'#e8e8e8\'">' +
       '</div>' +
       '<div class="pdp-thumb-label">' + img.label + '</div>' +
     '</div>';
@@ -2931,7 +2942,7 @@ function openPDP(pid, skipPush) {
 }
 
 function pdpSetImage(url, thumbEl) {
-  document.getElementById('pdp-main-img').src = (url || '').replace(/\\/g, '/');
+  document.getElementById('pdp-main-img').src = optImg((url || '').replace(/\\/g, '/'), 1080);
   document.getElementById('pdp-main-img').style.transform = '';
   document.querySelectorAll('.pdp-thumb').forEach(function(t){t.classList.remove('active');});
   if (thumbEl) thumbEl.classList.add('active');
@@ -6348,7 +6359,7 @@ function submitReview() {
   <div class="kpop">
     <button class="kpop-close" onclick="closeKpop()" aria-label="Close popup">&times;</button>
     <div class="kpop-visual">
-      <img src="klot_website/klot/assets/images/pop_up.jpeg" alt="KLOT x Bigbird — Limited Slide" onerror="this.style.display='none'">
+      <img src="klot_website/klot/assets/images/pop_up.jpeg" alt="KLOT x Bigbird — Limited Slide" loading="lazy" onerror="this.style.display='none'">
     </div>
     <div class="kpop-body">
       <div class="kpop-tag">Limited Collaboration</div>

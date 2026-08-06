@@ -5,6 +5,15 @@
       "includeFiles": "api/admin-page.html"
     }
   },
+  "images": {
+    "sizes": [96, 160, 256, 384, 480, 640, 828, 1080, 1200, 1920],
+    "localPatterns": [
+      { "pathname": "^/klot_website/klot/assets/images/.*$" }
+    ],
+    "minimumCacheTTL": 2678400,
+    "qualities": [75],
+    "formats": ["image/webp"]
+  },
   "headers": [
     {
       "source": "/klot_website/klot/assets/images/(.*)",
