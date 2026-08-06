@@ -163,7 +163,20 @@ module.exports = async function handler(req, res) {
       '    })\n' +
       '    .catch(function() {});\n' +
       '}\n' +
-      'document.addEventListener(\'DOMContentLoaded\', function() { loadAndRefreshAdmin(); });\n' +
+      'function loadAndRefreshOrders() {\n' +
+      '  fetch(\'/api/orders\', { headers: { \'x-klot-session\': _sessionToken } })\n' +
+      '    .then(function(r) { return r.ok ? r.json() : null; })\n' +
+      '    .then(function(data) {\n' +
+      '      if (!data || !Array.isArray(data.orders)) return;\n' +
+      '      orders.splice(0, orders.length);\n' +
+      '      data.orders.forEach(function(o) { orders.push(o); });\n' +
+      '      storageSet(\'klot_orders\', JSON.stringify(orders));\n' +
+      '      if (typeof populateOrders === \'function\') populateOrders();\n' +
+      '      if (typeof populateAdmin === \'function\') populateAdmin();\n' +
+      '    })\n' +
+      '    .catch(function() {});\n' +
+      '}\n' +
+      'document.addEventListener(\'DOMContentLoaded\', function() { loadAndRefreshAdmin(); loadAndRefreshOrders(); });\n' +
       '</script>';
     var bodyIdx = html.lastIndexOf('</body>');
     if (bodyIdx !== -1) {
