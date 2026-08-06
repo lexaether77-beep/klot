@@ -2117,54 +2117,10 @@ input.pm-inp.pfx { padding-left:26px; }
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ADMIN BUTTON -->
-<!-- Admin access: Ctrl+Shift+A or triple-click the footer copyright -->
-<span id="admin-trigger" style="position:fixed;bottom:0;right:0;width:24px;height:24px;z-index:1;cursor:default;opacity:0" onclick="handleAdminTrigger()" title=""></span>
-
-<!-- ADMIN LOGIN MODAL -->
-<div class="admin-login-overlay" id="admin-login-overlay">
-  <div class="admin-login-box">
-    <button class="admin-login-close" onclick="closeAdminLogin()">&#10005;</button>
-    <div class="admin-login-mark">
-      <svg viewBox="0 0 44 44" fill="none" style="height:48px;width:auto">
-        <ellipse cx="22" cy="22" rx="18" ry="20" stroke="#FF2D2D" stroke-width="6" fill="none"/>
-        <line x1="4" y1="22" x2="40" y2="22" stroke="#FF2D2D" stroke-width="6"/>
-      </svg>
-    </div>
-    <h2 class="admin-login-title">Admin <span>Access</span></h2>
-    <p class="admin-login-sub">Restricted area. Authorised personnel only.</p>
-    <div class="admin-lockout" id="admin-lockout"></div>
-    <div class="admin-error" id="admin-error"></div>
-    <div class="admin-field">
-      <label>Username</label>
-      <input type="text" id="admin-username" placeholder="admin" autocomplete="off" onkeydown="if(event.key==='Enter')attemptLogin()">
-    </div>
-    <div class="admin-field">
-      <label>Password</label>
-      <input type="password" id="admin-password" placeholder="Password" autocomplete="off" onkeydown="if(event.key==='Enter')attemptLogin()">
-    </div>
-    <button class="admin-login-btn" id="admin-login-btn" onclick="attemptLogin()">Sign In to Dashboard</button>
-
-    <!-- MFA panel (shown after password verified) -->
-    <div id="admin-mfa-panel" style="display:none;margin-top:20px">
-      <div class="admin-divider-label">Two-Factor Authentication</div>
-      <p style="font-size:12px;color:rgba(245,240,232,.4);text-align:center;margin-bottom:16px;font-family:'Inter',sans-serif">Enter the 6-digit code from your authenticator app</p>
-      <div class="admin-field">
-        <label>Verification Code</label>
-        <input type="text" id="admin-mfa-code" class="admin-field input" maxlength="6" placeholder="000000"
-               style="text-align:center;letter-spacing:.5em;font-size:22px;width:100%;padding:14px;background:rgba(255,255,255,.05);border:1px solid rgba(184,151,74,.2);color:var(--cream);font-family:'Inter',sans-serif;outline:none"
-               oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-               onkeydown="if(event.key==='Enter')verifyMFA()">
-      </div>
-      <button class="admin-login-btn" onclick="verifyMFA()">Verify Code</button>
-      <p style="text-align:center;font-size:11px;color:rgba(245,240,232,.25);margin-top:12px;letter-spacing:.06em">
-        Enter your authenticator code to continue
-      </p>
-    </div>
-
-    <p class="admin-attempts" id="admin-attempts-text"></p>
-  </div>
-</div>
+<!-- ADMIN ACCESS -->
+<!-- Admin login lives entirely at /admin (server-gated, HttpOnly session cookie).
+     These triggers just navigate there — no credentials or auth logic run on this page. -->
+<span id="admin-trigger" style="position:fixed;bottom:0;right:0;width:24px;height:24px;z-index:1;cursor:default;opacity:0" onclick="goToAdmin()" title=""></span>
 
 <!-- Admin panel served at /admin (auth-gated server-side) -->
 
@@ -4666,7 +4622,10 @@ function exportCustomers(fmt) {
 //  PAYSTACK CHECKOUT
 // ══════════════════════════════════════════════
 
-// Replace with your actual Paystack public key
+// LAUNCH BLOCKER: this is a pk_test_ key — no real payment is captured while it's live.
+// Before any real marketing/launch: swap to the pk_live_ key from the Paystack dashboard,
+// AND set the matching PAYSTACK_SECRET_KEY (sk_live_) env var in Vercel — api/orders.js
+// verifies every order against that secret key before accepting it.
 var PAYSTACK_PUBLIC_KEY = 'pk_test_f73aa5c0e73c5f9d5fca14d88f3506036eee24a2';
 
 function openCheckout() {
@@ -5167,12 +5126,17 @@ function exportAuditLog() {
   } catch(e) {}
 })();
 
-// ── Secret Admin Access Triggers ──
+// ── Admin Access Triggers ──
+// Login and MFA are handled entirely server-side at /admin — these just navigate there.
+function goToAdmin() {
+  window.location.href = '/admin';
+}
+
 // Trigger 1: Ctrl+Shift+A keyboard shortcut
 document.addEventListener('keydown', function(e) {
   if (e.ctrlKey && e.shiftKey && e.key === 'A') {
     e.preventDefault();
-    openAdminLogin();
+    goToAdmin();
   }
 });
 
@@ -5182,7 +5146,7 @@ function handleFooterClick() {
   if (footerClickTimer) clearTimeout(footerClickTimer);
   if (footerClickCount >= 3) {
     footerClickCount = 0;
-    openAdminLogin();
+    goToAdmin();
     return;
   }
   footerClickTimer = setTimeout(function() { footerClickCount = 0; }, 600);
@@ -5190,7 +5154,7 @@ function handleFooterClick() {
 
 // Trigger 3: Invisible bottom-right pixel click
 function handleAdminTrigger() {
-  openAdminLogin();
+  goToAdmin();
 }
 
 // ── MFA ──

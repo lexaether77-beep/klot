@@ -22,29 +22,106 @@ function parseCookie(header) {
   var m = header.match(/(?:^|;\s*)_klot_admin=([^;]+)/);
   return m ? m[1] : null;
 }
+function getClientIp(req) {
+  var fwd = req.headers['x-forwarded-for'];
+  if (fwd) return fwd.split(',')[0].trim();
+  return (req.socket && req.socket.remoteAddress) || 'unknown';
+}
+var LOGIN_MAX_ATTEMPTS = 5;
+var LOGIN_LOCKOUT_SECS = 10 * 60;
+function getFailCount(redisUrl, redisToken, key) {
+  return fetch(redisUrl + '/get/' + key, { headers: { Authorization: 'Bearer ' + redisToken } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { return parseInt(d.result, 10) || 0; });
+}
+function recordLoginFailure(redisUrl, redisToken, key) {
+  return fetch(redisUrl + '/incr/' + key, { headers: { Authorization: 'Bearer ' + redisToken } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.result === 1) {
+        return fetch(redisUrl + '/expire/' + key + '/' + LOGIN_LOCKOUT_SECS, { headers: { Authorization: 'Bearer ' + redisToken } });
+      }
+    });
+}
+function clearLoginFailures(redisUrl, redisToken, key) {
+  return fetch(redisUrl + '/del/' + key, { headers: { Authorization: 'Bearer ' + redisToken } });
+}
+// RFC 6238 TOTP — standard 30s/6-digit codes, works with any authenticator app
+// (Google Authenticator, Authy, 1Password, etc). No external dependency needed.
+function base32Decode(base32) {
+  var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  var clean = (base32 || '').replace(/=+$/, '').toUpperCase();
+  var bits = '';
+  for (var i = 0; i < clean.length; i++) {
+    var val = alphabet.indexOf(clean[i]);
+    if (val === -1) continue;
+    bits += val.toString(2).padStart(5, '0');
+  }
+  var bytes = [];
+  for (var j = 0; j + 8 <= bits.length; j += 8) {
+    bytes.push(parseInt(bits.substring(j, j + 8), 2));
+  }
+  return Buffer.from(bytes);
+}
+function totpAt(secretBase32, counter) {
+  var key = base32Decode(secretBase32);
+  var buf = Buffer.alloc(8);
+  buf.writeBigInt64BE(BigInt(counter));
+  var hmac = crypto.createHmac('sha1', key).update(buf).digest();
+  var offset = hmac[hmac.length - 1] & 0xf;
+  var code = ((hmac[offset] & 0x7f) << 24 | (hmac[offset + 1] & 0xff) << 16 | (hmac[offset + 2] & 0xff) << 8 | (hmac[offset + 3] & 0xff)) % 1000000;
+  return String(code).padStart(6, '0');
+}
+function verifyTotp(secretBase32, code) {
+  if (!secretBase32 || !code || !/^\d{6}$/.test(code)) return false;
+  var counter = Math.floor(Date.now() / 30000);
+  for (var i = -1; i <= 1; i++) {
+    if (totpAt(secretBase32, counter + i) === code) return true;
+  }
+  return false;
+}
 function loginPage(err) {
   var errHtml = err ? '<p style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:#fca5a5;font-size:12px;padding:10px;margin-bottom:20px;text-align:center">' + err + '</p>' : '';
-  return '<!DOCTYPE html><html><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>KLOT Admin</title><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&family=Inter:wght@400&display=swap" rel=stylesheet><style>*{box-sizing:border-box;margin:0;padding:0}body{background:#0D0D0D;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif}.b{width:100%;max-width:400px;padding:48px;border:1px solid rgba(184,151,74,.25)}.logo{font-family:"Barlow Condensed";font-size:26px;font-weight:600;color:#f5f5f5;text-align:center;margin-bottom:4px}.logo span{color:#FF2D2D;font-style:italic}.sub{font-size:12px;color:rgba(245,240,232,.35);text-align:center;margin-bottom:36px}label{display:block;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,240,232,.4);margin-bottom:8px}input{width:100%;padding:13px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(184,151,74,.2);color:#f5f5f5;font-family:Inter;font-size:14px;outline:none;margin-bottom:18px}input:focus{border-color:#FF2D2D}button{width:100%;padding:14px;background:#FF2D2D;border:none;color:#fff;font-size:11px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}a{display:block;text-align:center;margin-top:18px;font-size:11px;color:rgba(245,240,232,.3);text-decoration:none}</style></head><body><div class=b><div class=logo>KL<span>O</span>T</div><div class=sub>Admin Dashboard</div>' + errHtml + '<form method=POST action=/admin><label>Password</label><input type=password name=password autofocus><button>Sign In</button></form><a href=/>Back to site</a></div></body></html>';
+  return '<!DOCTYPE html><html><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>KLOT Admin</title><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&family=Inter:wght@400&display=swap" rel=stylesheet><style>*{box-sizing:border-box;margin:0;padding:0}body{background:#0D0D0D;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif}.b{width:100%;max-width:400px;padding:48px;border:1px solid rgba(184,151,74,.25)}.logo{font-family:"Barlow Condensed";font-size:26px;font-weight:600;color:#f5f5f5;text-align:center;margin-bottom:4px}.logo span{color:#FF2D2D;font-style:italic}.sub{font-size:12px;color:rgba(245,240,232,.35);text-align:center;margin-bottom:36px}label{display:block;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,240,232,.4);margin-bottom:8px}input{width:100%;padding:13px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(184,151,74,.2);color:#f5f5f5;font-family:Inter;font-size:14px;outline:none;margin-bottom:18px}input:focus{border-color:#FF2D2D}button{width:100%;padding:14px;background:#FF2D2D;border:none;color:#fff;font-size:11px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}a{display:block;text-align:center;margin-top:18px;font-size:11px;color:rgba(245,240,232,.3);text-decoration:none}</style></head><body><div class=b><div class=logo>KL<span>O</span>T</div><div class=sub>Admin Dashboard</div>' + errHtml + '<form method=POST action=/admin><label>Password</label><input type=password name=password autofocus><label>2FA Code (if enabled)</label><input type=text name=code inputmode=numeric maxlength=6 placeholder=000000 autocomplete=off><button>Sign In</button></form><a href=/>Back to site</a></div></body></html>';
 }
 
-module.exports = function handler(req, res) {
+module.exports = async function handler(req, res) {
   var secret   = process.env.KLOT_ADMIN_SECRET   || '';
   var adminPwd = process.env.KLOT_ADMIN_PASSWORD  || '';
   var cookie   = parseCookie(req.headers.cookie);
+  var redisUrl   = process.env.UPSTASH_REDIS_REST_URL;
+  var redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  var rateLimitAvailable = Boolean(redisUrl && redisToken);
+  var failKey = 'klot:loginfail:' + getClientIp(req);
 
   if (req.method === 'POST') {
+    if (rateLimitAvailable) {
+      try {
+        var attempts = await getFailCount(redisUrl, redisToken, failKey);
+        if (attempts >= LOGIN_MAX_ATTEMPTS) {
+          res.setHeader('Content-Type', 'text/html; charset=utf-8');
+          return res.status(429).send(loginPage('Too many failed attempts. Try again later.'));
+        }
+      } catch (e) {}
+    }
     var body = req.body || {};
     if (typeof body === 'string') { try { body = JSON.parse(body); } catch(e) { body = {}; } }
-    var pw = body.password || '';
-    if (pw && pw === adminPwd) {
+    var pw   = body.password || '';
+    var code = (body.code || '').trim();
+    var totpSecret = process.env.ADMIN_TOTP_SECRET || '';
+    var mfaOk = !totpSecret || verifyTotp(totpSecret, code);
+    if (pw && pw === adminPwd && mfaOk) {
+      if (rateLimitAvailable) { try { await clearLoginFailures(redisUrl, redisToken, failKey); } catch (e) {} }
       var token = createToken(secret);
       res.setHeader('Set-Cookie', '_klot_admin=' + token + '; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=' + (8*3600));
       res.setHeader('Location', '/admin');
       res.setHeader('Cache-Control', 'no-store');
       return res.status(302).end();
     }
+    if (rateLimitAvailable) { try { await recordLoginFailure(redisUrl, redisToken, failKey); } catch (e) {} }
+    var loginErr = (pw && pw === adminPwd && !mfaOk) ? 'Invalid or missing 2FA code.' : 'Incorrect password.';
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    return res.status(200).send(loginPage('Incorrect password.'));
+    return res.status(200).send(loginPage(loginErr));
   }
 
   if (validateSession(cookie, secret)) {

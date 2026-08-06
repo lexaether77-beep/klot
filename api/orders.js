@@ -18,6 +18,18 @@ function validateSession(cookie, secret) {
   } catch { return false; }
 }
 
+// Confirms a Paystack transaction actually succeeded — the client-side "callback"
+// firing is not proof of payment, so orders must never be trusted without this.
+async function verifyPaystackTransaction(reference, secretKey) {
+  const r = await fetch(`https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`, {
+    headers: { Authorization: `Bearer ${secretKey}` },
+  });
+  if (!r.ok) return null;
+  const data = await r.json();
+  if (!data || !data.status || !data.data) return null;
+  return data.data;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', 'same-origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,OPTIONS');
@@ -30,10 +42,33 @@ module.exports = async function handler(req, res) {
 
   if (!redisUrl || !redisToken) return res.status(500).json({ error: 'Redis not configured' });
 
-  // POST — public: called from storefront after successful Paystack payment
+  // POST — public: called from storefront after the Paystack popup reports success.
+  // That report alone is client-controlled and not trustworthy — verify with Paystack
+  // directly before ever writing an order.
   if (req.method === 'POST') {
     const o = req.body || {};
     if (!o.id || !o.email) return res.status(400).json({ error: 'Missing id or email' });
+
+    const paystackSecret = process.env.PAYSTACK_SECRET_KEY;
+    if (!paystackSecret) return res.status(503).json({ error: 'Payment verification not configured' });
+
+    const tx = await verifyPaystackTransaction(o.id, paystackSecret).catch(() => null);
+    if (!tx || tx.status !== 'success') {
+      return res.status(402).json({ error: 'Payment could not be verified' });
+    }
+    const expectedKobo = Math.round((o.total || 0) * 100);
+    if (tx.amount !== expectedKobo) {
+      return res.status(402).json({ error: 'Payment amount does not match order total' });
+    }
+
+    // A verified reference may only ever create one order, even if this endpoint is called twice
+    const dupCheck = await fetch(`${redisUrl}/sadd/klot:usedrefs/${encodeURIComponent(o.id)}`, {
+      headers: { Authorization: `Bearer ${redisToken}` },
+    }).then(r => r.json()).catch(() => ({ result: 1 }));
+    if (dupCheck.result === 0) {
+      return res.status(409).json({ error: 'Order already recorded for this payment' });
+    }
+
     const entry = JSON.stringify({
       id:          o.id,
       customer:    o.customer    || '',
