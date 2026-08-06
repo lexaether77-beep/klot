@@ -4626,7 +4626,8 @@ function exportCustomers(fmt) {
 // Before any real marketing/launch: swap to the pk_live_ key from the Paystack dashboard,
 // AND set the matching PAYSTACK_SECRET_KEY (sk_live_) env var in Vercel — api/orders.js
 // verifies every order against that secret key before accepting it.
-var PAYSTACK_PUBLIC_KEY = 'pk_test_f73aa5c0e73c5f9d5fca14d88f3506036eee24a2';
+// Keys must be a matching pair from the same Paystack account, or verification will fail.
+var PAYSTACK_PUBLIC_KEY = 'pk_test_48f87b82c1f5d01624d0b9c9a242dc6aff0f5d25';
 
 function openCheckout() {
   if (!cart.length) { showToast('Your bag is empty'); return; }
