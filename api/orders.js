@@ -61,13 +61,17 @@ module.exports = async function handler(req, res) {
       return res.status(402).json({ error: 'Payment amount does not match order total' });
     }
 
-    // A verified reference may only ever create one order, even if this endpoint is called twice
-    const dupCheck = await fetch(`${redisUrl}/sadd/klot:usedrefs/${encodeURIComponent(o.id)}`, {
+    // Idempotency: if this reference was already saved (e.g. a client retry), confirm
+    // success without duplicating it — checked against the actual order list, not a
+    // separate flag, so a failed write below can never leave behind a permanent false
+    // "already recorded" block on a reference that was never actually saved.
+    const existing = await fetch(`${redisUrl}/lrange/klot:orders/0/999`, {
       headers: { Authorization: `Bearer ${redisToken}` },
-    }).then(r => r.json()).catch(() => ({ result: 1 }));
-    if (dupCheck.result === 0) {
-      return res.status(409).json({ error: 'Order already recorded for this payment' });
-    }
+    }).then(r => r.json()).catch(() => ({ result: [] }));
+    const alreadySaved = (existing.result || []).some(s => {
+      try { return JSON.parse(s).id === o.id; } catch { return false; }
+    });
+    if (alreadySaved) return res.status(200).json({ ok: true });
 
     const entry = JSON.stringify({
       id:          o.id,
@@ -82,14 +86,19 @@ module.exports = async function handler(req, res) {
       date:        o.date        || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
       ts:          new Date().toISOString(),
     });
-    await fetch(`${redisUrl}/pipeline`, {
+    const pipeRes = await fetch(`${redisUrl}/pipeline`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${redisToken}`, 'Content-Type': 'application/json' },
       body: JSON.stringify([
         ['LPUSH', 'klot:orders', entry],
         ['LTRIM', 'klot:orders', '0', '999'],
       ]),
-    });
+    }).catch(() => null);
+    const pipeData = pipeRes ? await pipeRes.json().catch(() => null) : null;
+    const writeFailed = !pipeRes || !pipeRes.ok || !Array.isArray(pipeData) || pipeData.some(r => r && r.error);
+    if (writeFailed) {
+      return res.status(500).json({ error: 'Failed to save order — please contact support with your payment reference' });
+    }
     return res.status(200).json({ ok: true });
   }
 
