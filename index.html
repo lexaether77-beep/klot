@@ -5989,8 +5989,8 @@ document.addEventListener('DOMContentLoaded', function() {
       shown = true;
       document.getElementById('kpop-overlay').classList.add('open');
     }
-    // Trigger after 10 seconds on page
-    setTimeout(openKpop, 10000);
+    // Trigger after 45 seconds on page (exit-intent below usually catches desktop first)
+    setTimeout(openKpop, 45000);
     // Exit intent on desktop
     document.addEventListener('mouseleave', function(e) {
       if (e.clientY < 20) openKpop();
