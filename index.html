@@ -84,6 +84,8 @@
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { font-family:'Inter',sans-serif; background:var(--white); color:var(--text); overflow-x:hidden; }
+.skip-nav-link { position:absolute; top:-100px; left:16px; background:var(--navy); color:var(--cream); padding:8px 16px; font-size:12px; letter-spacing:.08em; text-decoration:none; z-index:10000; transition:top .15s; }
+.skip-nav-link:focus { top:8px; }
 
 a { text-decoration:none; }
 button { cursor:pointer; }
@@ -1451,6 +1453,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
 
 </head>
 <body>
+<a href="#page-home" class="skip-nav-link">Skip to main content</a>
 
 <!-- ANNOUNCEMENT BAR -->
 <div id="currency-bar">
@@ -1524,6 +1527,11 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
       <span>Subtotal</span>
       <span id="cart-total">&#8358;0</span>
     </div>
+    <div class="cart-subtotal" style="font-size:12px;margin-bottom:4px">
+      <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Delivery</span>
+      <span id="cart-shipping-label" style="font-size:13px;color:var(--navy)">Calculated at checkout</span>
+    </div>
+    <p id="cart-free-shipping-note" style="font-size:11px;color:#2e7d32;text-align:right;margin-bottom:14px;display:none">&#10003; You qualify for FREE delivery</p>
     <button class="btn-primary" style="width:100%;text-align:center" onclick="openCheckout()">Proceed to Checkout</button>
   </div>
 </div>
@@ -1536,7 +1544,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
   <!-- Hero -->
   <section class="hero">
     <div class="hero-text">
-      <p class="hero-eyebrow">The Klot Worx Company &middot; Est. 2026</p>
+      <p class="hero-eyebrow">The Klot Worx Company &middot; Est. 2024</p>
       <h1 class="hero-title">Luxury<br>Streetwear<br><em>Lagos</em></h1>
       <p class="hero-sub">Built different. In God&rsquo;s time. Crafted for those who move with purpose and refuse to blend in.</p>
       <div class="hero-btns">
@@ -2404,6 +2412,10 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
         <div class="checkout-section-title">Order Summary</div>
         <div id="checkout-items-list"></div>
         <div class="checkout-divider"></div>
+        <div class="checkout-row" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,240,232,.5);margin-bottom:6px">
+          <span>Delivery</span>
+          <span id="checkout-shipping-label" style="color:rgba(245,240,232,.7);text-transform:none;letter-spacing:0;font-size:13px">—</span>
+        </div>
         <div class="checkout-row checkout-total-row">
           <span>Total</span>
           <span id="checkout-grand-total"></span>
@@ -3094,6 +3106,17 @@ function updateCartDisplay() {
     ? '\u20A6' + cart.reduce(function(s,i){return s+i.priceNGN*i.qty;},0).toLocaleString()
     : '$' + cart.reduce(function(s,i){return s+i.priceUSD*i.qty;},0);
   var te = document.getElementById('cart-total'); if (te) te.textContent = total;
+
+  // Shipping note
+  var totalNGN = cart.reduce(function(s,i){ return s+i.priceNGN*i.qty; }, 0);
+  var totalUSD = cart.reduce(function(s,i){ return s+i.priceUSD*i.qty; }, 0);
+  var freeNGN = 80000, freeUSD = 50;
+  var qualifies = currentCurrency === 'NGN' ? totalNGN >= freeNGN : totalUSD >= freeUSD;
+  var shipLabel = document.getElementById('cart-shipping-label');
+  var freeNote  = document.getElementById('cart-free-shipping-note');
+  if (shipLabel) shipLabel.textContent = qualifies ? 'FREE' : (currentCurrency === 'NGN' ? 'Calculated at checkout' : 'Calculated at checkout');
+  if (shipLabel) shipLabel.style.color = qualifies ? '#2e7d32' : '';
+  if (freeNote)  freeNote.style.display = qualifies ? 'block' : 'none';
 
   // Upsell: You might also like
   var upsellEl = document.getElementById('cart-upsell');
@@ -4783,9 +4806,15 @@ function openCheckout() {
     }).join('');
   }
 
-  // Grand total
+  // Grand total + shipping line
   var totalNGN = cart.reduce(function(s,i) { return s + i.priceNGN * i.qty; }, 0);
   var totalUSD = cart.reduce(function(s,i) { return s + i.priceUSD * i.qty; }, 0);
+  var freeShip = currentCurrency === 'NGN' ? totalNGN >= 80000 : totalUSD >= 50;
+  var ckShipEl = document.getElementById('checkout-shipping-label');
+  if (ckShipEl) {
+    ckShipEl.textContent = freeShip ? 'FREE' : 'Calculated by courier';
+    ckShipEl.style.color = freeShip ? '#4ade80' : 'rgba(245,240,232,.7)';
+  }
   var grandEl = document.getElementById('checkout-grand-total');
   if (grandEl) grandEl.textContent = currentCurrency === 'NGN'
     ? '₦' + totalNGN.toLocaleString()
@@ -6372,7 +6401,7 @@ function submitReview() {
         <input type="email" placeholder="Enter your email" required aria-label="Email address">
         <button type="submit" class="kpop-cta">Join the Waitlist</button>
       </form>
-      <button class="kpop-dismiss" onclick="closeKpop()">No thanks, I'll miss out</button>
+      <button class="kpop-dismiss" onclick="closeKpop()">No thanks</button>
     </div>
   </div>
 </div>
