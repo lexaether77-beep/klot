@@ -1492,7 +1492,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
 
 <!-- ANNOUNCEMENT BAR -->
 <div id="currency-bar">
-  <span>FREE DELIVERY ON ORDERS OVER &#8358;80,000 &nbsp;/&nbsp; $50 &nbsp;&#183;&nbsp; UNISEX SIZING XS&#8211;XL</span>
+  <span>FREE DELIVERY ON ORDERS OVER &#8358;160,000 &nbsp;/&nbsp; $100 &nbsp;&#183;&nbsp; UNISEX SIZING XS&#8211;XL</span>
   <div class="currency-toggle" onclick="toggleCurrency()">
     <span id="curr-label-ngn" style="color:var(--gold)">&#8358; NGN</span>
     <div class="toggle-pill" id="currency-pill"></div>
@@ -1831,7 +1831,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
       </div>
 
       <div class="pdp-perks">
-        <div class="pdp-perk">Free delivery on orders over &#8358;80,000 / $50</div>
+        <div class="pdp-perk">Free delivery on orders over &#8358;160,000 / $100</div>
         <div class="pdp-perk">30-day hassle-free returns</div>
         <div class="pdp-perk">Authentic KLOT quality guaranteed</div>
       </div>
@@ -3243,7 +3243,7 @@ function updateCartDisplay() {
   // Shipping note
   var totalNGN = cart.reduce(function(s,i){ return s+i.priceNGN*i.qty; }, 0);
   var totalUSD = cart.reduce(function(s,i){ return s+i.priceUSD*i.qty; }, 0);
-  var freeNGN = 80000, freeUSD = 50;
+  var freeNGN = 160000, freeUSD = 100;
   var qualifies = currentCurrency === 'NGN' ? totalNGN >= freeNGN : totalUSD >= freeUSD;
   var shipLabel = document.getElementById('cart-shipping-label');
   var freeNote  = document.getElementById('cart-free-shipping-note');
@@ -4982,7 +4982,7 @@ function openCheckout() {
   // Grand total + shipping line
   var totalNGN = cart.reduce(function(s,i) { return s + i.priceNGN * i.qty; }, 0);
   var totalUSD = cart.reduce(function(s,i) { return s + i.priceUSD * i.qty; }, 0);
-  var freeShip = currentCurrency === 'NGN' ? totalNGN >= 80000 : totalUSD >= 50;
+  var freeShip = currentCurrency === 'NGN' ? totalNGN >= 160000 : totalUSD >= 100;
   var ckShipEl = document.getElementById('checkout-shipping-label');
   if (ckShipEl) {
     ckShipEl.textContent = freeShip ? 'FREE' : 'Calculated by courier';
