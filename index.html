@@ -383,6 +383,21 @@ nav { max-width:1400px; margin:0 auto; padding:0 40px; height:72px; display:flex
 .collection-info p { font-family:'Inter',sans-serif; font-size:15px; color:rgba(245,240,232,.65); margin-bottom:16px; }
 .collection-link { font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--accent-light); padding-bottom:2px; border-bottom:1px solid var(--gold); cursor:pointer; }
 
+/* ── Collection Landing Page ── */
+.coll-detail-hero { background:var(--navy); padding:80px 40px 60px; text-align:center; position:relative; overflow:hidden; }
+.coll-detail-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(42,107,42,.18) 0%, transparent 70%); pointer-events:none; }
+.coll-detail-eyebrow { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--green); margin-bottom:16px; font-family:'Inter',sans-serif; position:relative; }
+.coll-detail-title { font-family:'Barlow Condensed',sans-serif; font-size:clamp(40px,6vw,88px); font-weight:400; color:var(--cream); line-height:1; margin-bottom:20px; position:relative; }
+.coll-detail-sub { font-size:15px; color:rgba(245,240,232,.55); max-width:480px; margin:0 auto; font-family:'Inter',sans-serif; line-height:1.7; position:relative; }
+.coll-detail-body { padding:60px 40px 80px; max-width:1400px; margin:0 auto; }
+
+/* ── 404 Page ── */
+.page-404-wrap { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; padding:80px 40px; text-align:center; }
+.page-404-code { font-family:'Barlow Condensed',sans-serif; font-size:clamp(80px,12vw,160px); font-weight:700; color:var(--border); line-height:1; margin-bottom:16px; }
+.page-404-title { font-family:'Barlow Condensed',sans-serif; font-size:28px; color:var(--navy); margin-bottom:12px; }
+.page-404-sub { font-size:14px; color:var(--muted); font-family:'Inter',sans-serif; letter-spacing:.04em; margin-bottom:36px; }
+.page-404-actions { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+
 /* ── About ── */
 .about-layout { padding:100px 40px; max-width:1400px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
 .about-img { position:relative; aspect-ratio:4/5; overflow:hidden; background:var(--navy); }
@@ -1891,7 +1906,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
   </div>
   <div style="padding:60px 40px;max-width:1400px;margin:0 auto">
     <div class="collections-grid" style="margin:0">
-      <div class="collection-card" onclick="goToCategory('fashion')" role="button" aria-label="Shop Fashion — Ivory &amp; Indigo">
+      <div class="collection-card" onclick="openCollection('fashion')" role="button" aria-label="Shop Fashion — Ivory &amp; Indigo">
         <div class="collection-bg coll-1"></div>
         <div class="coll-icon"><svg viewBox="0 0 60 70" fill="none" style="width:100px;opacity:.08"><rect x="0" y="0" width="17" height="28" fill="#2a6b2a"/><rect x="0" y="32" width="17" height="38" fill="#2a6b2a"/><rect x="21.5" y="10" width="17" height="18" fill="#2a6b2a"/><rect x="21.5" y="32" width="17" height="38" fill="#2a6b2a"/><rect x="43" y="0" width="17" height="28" fill="#2a6b2a"/><rect x="43" y="32" width="17" height="38" fill="#2a6b2a"/></svg></div>
         <div class="collection-info">
@@ -1901,7 +1916,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
           <span class="collection-link">Shop Fashion &#8594;</span>
         </div>
       </div>
-      <div class="collection-card tall" onclick="goToCategory('sports')" role="button" aria-label="Shop Sports — Motion Study">
+      <div class="collection-card tall" onclick="openCollection('sports')" role="button" aria-label="Shop Sports — Motion Study">
         <div class="collection-bg coll-2"></div>
         <div class="coll-icon"><svg viewBox="0 0 60 70" fill="none" style="width:80px;opacity:.08"><rect x="0" y="0" width="17" height="28" fill="#2a6b2a"/><rect x="0" y="32" width="17" height="38" fill="#2a6b2a"/><rect x="21.5" y="10" width="17" height="18" fill="#2a6b2a"/><rect x="21.5" y="32" width="17" height="38" fill="#2a6b2a"/><rect x="43" y="0" width="17" height="28" fill="#2a6b2a"/><rect x="43" y="32" width="17" height="38" fill="#2a6b2a"/></svg></div>
         <div class="collection-info">
@@ -1911,7 +1926,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
           <span class="collection-link">Shop Sports &#8594;</span>
         </div>
       </div>
-      <div class="collection-card" onclick="goToCategory('kids')" role="button" aria-label="Shop Kids — Golden Hours">
+      <div class="collection-card" onclick="openCollection('kids')" role="button" aria-label="Shop Kids — Golden Hours">
         <div class="collection-bg coll-3"></div>
         <div class="collection-info">
           <p class="collection-season">SS 2025 &middot; Kids</p>
@@ -1920,7 +1935,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
           <span class="collection-link">Shop Kids &#8594;</span>
         </div>
       </div>
-      <div class="collection-card" onclick="goToCategory('new arrivals')" role="button" aria-label="Shop New Arrivals — Nocturne">
+      <div class="collection-card" onclick="openCollection('new')" role="button" aria-label="Shop New Arrivals — Nocturne">
         <div class="collection-bg coll-4"></div>
         <div class="collection-info">
           <p class="collection-season">Limited Edition</p>
@@ -1929,6 +1944,40 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
           <span class="collection-link">Shop New Arrivals &#8594;</span>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================
+     COLLECTION LANDING PAGE (dynamic)
+     ====================================== -->
+<div class="page" id="page-collection">
+  <button class="pdp-back" onclick="showPage('collections')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
+    Collections
+  </button>
+  <div class="coll-detail-hero">
+    <p class="coll-detail-eyebrow" id="coll-detail-eyebrow"></p>
+    <h1 class="coll-detail-title" id="coll-detail-title"></h1>
+    <p class="coll-detail-sub" id="coll-detail-sub"></p>
+  </div>
+  <div class="coll-detail-body">
+    <div class="product-grid" id="coll-grid"></div>
+    <p id="coll-empty" style="display:none;text-align:center;color:var(--muted);font-family:'Inter',sans-serif;font-size:13px;padding:60px 0">No products in this collection yet.</p>
+  </div>
+</div>
+
+<!-- ======================================
+     404 PAGE
+     ====================================== -->
+<div class="page" id="page-404">
+  <div class="page-404-wrap">
+    <div class="page-404-code">404</div>
+    <h1 class="page-404-title">Page Not Found</h1>
+    <p class="page-404-sub">The page you&rsquo;re looking for doesn&rsquo;t exist or has moved.</p>
+    <div class="page-404-actions">
+      <button class="btn-primary" onclick="showPage('home')">Back to Home</button>
+      <button class="btn-outline" onclick="showPage('shop')">Shop All</button>
     </div>
   </div>
 </div>
@@ -2491,8 +2540,8 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
           </div>
           <div class="checkout-field">
             <label class="checkout-label">State</label>
-            <select class="checkout-input" id="co-state">
-              <option value="">Select state</option>
+            <input type="text" class="checkout-input" id="co-state" list="ng-states" placeholder="Type to search&hellip;" autocomplete="address-level1" value="Lagos">
+            <datalist id="ng-states">
               <option>Abia</option><option>Abuja (FCT)</option><option>Adamawa</option>
               <option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option>
               <option>Bayelsa</option><option>Benue</option><option>Borno</option>
@@ -2501,12 +2550,12 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
               <option>Gombe</option><option>Imo</option><option>Jigawa</option>
               <option>Kaduna</option><option>Kano</option><option>Katsina</option>
               <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
-              <option selected>Lagos</option><option>Nasarawa</option><option>Niger</option>
+              <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
               <option>Ogun</option><option>Ondo</option><option>Osun</option>
               <option>Oyo</option><option>Plateau</option><option>Rivers</option>
               <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
               <option>Zamfara</option>
-            </select>
+            </datalist>
           </div>
         </div>
       </div>
@@ -2795,12 +2844,33 @@ function renderAllGrids() {
 }
 
 // ── CATEGORY NAV ──
+var _collMeta = {
+  fashion: { title:'Ivory & Indigo', tagline:'Crisp whites against deep navy, structure meeting softness.', season:'SS 2025 · Flagship' },
+  sports:  { title:'Motion Study',        tagline:'Performance refined to its purest form.',                    season:'AW 2025 · Active'  },
+  kids:    { title:'Golden Hours',        tagline:'Little ones deserve extraordinary things.',                  season:'SS 2025 · Kids'    },
+  new:     { title:'Nocturne',            tagline:'After dark — the luxury of darkness made wearable.',  season:'Limited Edition'         }
+};
+
+function openCollection(cat) {
+  var meta = _collMeta[cat] || { title: cat, tagline: '', season: '' };
+  var eyebrow = document.getElementById('coll-detail-eyebrow');
+  var title   = document.getElementById('coll-detail-title');
+  var sub     = document.getElementById('coll-detail-sub');
+  var empty   = document.getElementById('coll-empty');
+  if (eyebrow) eyebrow.textContent = meta.season;
+  if (title)   title.textContent   = meta.title;
+  if (sub)     sub.textContent     = meta.tagline;
+  var filtered = cat === 'new'
+    ? products.filter(function(p){ return p.tag === 'new' && p.status !== 'inactive'; })
+    : products.filter(function(p){ return p.category === cat && p.status !== 'inactive'; });
+  renderGrid('coll-grid', filtered);
+  if (empty) empty.style.display = filtered.length ? 'none' : 'block';
+  showPage('collection');
+}
+
 function goToCategory(cat) {
-  showPage('shop');
-  var btns = document.querySelectorAll('#page-shop .filter-btn');
-  for (var i = 0; i < btns.length; i++) {
-    if (btns[i].textContent.trim().toLowerCase() === cat) { btns[i].click(); break; }
-  }
+  var key = cat === 'new arrivals' ? 'new' : cat;
+  openCollection(key);
 }
 
 // ── FILTERS ──
@@ -5659,24 +5729,31 @@ document.addEventListener('DOMContentLoaded', function() {
   // Pre-render shop grid so it loads instantly on navigation
   renderGrid('shop-grid', products);
 
-  // Deep link into a product page if the URL points at one (e.g. /products/klot-jersey)
+  // Deep link routing: /products/slug opens PDP; any other non-root path shows 404
   (function routeInitialLoad() {
-    var m = location.pathname.match(/^\/products\/([^\/]+)\/?$/);
-    if (!m) return;
-    var p = findProductBySlug(decodeURIComponent(m[1]));
-    if (p) openPDP(p.id, true);
+    var path = location.pathname;
+    var m = path.match(/^\/products\/([^\/]+)\/?$/);
+    if (m) {
+      var p = findProductBySlug(decodeURIComponent(m[1]));
+      if (p) openPDP(p.id, true); else showPage('404');
+      return;
+    }
+    if (path !== '/' && path !== '' && path !== '/index.html') showPage('404');
   })();
 });
 
 // Back/forward navigation — sync the PDP open/closed state to the URL
 window.addEventListener('popstate', function() {
   _restoringFromPopstate = true;
-  var m = location.pathname.match(/^\/products\/([^\/]+)\/?$/);
+  var path = location.pathname;
+  var m = path.match(/^\/products\/([^\/]+)\/?$/);
   if (m) {
     var p = findProductBySlug(decodeURIComponent(m[1]));
     if (p) openPDP(p.id, true); else showPage(window._pdpReturn || 'shop');
+  } else if (path === '/' || path === '' || path === '/index.html') {
+    showPage(window._pdpReturn || 'home');
   } else {
-    showPage(window._pdpReturn || 'shop');
+    showPage('404');
   }
   _restoringFromPopstate = false;
 });
@@ -6208,13 +6285,7 @@ openCheckout = function() {
       if (el && map[id]) el.value = map[id];
     });
     var stateEl = document.getElementById('co-state');
-    if (stateEl && currentUser.state) {
-      for (var i=0; i < stateEl.options.length; i++) {
-        if (stateEl.options[i].text === currentUser.state) {
-          stateEl.selectedIndex = i; break;
-        }
-      }
-    }
+    if (stateEl && currentUser.state) stateEl.value = currentUser.state;
     updatePayLabel();
   }, 100);
 };
