@@ -206,12 +206,11 @@ nav { max-width:1400px; margin:0 auto; padding:0 40px; height:72px; display:flex
 
 /* ── Instagram ── */
 .instagram-section { background:var(--cream); padding:80px 40px; text-align:center; }
-.instagram-handle { font-family:'Inter',sans-serif; font-size:18px; color:var(--green); font-style:italic; margin-bottom:48px; cursor:pointer; display:block; }
-.instagram-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:4px; max-width:1400px; margin:0 auto; }
-.insta-item { aspect-ratio:1; position:relative; overflow:hidden; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:28px; opacity:.85; transition:opacity .2s; }
-.insta-item:hover { opacity:1; }
-.insta-overlay { position:absolute; inset:0; background:rgba(13,27,42,.6); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .3s; font-size:11px; letter-spacing:.1em; color:var(--cream); text-transform:uppercase; }
-.insta-item:hover .insta-overlay { opacity:1; }
+.instagram-handle { font-family:'Inter',sans-serif; font-size:18px; color:var(--green); font-style:italic; margin-bottom:16px; cursor:pointer; display:block; text-decoration:none; }
+.instagram-eyebrow { font-size:10px; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); margin-bottom:16px; font-family:'Inter',sans-serif; }
+.instagram-tagline { font-size:13px; color:var(--muted); letter-spacing:.06em; max-width:360px; margin:0 auto 28px; font-family:'Inter',sans-serif; line-height:1.7; }
+.instagram-cta-btn { display:inline-block; padding:14px 36px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; font-family:'Inter',sans-serif; border:1px solid var(--navy); color:var(--navy); text-decoration:none; transition:background .2s, color .2s; }
+.instagram-cta-btn:hover { background:var(--navy); color:var(--cream); }
 
 /* ── Page Hero ── */
 .page-hero { background:var(--navy); padding:80px 40px; text-align:center; position:relative; overflow:hidden; }
@@ -915,7 +914,6 @@ input.pm-inp.pfx { padding-left:26px; }
   .section { padding:60px 20px; }
   .categories { grid-template-columns:1fr; }
   .team-grid { grid-template-columns:1fr; }
-  .instagram-grid { grid-template-columns:repeat(3,1fr); }
   .stats-grid { grid-template-columns:repeat(2,1fr); }
   .feature-strip-inner { grid-template-columns:1fr 1fr; }
   .contact-info, .contact-form-wrap { padding:40px 20px; }
@@ -1344,6 +1342,8 @@ input.pm-inp.pfx { padding-left:26px; }
   font-family:'Inter',sans-serif; font-size:14px;
   color:#e05555; min-height:18px; margin-bottom:10px; text-align:center;
 }
+.field-error { display:block; font-family:'Inter',sans-serif; font-size:11px; color:#e05555; margin-top:4px; min-height:14px; letter-spacing:.02em; }
+.checkout-input.invalid, .auth-input.invalid { border-color:#e05555 !important; }
 
 /* Submit */
 .auth-submit-btn {
@@ -1549,7 +1549,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
 
 <!-- CART OVERLAY + SIDEBAR -->
 <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
-<div class="cart-sidebar" id="cart-sidebar">
+<div class="cart-sidebar" id="cart-sidebar" role="dialog" aria-modal="true" aria-label="Shopping bag">
   <div class="cart-header">
     <span class="cart-title">Your Bag</span>
     <button class="cart-close" onclick="toggleCart()">&#10005;</button>
@@ -1721,17 +1721,10 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
 
   <!-- Instagram -->
   <div class="instagram-section">
-    <span class="section-label">Follow the Journey</span>
-    <h2 class="section-title">&#64;klotlife</h2>
-    <span class="instagram-handle">on Instagram</span>
-    <div class="instagram-grid">
-      <a href="https://instagram.com/klotlifelife" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#1a2d42,#0d1b2a);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotlife</span><div class="insta-overlay">View on Instagram</div></a>
-      <a href="https://instagram.com/klotlifelife" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#2a1a0d,#1a2d42);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotlife</span><div class="insta-overlay">View on Instagram</div></a>
-      <a href="https://instagram.com/klotlifelife" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#0d2a1a,#1a2d42);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotlife</span><div class="insta-overlay">View on Instagram</div></a>
-      <a href="https://instagram.com/klotlifelife" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#1a0d2a,#1a2d42);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotlife</span><div class="insta-overlay">View on Instagram</div></a>
-      <a href="https://instagram.com/klotlifelife" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#2a0d0d,#1a2d42);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotlife</span><div class="insta-overlay">View on Instagram</div></a>
-      <a href="https://instagram.com/klotlifelife" target="_blank" rel="noopener" class="insta-item" style="background:linear-gradient(135deg,#0d1a2a,#2a1a0d);text-decoration:none"><span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase">@klotlife</span><div class="insta-overlay">View on Instagram</div></a>
-    </div>
+    <p class="instagram-eyebrow">KLOT on Instagram</p>
+    <a href="https://instagram.com/klotlife" target="_blank" rel="noopener" class="instagram-handle">@klotlife</a>
+    <p class="instagram-tagline">Drops, fits, and the world of KLOT &mdash; follow along.</p>
+    <a href="https://instagram.com/klotlife" target="_blank" rel="noopener" class="instagram-cta-btn">Follow on Instagram &#8599;</a>
   </div>
 
 </div><!-- /home -->
@@ -2234,7 +2227,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
      AUTH MODAL (Login / Register / Profile)
      ====================================== -->
 <div class="auth-overlay" id="auth-overlay" onclick="closeAuthModal(event)">
-  <div class="auth-modal" id="auth-modal">
+  <div class="auth-modal" id="auth-modal" role="dialog" aria-modal="true" aria-label="Account">
 
     <!-- Tabs -->
     <div class="auth-tabs" id="auth-tabs">
@@ -2276,7 +2269,8 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
 
       <div class="auth-field">
         <label class="auth-label">Email Address</label>
-        <input type="email" class="auth-input" id="login-email" placeholder="hello&#64;yourname.com" autocomplete="email">
+        <input type="email" class="auth-input" id="login-email" placeholder="hello&#64;yourname.com" autocomplete="email" aria-describedby="err-login-email">
+        <span class="field-error" id="err-login-email"></span>
       </div>
       <div class="auth-field">
         <label class="auth-label">Password</label>
@@ -2326,7 +2320,8 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
       </div>
       <div class="auth-field">
         <label class="auth-label">Email Address <span class="auth-req">*</span></label>
-        <input type="email" class="auth-input" id="reg-email" placeholder="hello&#64;yourname.com" autocomplete="email">
+        <input type="email" class="auth-input" id="reg-email" placeholder="hello&#64;yourname.com" autocomplete="email" aria-describedby="err-reg-email">
+        <span class="field-error" id="err-reg-email"></span>
       </div>
       <div class="auth-field">
         <label class="auth-label">Phone <span style="opacity:.4;font-size:9px">(optional)</span></label>
@@ -2335,18 +2330,20 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
       <div class="auth-field">
         <label class="auth-label">Password <span class="auth-req">*</span></label>
         <div class="auth-pwd-wrap">
-          <input type="password" class="auth-input" id="reg-password" placeholder="Min. 8 characters" autocomplete="new-password" oninput="updatePwdStrength(this.value)">
+          <input type="password" class="auth-input" id="reg-password" placeholder="Min. 8 characters" autocomplete="new-password" oninput="updatePwdStrength(this.value)" aria-describedby="err-reg-password">
           <button class="auth-pwd-toggle" onclick="togglePwd('reg-password',this)" type="button">&#128065;</button>
         </div>
         <div class="pwd-strength-bar"><div class="pwd-strength-fill" id="pwd-strength-fill"></div></div>
         <div class="pwd-strength-label" id="pwd-strength-label"></div>
+        <span class="field-error" id="err-reg-password"></span>
       </div>
       <div class="auth-field">
         <label class="auth-label">Confirm Password <span class="auth-req">*</span></label>
         <div class="auth-pwd-wrap">
-          <input type="password" class="auth-input" id="reg-confirm" placeholder="Repeat password" autocomplete="new-password" onkeydown="if(event.key==='Enter')submitRegister()">
+          <input type="password" class="auth-input" id="reg-confirm" placeholder="Repeat password" autocomplete="new-password" onkeydown="if(event.key==='Enter')submitRegister()" aria-describedby="err-reg-confirm">
           <button class="auth-pwd-toggle" onclick="togglePwd('reg-confirm',this)" type="button">&#128065;</button>
         </div>
+        <span class="field-error" id="err-reg-confirm"></span>
       </div>
       <div class="auth-field">
         <label class="auth-remember">
@@ -2433,7 +2430,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
      PAYSTACK CHECKOUT MODAL
      ====================================== -->
 <div class="checkout-overlay" id="checkout-overlay" onclick="closeCheckout(event)">
-  <div class="checkout-modal" id="checkout-modal">
+  <div class="checkout-modal" id="checkout-modal" role="dialog" aria-modal="true" aria-label="Checkout">
     <div class="checkout-hdr">
       <div>
         <h3 class="checkout-title">Checkout</h3>
@@ -2464,16 +2461,19 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
         <div class="checkout-form-row">
           <div class="checkout-field">
             <label class="checkout-label">First Name <span class="checkout-req">*</span></label>
-            <input type="text" class="checkout-input" id="co-firstname" placeholder="Adaeze">
+            <input type="text" class="checkout-input" id="co-firstname" placeholder="Adaeze" aria-describedby="err-co-firstname">
+            <span class="field-error" id="err-co-firstname"></span>
           </div>
           <div class="checkout-field">
             <label class="checkout-label">Last Name <span class="checkout-req">*</span></label>
-            <input type="text" class="checkout-input" id="co-lastname" placeholder="Okafor">
+            <input type="text" class="checkout-input" id="co-lastname" placeholder="Okafor" aria-describedby="err-co-lastname">
+            <span class="field-error" id="err-co-lastname"></span>
           </div>
         </div>
         <div class="checkout-field">
           <label class="checkout-label">Email Address <span class="checkout-req">*</span></label>
-          <input type="email" class="checkout-input" id="co-email" placeholder="hello&#64;yourname.com">
+          <input type="email" class="checkout-input" id="co-email" placeholder="hello&#64;yourname.com" aria-describedby="err-co-email">
+          <span class="field-error" id="err-co-email"></span>
         </div>
         <div class="checkout-field">
           <label class="checkout-label">Phone Number</label>
@@ -2481,7 +2481,8 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
         </div>
         <div class="checkout-field">
           <label class="checkout-label">Delivery Address <span class="checkout-req">*</span></label>
-          <input type="text" class="checkout-input" id="co-address" placeholder="15 Victoria Island, Lagos">
+          <input type="text" class="checkout-input" id="co-address" placeholder="15 Victoria Island, Lagos" aria-describedby="err-co-address">
+          <span class="field-error" id="err-co-address"></span>
         </div>
         <div class="checkout-form-row">
           <div class="checkout-field">
@@ -2541,7 +2542,7 @@ src="https://www.facebook.com/tr?id=1538014857430041&ev=PageView&noscript=1"
 
 <!-- Order Success Modal -->
 <div class="order-success-overlay" id="order-success-overlay">
-  <div class="order-success-box">
+  <div class="order-success-box" id="order-success-box" role="dialog" aria-modal="true" aria-label="Order confirmed">
     <div class="order-success-icon">&#10003;</div>
     <h3 class="order-success-title">Order Confirmed!</h3>
     <p class="order-success-ref" id="order-success-ref"></p>
@@ -3227,9 +3228,42 @@ function persistCart() {
   storageSet('klot_cart', JSON.stringify(cart));
 }
 
+// ── Focus trap utility ──
+function trapFocus(container, onEscape) {
+  var sel = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  var prev = document.activeElement;
+  function getFocusable() {
+    return Array.prototype.slice.call(container.querySelectorAll(sel)).filter(function(el) {
+      return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+    });
+  }
+  setTimeout(function() { var f = getFocusable(); if (f.length) f[0].focus(); }, 80);
+  function handler(e) {
+    if (e.key === 'Escape') { if (onEscape) onEscape(); return; }
+    if (e.key !== 'Tab') return;
+    var f = getFocusable();
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+    else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
+  }
+  container.addEventListener('keydown', handler);
+  return function() {
+    container.removeEventListener('keydown', handler);
+    if (prev && prev.focus) try { prev.focus(); } catch(x) {}
+  };
+}
+var _cartTrap = null, _authTrap = null, _checkoutTrap = null, _wlTrap = null, _sgTrap = null, _orderTrap = null;
+
 function toggleCart() {
-  document.getElementById('cart-sidebar').classList.toggle('open');
+  var sidebar = document.getElementById('cart-sidebar');
+  var isOpen = sidebar.classList.toggle('open');
   document.getElementById('cart-overlay').classList.toggle('visible');
+  if (isOpen) {
+    _cartTrap = trapFocus(sidebar, toggleCart);
+  } else {
+    if (_cartTrap) { _cartTrap(); _cartTrap = null; }
+  }
 }
 
 // ── ADMIN AUTH ──
@@ -4905,9 +4939,16 @@ function openCheckout() {
 
   // Clear errors
   var errEl = document.getElementById('checkout-error'); if (errEl) errEl.textContent = '';
+  ['co-firstname','co-lastname','co-email','co-address'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('invalid');
+    var er = document.getElementById('err-' + id);
+    if (er) er.textContent = '';
+  });
 
   document.getElementById('checkout-overlay').classList.add('open');
-  setTimeout(function() { var el=document.getElementById('co-firstname'); if(el)el.focus(); }, 200);
+  if (_checkoutTrap) _checkoutTrap();
+  _checkoutTrap = trapFocus(document.getElementById('checkout-modal'), closeCheckoutDirect);
 }
 
 function closeCheckout(e) {
@@ -4916,6 +4957,7 @@ function closeCheckout(e) {
 }
 function closeCheckoutDirect() {
   document.getElementById('checkout-overlay').classList.remove('open');
+  if (_checkoutTrap) { _checkoutTrap(); _checkoutTrap = null; }
 }
 
 function updatePayLabel() {
@@ -5070,6 +5112,8 @@ function initiatePaystack() {
       var refEl = document.getElementById('order-success-ref');
       if (refEl) refEl.textContent = 'Order Ref: ' + response.reference;
       document.getElementById('order-success-overlay').classList.add('open');
+      if (_orderTrap) _orderTrap();
+      _orderTrap = trapFocus(document.getElementById('order-success-box'), closeOrderSuccess);
       if (btn) { btn.disabled = false; updatePayLabel(); }
     }
   });
@@ -5084,9 +5128,12 @@ function openProductWaitlist() {
   var emailEl = document.getElementById('wl-email'); if (emailEl) emailEl.value = '';
   var msgEl = document.getElementById('wl-msg'); if (msgEl) msgEl.style.display = 'none';
   document.getElementById('wl-overlay').classList.add('open');
+  if (_wlTrap) _wlTrap();
+  _wlTrap = trapFocus(document.getElementById('wl-modal'), closeProductWaitlist);
 }
 function closeProductWaitlist() {
   document.getElementById('wl-overlay').classList.remove('open');
+  if (_wlTrap) { _wlTrap(); _wlTrap = null; }
 }
 function submitProductWaitlist() {
   var email = (document.getElementById('wl-email') || {}).value.trim();
@@ -5123,9 +5170,12 @@ function submitProductWaitlist() {
 // ── Size Guide ──
 function openSizeGuide() {
   document.getElementById('sg-overlay').classList.add('open');
+  if (_sgTrap) _sgTrap();
+  _sgTrap = trapFocus(document.getElementById('sg-modal'), closeSizeGuide);
 }
 function closeSizeGuide() {
   document.getElementById('sg-overlay').classList.remove('open');
+  if (_sgTrap) { _sgTrap(); _sgTrap = null; }
 }
 function sgTab(id, btn) {
   ['tops','bottoms','kids'].forEach(function(t) {
@@ -5138,6 +5188,7 @@ function sgTab(id, btn) {
 
 function closeOrderSuccess() {
   document.getElementById('order-success-overlay').classList.remove('open');
+  if (_orderTrap) { _orderTrap(); _orderTrap = null; }
   showPage(lastShopPage);
 }
 
@@ -5824,11 +5875,8 @@ function openAuthModal(panel) {
   if (panel === 'orders')                 populateMyOrders();
 
   overlay.classList.add('open');
-  // Focus first input
-  setTimeout(function() {
-    var inp = overlay.querySelector('#panel-' + panel + ' .auth-input');
-    if (inp) inp.focus();
-  }, 150);
+  if (_authTrap) _authTrap();
+  _authTrap = trapFocus(document.getElementById('auth-modal'), closeAuthModalDirect);
 }
 
 function closeAuthModal(e) {
@@ -5839,6 +5887,7 @@ function closeAuthModalDirect() {
   var overlay = document.getElementById('auth-overlay');
   if (overlay) overlay.classList.remove('open');
   clearAuthErrors();
+  if (_authTrap) { _authTrap(); _authTrap = null; }
 }
 function clearAuthErrors() {
   ['login-error','reg-error','profile-error','forgot-error'].forEach(function(id) {
@@ -6214,6 +6263,60 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.target === this) closeKpop();
     });
   })();
+
+  // ── Inline field validation ──
+  function setFieldError(inputId, errId, msg) {
+    var inp = document.getElementById(inputId);
+    var err = document.getElementById(errId);
+    if (!inp || !err) return;
+    if (msg) {
+      err.textContent = msg;
+      inp.classList.add('invalid');
+    } else {
+      err.textContent = '';
+      inp.classList.remove('invalid');
+    }
+  }
+  function blurValidateRequired(inputId, errId, label) {
+    var el = document.getElementById(inputId);
+    if (!el) return;
+    el.addEventListener('blur', function() {
+      setFieldError(inputId, errId, el.value.trim() ? '' : (label || 'Required'));
+    });
+    el.addEventListener('input', function() {
+      if (el.value.trim()) setFieldError(inputId, errId, '');
+    });
+  }
+  function blurValidateEmail(inputId, errId) {
+    var el = document.getElementById(inputId);
+    if (!el) return;
+    el.addEventListener('blur', function() {
+      var v = el.value.trim();
+      if (!v) { setFieldError(inputId, errId, 'Email is required'); return; }
+      setFieldError(inputId, errId, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : 'Enter a valid email address');
+    });
+    el.addEventListener('input', function() {
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim())) setFieldError(inputId, errId, '');
+    });
+  }
+  // Checkout
+  blurValidateRequired('co-firstname', 'err-co-firstname', 'First name is required');
+  blurValidateRequired('co-lastname',  'err-co-lastname',  'Last name is required');
+  blurValidateEmail('co-email', 'err-co-email');
+  blurValidateRequired('co-address', 'err-co-address', 'Delivery address is required');
+  // Auth
+  blurValidateEmail('login-email', 'err-login-email');
+  blurValidateEmail('reg-email',   'err-reg-email');
+  (function() {
+    var pwd = document.getElementById('reg-password');
+    var cfm = document.getElementById('reg-confirm');
+    if (pwd) pwd.addEventListener('blur', function() {
+      setFieldError('reg-password', 'err-reg-password', pwd.value.length >= 8 || !pwd.value ? '' : 'Password must be at least 8 characters');
+    });
+    if (cfm) cfm.addEventListener('blur', function() {
+      setFieldError('reg-confirm', 'err-reg-confirm', (!cfm.value || cfm.value === (pwd ? pwd.value : '')) ? '' : 'Passwords do not match');
+    });
+  })();
 });
 
 // ══════════════════════════════════════════════
@@ -6480,7 +6583,7 @@ function submitReview() {
 
 <!-- Product Waitlist Modal -->
 <div class="wl-overlay" id="wl-overlay" onclick="if(event.target===this)closeProductWaitlist()">
-  <div class="wl-modal">
+  <div class="wl-modal" id="wl-modal" role="dialog" aria-modal="true" aria-label="Product waitlist">
     <button class="wl-close" onclick="closeProductWaitlist()">&times;</button>
     <div style="font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--green);font-family:'Inter',sans-serif;margin-bottom:12px">Notify Me</div>
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:600;color:var(--cream);letter-spacing:.02em;margin-bottom:6px" id="wl-product-name">Product</div>
@@ -6493,7 +6596,7 @@ function submitReview() {
 
 <!-- Size Guide Modal -->
 <div class="sg-overlay" id="sg-overlay" onclick="if(event.target===this)closeSizeGuide()">
-  <div class="sg-modal">
+  <div class="sg-modal" id="sg-modal" role="dialog" aria-modal="true" aria-label="Size guide">
     <button class="sg-close" onclick="closeSizeGuide()">&times;</button>
     <div class="sg-title">Size Guide</div>
     <p class="sg-sub">KLOT uses unisex sizing. Measurements are in centimetres. Find your size using chest or waist measurement.</p>
