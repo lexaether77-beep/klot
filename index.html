@@ -543,38 +543,35 @@ footer { background:var(--navy); padding:80px 40px 40px; }
 /* ── Klot Nomad Preorder Popup ── */
 .kpop-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:300; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .35s ease; backdrop-filter:blur(2px); }
 .kpop-overlay.open { opacity:1; pointer-events:all; }
-.kpop { background:#fafafa; width:100%; max-width:860px; display:grid; grid-template-columns:1fr 1fr; position:relative; overflow:hidden; box-shadow:0 32px 80px rgba(0,0,0,.25); transform:translateY(20px) scale(.97); transition:transform .45s cubic-bezier(.22,1,.36,1); }
+.kpop { background:#fafafa; width:100%; max-width:400px; position:relative; overflow:hidden; box-shadow:0 32px 80px rgba(0,0,0,.25); transform:translateY(20px) scale(.97); transition:transform .45s cubic-bezier(.22,1,.36,1); max-height:90vh; overflow-y:auto; }
 .kpop-overlay.open .kpop { transform:none; }
-.kpop-close { position:absolute; top:16px; right:20px; background:none; border:none; font-size:28px; color:#111; cursor:pointer; z-index:10; line-height:1; opacity:.6; transition:opacity .2s; }
+.kpop-close { position:absolute; top:12px; right:14px; background:rgba(255,255,255,.75); border:none; width:28px; height:28px; border-radius:50%; font-size:20px; color:#111; cursor:pointer; z-index:10; line-height:1; opacity:.75; transition:opacity .2s; }
 .kpop-close:hover { opacity:1; }
-.kpop-visual { position:relative; display:flex; align-items:center; justify-content:center; padding:0; min-height:420px; overflow:hidden; background:#e8e1d6; }
-.kpop-visual::before { content:''; position:absolute; inset:-24px; background:url('klot_website/klot/assets/images/nomad_popup.jpg') center/cover no-repeat; filter:blur(18px) brightness(1.08) saturate(.85); z-index:0; transform:scale(1.05); }
-.kpop-visual img { position:relative; z-index:1; width:100%; height:100%; object-fit:contain; display:block; transform:scale(1); transition:transform .6s cubic-bezier(.22,1,.36,1); }
-.kpop-overlay.open .kpop-visual img { transform:scale(1.02); }
-.kpop-body { padding:52px 44px; display:flex; flex-direction:column; justify-content:center; }
-.kpop-tag { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:#3B1C70; font-weight:700; margin-bottom:14px; font-family:'Inter',sans-serif; }
-.kpop-title { font-family:'Barlow Condensed',sans-serif; font-size:44px; font-weight:700; line-height:1.0; color:#111; text-transform:uppercase; margin:0 0 24px; }
-.kpop-title span { color:#3B1C70; display:block; }
-.kpop-urgency { border-left:3px solid #FCD116; padding-left:16px; margin-bottom:26px; }
-.kpop-urgency p { font-family:'Inter',sans-serif; margin:0 0 6px; line-height:1.55; }
-.kpop-urgency .kpop-main { font-size:15px; color:#111; }
-.kpop-urgency .kpop-sub { font-size:13px; color:#555; }
-.kpop-cta { display:block; width:100%; box-sizing:border-box; text-align:center; background:#3B1C70; color:#fff; border:none; padding:16px; font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:700; cursor:pointer; transition:background .25s; text-decoration:none; }
+.kpop-visual { position:relative; aspect-ratio:16/10; overflow:hidden; background:#fff; }
+.kpop-visual img { width:100%; height:100%; object-fit:cover; object-position:center 40%; display:block; }
+.kpop-body { padding:22px 26px 26px; display:flex; flex-direction:column; }
+.kpop-tag { font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:#3B1C70; font-weight:700; margin-bottom:8px; font-family:'Inter',sans-serif; }
+.kpop-title { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:700; line-height:1.0; color:#111; text-transform:uppercase; margin:0 0 14px; }
+.kpop-title span { color:#3B1C70; }
+.kpop-urgency { border-left:3px solid #FCD116; padding-left:12px; margin-bottom:16px; }
+.kpop-urgency p { font-family:'Inter',sans-serif; margin:0 0 4px; line-height:1.45; }
+.kpop-urgency .kpop-main { font-size:13px; color:#111; }
+.kpop-urgency .kpop-sub { font-size:12px; color:#555; }
+.kpop-cta { display:block; width:100%; box-sizing:border-box; text-align:center; background:#3B1C70; color:#fff; border:none; padding:13px; font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; font-weight:700; cursor:pointer; transition:background .25s; text-decoration:none; }
 .kpop-cta:hover { background:#2a1450; }
-.kpop-or { text-align:center; font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#bbb; margin:16px 0; }
-.kpop-form { display:flex; flex-direction:column; gap:10px; }
-.kpop-form input[type="email"] { padding:15px 16px; border:1px solid #ccc; background:#fff; font-family:'Inter',sans-serif; font-size:12px; letter-spacing:.1em; outline:none; transition:border-color .25s; border-radius:0; width:100%; box-sizing:border-box; }
+.kpop-or { text-align:center; font-family:'Inter',sans-serif; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#bbb; margin:10px 0; }
+.kpop-form { display:flex; flex-direction:column; gap:8px; }
+.kpop-form input[type="email"] { padding:12px 14px; border:1px solid #ccc; background:#fff; font-family:'Inter',sans-serif; font-size:12px; letter-spacing:.1em; outline:none; transition:border-color .25s; border-radius:0; width:100%; box-sizing:border-box; }
 .kpop-form input[type="email"]:focus { border-color:#3B1C70; }
 .kpop-form input[type="email"]::placeholder { text-transform:uppercase; letter-spacing:.12em; color:#bbb; font-size:11px; }
-.kpop-cta-secondary { background:transparent; color:#3B1C70; border:1px solid #3B1C70; padding:15px; font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:700; cursor:pointer; transition:background .2s,color .2s; }
+.kpop-cta-secondary { background:transparent; color:#3B1C70; border:1px solid #3B1C70; padding:12px; font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; font-weight:700; cursor:pointer; transition:background .2s,color .2s; }
 .kpop-cta-secondary:hover { background:#3B1C70; color:#fff; }
-.kpop-dismiss { display:block; text-align:center; margin-top:14px; font-family:'Inter',sans-serif; font-size:11px; color:#bbb; cursor:pointer; letter-spacing:.06em; background:none; border:none; transition:color .2s; padding:0; }
+.kpop-dismiss { display:block; text-align:center; margin-top:12px; font-family:'Inter',sans-serif; font-size:11px; color:#bbb; cursor:pointer; letter-spacing:.06em; background:none; border:none; transition:color .2s; padding:0; }
 .kpop-dismiss:hover { color:#555; }
-@media (max-width:680px) {
-  .kpop { grid-template-columns:1fr; }
-  .kpop-visual { min-height:220px; padding:0; }
-  .kpop-body { padding:30px 28px; }
-  .kpop-title { font-size:34px; }
+@media (max-width:480px) {
+  .kpop { max-width:340px; }
+  .kpop-body { padding:18px 20px 22px; }
+  .kpop-title { font-size:24px; }
 }
 
 /* ── Subscribe Tab ── */
@@ -6636,11 +6633,11 @@ function submitReview() {
   <div class="kpop">
     <button class="kpop-close" onclick="closeKpop()" aria-label="Close popup">&times;</button>
     <div class="kpop-visual">
-      <img src="klot_website/klot/assets/images/nomad_popup.jpg" alt="KLOT Nomad — zero-drop, five-toe barefoot shoe" loading="lazy" onerror="this.style.display='none'">
+      <img src="klot_website/klot/assets/images/pop_up.png" alt="KLOT Nomad — zero-drop, five-toe barefoot shoe" loading="lazy" onerror="this.style.display='none'">
     </div>
     <div class="kpop-body">
       <div class="kpop-tag">Now Preordering</div>
-      <h2 class="kpop-title" id="kpop-heading">Klot<br><span>Nomad</span></h2>
+      <h2 class="kpop-title" id="kpop-heading">Klot <span>Nomad</span></h2>
       <div class="kpop-urgency">
         <p class="kpop-main">Victory Through Harmony. Zero-drop, five-toe barefoot design, born in Lagos.</p>
         <p class="kpop-sub">Drops October 2026 &middot; 3 colorways &mdash; Obsidian, Cobalt Current, Solar.</p>
